@@ -25,7 +25,8 @@ import java.awt.event.*;
 int modeIndex = 0;
 
 int projectorWidth = 1920;
-int projectorHeight = 1080;
+int projectorHeight = 1200;
+int projectorOffset = 1842;
 
 int screenWidth = 1200;
 int screenHeight = 800;
@@ -216,7 +217,7 @@ void draw() {
   
   image(table, tablex_0, tabley_0, tablex_1, tabley_1);
   
-  
+  renderProjCanvas();
   
   
   screen.beginDraw();
@@ -236,10 +237,6 @@ void draw() {
   screen.endDraw();
   
   image(screen, 0, 0);
-  
-  //if (displayProjection2D) {
-    renderProjCanvas();
-  //}
   
 }
   

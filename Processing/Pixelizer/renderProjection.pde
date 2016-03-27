@@ -35,7 +35,7 @@ import deadpixel.keystone.*;
 
 // Visualization may show 2D projection visualization, or not
 boolean displayProjection2D = false;
-int projectorOffset = screenWidth;
+//int projectorOffset = screenWidth;
 
 // defines Keystone settings from xml file in parent folder
 Keystone ks;
@@ -130,6 +130,7 @@ public class projApplet extends PApplet {
   void renderCanvas(PGraphics p, int x_offset) {
     // Draw the scene, offscreen
     p.beginDraw();
+    p.clear();
     p.translate(x_offset, 0);
     p.image(projCanvas, 0, 0);
     p.endDraw();
