@@ -1,4 +1,4 @@
-PGraphics screen, projector, table;
+PGraphics screen, table;
 PGraphics h, s, l, i, c, p;
 float gridWidth, gridHeight;
 PGraphics legendH, legendP;
@@ -9,7 +9,7 @@ int tabley_1, tablex_1;
 
 // 2D matrix that holds grid values
 float heatmap[][], stores[][], pop[][], hu[][];
-// variables to hol minimum and maximum grid values in matrix
+// variables to hol minimum and maximum grid values in matrixƒ
 float heatmapMIN, heatmapMAX;
 float storesMIN, storesMAX;
 float popMIN, popMAX;
@@ -32,7 +32,6 @@ void initScreenOffsets() {
 }
 
 void initDataGraphics() {
-  projector = createGraphics(projectorWidth, projectorHeight);
   
   screen = createGraphics(screenWidth, screenHeight);
   i = createGraphics(screen.width, screen.height); // Information

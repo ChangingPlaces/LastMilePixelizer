@@ -25,6 +25,7 @@ String[] menuOrder =
   "Show Basemap (m)",
   "Invert Colors (i)",
   "Show Framerate (f)",
+  "Enable Projection (`)",
   "Print Screenshot (p)"
 };
 
@@ -53,6 +54,7 @@ String[] buttonNames =
   "Population Counts (u)",   // 18
   "Household Counts (e)",    // 19
   "Recenter Grid (R)",       // 20
+  "Enable Projection (`)"    // 21
 };
 
 int getButtonIndex(String name) {
@@ -189,6 +191,11 @@ void mouseClicked() {
     setGridParameters();
   }
   
+  //function21
+  if(mainMenu.buttons[getButtonIndex(buttonNames[21])].over()){ 
+    toggleProjection(21);
+  }
+  
   reRender();
 }
 
@@ -265,6 +272,9 @@ void keyPressed() {
       break;
     case 'R': //  "Recenter Grid (R)",      // 20
       setGridParameters();
+      break;
+    case '`': //  "Enable Projection (`)"   // 21
+      toggleProjection(getButtonIndex(buttonNames[21]));
       break;
   }
   
@@ -472,6 +482,12 @@ void toggleFramerate(int button) {
   pressButton(showFrameRate, button);
   println("showFrameRate = " + showFrameRate);
 } 
+
+void toggleProjection(int button) {
+  toggle2DProjection();
+  pressButton(displayProjection2D, button);
+  println("displayProjection2D = " + displayProjection2D);
+}
 
 void toggleDeliveryData(int button) {
   showDeliveryData = toggle(showDeliveryData);

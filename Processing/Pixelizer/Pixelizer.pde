@@ -61,8 +61,8 @@ void setGridParameters() {
   resetMousePan();
 }
 
-// How big your applet window is, in pixels
-int tableWidth = 800;
+// How big your table is, in pixels
+int tableWidth = int(18.0/22*1500);
 int tableHeight = int(tableWidth * float(displayV)/displayU);
 
 //Global Text and Background Color
@@ -128,6 +128,9 @@ void loadData(int gridU, int gridV, int index) {
   
   // Loads Basemap from subset of file
   loadBasemap();
+  
+  // Initial Projection-Mapping Canvas
+  initializeProjection2D();
 }
 
 void loadMenu(int screenWidth, int screenHeight) {
@@ -147,6 +150,7 @@ void loadMenu(int screenWidth, int screenHeight) {
   pressButton(showFrameRate, getButtonIndex(buttonNames[15]));
   pressButton(showDeliveryData, getButtonIndex(buttonNames[16]));
   pressButton(showPopulationData, getButtonIndex(buttonNames[17]));
+  pressButton(displayProjection2D, getButtonIndex(buttonNames[21]));
   
   if (!showPopulationData) {
     for (int i=18; i<=19; i++) {
@@ -232,6 +236,10 @@ void draw() {
   screen.endDraw();
   
   image(screen, 0, 0);
+  
+  //if (displayProjection2D) {
+    renderProjCanvas();
+  //}
   
 }
   
