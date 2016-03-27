@@ -63,7 +63,7 @@ void setGridParameters() {
 }
 
 // How big your table is, in pixels
-int tableWidth = int(18.0/22*1500);
+int tableWidth = 800;
 int tableHeight = int(tableWidth * float(displayV)/displayU);
 
 //Global Text and Background Color

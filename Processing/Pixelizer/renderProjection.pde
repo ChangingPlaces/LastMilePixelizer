@@ -125,7 +125,7 @@ public class projApplet extends PApplet {
     background(0);
       
     // Draw the scene, offscreen
-    renderCanvas(offscreen, int((float)(displayV-displayU)/displayV));
+    renderCanvas(offscreen, int(table.height*(float)(displayV-displayU)/displayV));
     surface.render(offscreen);
   
   }
