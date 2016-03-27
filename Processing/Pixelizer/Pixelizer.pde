@@ -93,6 +93,9 @@ void setup() {
   setGridParameters();
   initDataGraphics();
   
+  // Initial Projection-Mapping Canvas
+  initializeProjection2D();
+  
   // Reads point data from TSV file, converts to JSON, prints to JSON, and reads in from JSON
   loadData(gridU, gridV, modeIndex);
   
@@ -129,9 +132,6 @@ void loadData(int gridU, int gridV, int index) {
   
   // Loads Basemap from subset of file
   loadBasemap();
-  
-  // Initial Projection-Mapping Canvas
-  initializeProjection2D();
 }
 
 void loadMenu(int screenWidth, int screenHeight) {
@@ -215,10 +215,7 @@ void draw() {
   
   table.endDraw();
   
-  image(table, tablex_0, tabley_0, tablex_1, tabley_1);
-  
-  renderProjCanvas();
-  
+  image(table, tablex_0, tabley_0, tablex_1, tabley_1);  
   
   screen.beginDraw();
   screen.clear();
@@ -237,6 +234,6 @@ void draw() {
   screen.endDraw();
   
   image(screen, 0, 0);
-  
+//  if (showFrameRate) { renderProjCanvas(); }
 }
   

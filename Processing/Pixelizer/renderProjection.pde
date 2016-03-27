@@ -1,11 +1,14 @@
-PGraphics projCanvas;
+//PGraphics projCanvas;
 
-void renderProjCanvas() {
-  projCanvas.beginDraw();
-  projCanvas.background(background);
-  projCanvas.image(table, (float)(displayV-displayU)/displayV*projCanvas.width, 0, table.width, table.height);
-  projCanvas.endDraw();
-}
+//void renderProjCanvas() {
+//  projCanvas.beginDraw();
+//  projCanvas.clear();
+//  projCanvas.background(background);
+//  projCanvas.image(table, (float)(displayV-displayU)/displayV*projCanvas.width, 0, (float)(displayU)/displayV*projCanvas.width, projCanvas.height);
+//  projCanvas.endDraw();
+//  
+//  image(projCanvas, 0, 0, width, height);
+//}
 
 //
 // This is a script that allows one to open a new canvas for the purpose 
@@ -64,7 +67,7 @@ public class PFrame extends JFrame {
 }
 
 void initializeProjection2D() {
-  projCanvas = createGraphics(1500,1500);
+//  projCanvas = createGraphics(1500,1500);
   println("Projector Info: " + projectorWidth + ", " + projectorHeight + ", " + projectorOffset);
 }
 
@@ -100,8 +103,8 @@ public class projApplet extends PApplet {
     
     ks = new Keystone(this);;
     
-    surface = ks.createCornerPinSurface(projCanvas.width, projCanvas.height, 20);
-    offscreen = createGraphics(projCanvas.width, projCanvas.height);
+    surface = ks.createCornerPinSurface(table.height, table.height, 20);
+    offscreen = createGraphics(table.height, table.height);
     
     try{
       ks.load();
@@ -122,7 +125,7 @@ public class projApplet extends PApplet {
     background(0);
       
     // Draw the scene, offscreen
-    renderCanvas(offscreen, 0);
+    renderCanvas(offscreen, int((float)(displayV-displayU)/displayV));
     surface.render(offscreen);
   
   }
@@ -132,7 +135,7 @@ public class projApplet extends PApplet {
     p.beginDraw();
     p.clear();
     p.translate(x_offset, 0);
-    p.image(projCanvas, 0, 0);
+    p.image(table, 0, 0);
     p.endDraw();
   }
   

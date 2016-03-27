@@ -51,7 +51,6 @@ void initDataGraphics() {
   legendP = createGraphics(legendWidth, legendHeight);
 }
 
-boolean reDraw = true;
 void reRender() {
   
   // Renders false color heatmap to canvas
@@ -65,8 +64,6 @@ void reRender() {
   
   // Renders Text
   renderInfo(i, 2*tablex_0 + tablex_1, tabley_0, mapRatio*tablex_1, mapRatio*tabley_1);
-  
-  reDraw = true;
 }
 
 // Runs once when initializes
