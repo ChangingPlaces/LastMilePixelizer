@@ -4,7 +4,7 @@ float mapRatio = 0.2;
 
 void loadMiniBaseMap() {
   miniBaseMap = loadImage("data/" + mapColor + "/" + fileName + "_2000.png");
-  miniBaseMap.resize(4*displayU, 4*displayV);
+  miniBaseMap.resize(2*displayU, 2*displayV);
 }
 
 void renderMiniMap(PGraphics miniMap) {
