@@ -10,6 +10,7 @@ void loadBasemap() {
   float w = (float)wholeMap.width/gridU;
   float h = (float)wholeMap.height/gridV;
   basemap = wholeMap.get(int(gridPanU*w), int(gridPanV*h), int(displayU*w), int(displayV*h));
+  basemap.resize(table.width, table.height);
   loadMiniBaseMap();
 }
 

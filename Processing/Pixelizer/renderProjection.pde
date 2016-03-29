@@ -1,15 +1,3 @@
-//PGraphics projCanvas;
-
-//void renderProjCanvas() {
-//  projCanvas.beginDraw();
-//  projCanvas.clear();
-//  projCanvas.background(background);
-//  projCanvas.image(table, (float)(displayV-displayU)/displayV*projCanvas.width, 0, (float)(displayU)/displayV*projCanvas.width, projCanvas.height);
-//  projCanvas.endDraw();
-//  
-//  image(projCanvas, 0, 0, width, height);
-//}
-
 //
 // This is a script that allows one to open a new canvas for the purpose 
 // of simple 2D projection mapping, such as on a flat table surface
@@ -67,7 +55,6 @@ public class PFrame extends JFrame {
 }
 
 void initializeProjection2D() {
-//  projCanvas = createGraphics(1500,1500);
   println("Projector Info: " + projectorWidth + ", " + projectorHeight + ", " + projectorOffset);
 }
 

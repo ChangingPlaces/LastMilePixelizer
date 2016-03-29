@@ -43,7 +43,7 @@ boolean showDeliveryData = false;
 boolean showPopulationData = true;
 boolean showBasemap = true;
 
-boolean flagResize = false;
+boolean flagResize = true;
 
 // Display Matrix Size (cells rendered to screen)
 int displayV = 22*4; // Height of Lego Table
@@ -75,7 +75,7 @@ String align = "RIGHT";
 Menu mainMenu, hideMenu;
 
 void setup() {
-  size(screenWidth, screenHeight);
+  size(screenWidth, screenHeight, P3D);
   
   // Window may be resized after initialized
   frame.setResizable(true);
@@ -215,7 +215,7 @@ void draw() {
   
   table.endDraw();
   
-  image(table, tablex_0, tabley_0, tablex_1, tabley_1);  
+  image(table, tablex_0, tabley_0, tablex_1, tabley_1); 
   
   projector = get(tablex_0, tabley_0, tablex_1, tabley_1);
   
@@ -236,6 +236,5 @@ void draw() {
   screen.endDraw();
   
   image(screen, 0, 0);
-//  if (showFrameRate) { renderProjCanvas(); }
 }
   
