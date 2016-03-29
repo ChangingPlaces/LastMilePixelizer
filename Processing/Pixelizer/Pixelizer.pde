@@ -47,6 +47,7 @@ boolean showStores = true;
 boolean showDeliveryData = false;
 boolean showPopulationData = true;
 boolean showBasemap = true;
+boolean showInputData = true;
 
 // Class that holds a button menu
 Menu mainMenu, hideMenu;
@@ -91,6 +92,9 @@ void setup() {
       // Reads point data from TSV file, converts to JSON, prints to JSON, and reads in from JSON
       reloadData(gridU, gridV, modeIndex);
     
+      // Initializes inputs with Random numbers
+      initInputData();
+      
       // Renders Minimap
       reRenderMiniMap(miniMap);
       

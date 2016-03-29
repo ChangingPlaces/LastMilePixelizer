@@ -18,7 +18,7 @@ boolean flagResize = true;
  */
  
 PGraphics screen, table;
-PGraphics h, s, l, i, c, p;
+PGraphics h, s, l, i, c, p, input;
 float gridWidth, gridHeight;
 PGraphics legendH, legendP;
 
@@ -44,6 +44,10 @@ void renderTable() {
  
   if (showStores) {
     table.image(s, 0, 0);
+  }
+  
+  if (showInputData) {
+    table.image(input, 0, 0);
   }
   
   // Draws lines
@@ -73,8 +77,11 @@ void renderScreen() {
 
 void reRender() {
   
-  // Renders false color heatmap to canvas
-  renderData(h, s, p);
+  // Renders Static Data Layers to Canvases
+  renderStaticTableLayers(h, s, p);
+  
+  // Renders Dynamic Table Layers to Canvases
+  renderDynamicTableLayers(input);
   
   // Renders Outlines of Lego Data Modules (a 4x4 lego stud piece)
   renderLines(l);
@@ -100,6 +107,7 @@ void initDataGraphics() {
   s = createGraphics(table.width, table.height);   // Store Dots
   l = createGraphics(table.width, table.height);   // lines
   c = createGraphics(table.width, table.height);   // Cursor
+  input = createGraphics(table.width, table.height);   // Input Data
   
   int legendWidth = 40;
   int legendHeight = 100;
@@ -126,10 +134,10 @@ void renderBasemap(PGraphics graphic) {
     tablex_1 = int(((float)displayU/displayV)*tabley_1);
   }
 
-// Methods for drawing Static Data onto Table
+// Methods for drawing Layers onto Table
 
-    // Draws false color heatmap to canvas
-    void renderData(PGraphics h, PGraphics s, PGraphics p) {
+    // Rully Renders Every Possible Layer we would want to draw on canvas
+    void renderStaticTableLayers(PGraphics h, PGraphics s, PGraphics p) {
       
       // Dynamically adjusts grid size to fit within canvas dimensions
       gridWidth = float(table.width)/displayU;
@@ -283,6 +291,51 @@ void renderBasemap(PGraphics graphic) {
         graphic.stroke(255*normalized, 255, 255, alpha);
             
         return normalized;
+    }
+    
+    // Rully Renders Every Possible Layer we would want to draw on canvas
+    void renderDynamicTableLayers(PGraphics input) {
+      
+      // Dynamically adjusts grid size to fit within canvas dimensions
+      gridWidth = float(table.width)/displayU;
+      gridHeight= float(table.height)/displayV;
+      
+      // clear canvases
+      input.beginDraw();
+      input.clear();
+      
+      // makes it so that colors are defined by Hue, Saturation, and Brightness values (0-255 by default)
+      input.colorMode(HSB);
+      
+      for (int u=0; u<displayU; u++) {
+        for (int v=0; v<displayV; v++) {
+          // Only loads data within bounds of dataset
+          if (u+gridPanU>=0 && u+gridPanU<gridU && v+gridPanV>=0 && v+gridPanV<gridV) {
+            float ID;
+            input.noStroke(); // No lines draw around grid cells
+            
+            ID = facilities[u+gridPanU][v+gridPanV];
+            input.fill(#00FF00);
+            if (ID == 1) {
+              input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+            }
+            
+            ID = market[u+gridPanU][v+gridPanV];
+            input.fill(#FF0000);
+            if (ID == 1) {
+              input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+            }
+            
+            ID = obstacles[u+gridPanU][v+gridPanV];
+            input.fill(0);
+            if (ID == 1) {
+              input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+            }
+            
+          }
+        }
+      }
+      input.endDraw();
     }
 
 // Methods for drawing lines representing lego piece boundaries

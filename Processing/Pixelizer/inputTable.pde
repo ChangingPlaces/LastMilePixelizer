@@ -6,10 +6,6 @@ int IDMax = 15;
 int tablePieceInput[][][] = new int[displayU/4][displayV/4][2]; 
 int tablePixelInput[][] = new int[displayU][displayV];
 
-int[][] facilities = new int[gridU][gridV];
-int[][] market = new int[gridU][gridV];
-int[][] obstacles = new int[gridU][gridV];
-
 // Input Piece Types
 ArrayList<Integer[][]> inputDef = new ArrayList<Integer[][]>();
 void setupPieces() {

@@ -17,7 +17,27 @@
       resetMousePan();
     }
 
-// Method for reloading data when changing zoom level, area of analysis, etc
+// Raster Basemap Data based on Google Maps
+    
+    // Raster Basemap Objects
+    PImage wholeMap, basemap;
+    String mapColor = "bw";
+    
+    // Loads one giant map object
+    void initializeBaseMap() {
+      wholeMap = loadImage("data/" + mapColor + "/" + fileName + "_2000.png");
+    }
+    
+    // Loads subset of wholemap onto basemap
+    void loadBasemap() {
+      float w = (float)wholeMap.width/gridU;
+      float h = (float)wholeMap.height/gridV;
+      basemap = wholeMap.get(int(gridPanU*w), int(gridPanV*h), int(displayU*w), int(displayV*h));
+      basemap.resize(table.width, table.height);
+      loadMiniBaseMap();
+    }
+    
+// Methods for reloading data when changing zoom level, area of analysis, etc
     
     // Set this to false if you know that you don't need to regenerate data every time Software is run
     boolean pixelizeData = true;
@@ -38,8 +58,11 @@
         pixelizeData(this.gridU, this.gridV);
       }
       
-      // Loads pixel data into heatmap
-      loadPixelData();
+      // Loads extents of static data
+      initStaticData();
+      
+      // Loads extents of Input data
+      initInputData(); 
       
       // Initializes Basemap file
       initializeBaseMap();
@@ -47,27 +70,6 @@
       // Loads Basemap from subset of file
       loadBasemap();
     }
-
-// Raster Basemap Data based on Google Maps
-    
-    // Raster Basemap Objects
-    PImage wholeMap, basemap;
-    String mapColor = "bw";
-    
-    // Loads one giant map object
-    void initializeBaseMap() {
-      wholeMap = loadImage("data/" + mapColor + "/" + fileName + "_2000.png");
-    }
-    
-    // Loads subset of wholemap onto basemap
-    void loadBasemap() {
-      float w = (float)wholeMap.width/gridU;
-      float h = (float)wholeMap.height/gridV;
-      basemap = wholeMap.get(int(gridPanU*w), int(gridPanV*h), int(displayU*w), int(displayV*h));
-      basemap.resize(table.width, table.height);
-      loadMiniBaseMap();
-    }
-
 
 // Pre-loaded Static Data (geospatial delivery counts, population, etc)
 
@@ -86,7 +88,7 @@
     Table popCSV, huCSV;
     
     // Runs once when initializes
-    void loadPixelData() {
+    void initStaticData() {
       
       array = loadJSONArray("data/" + fileName + "_" + valueMode + ".json");
       try {
@@ -160,5 +162,57 @@
     //  // Prints largest and smallest values to console
     //  println("Maximum Value: " + heatmapMAX);
     //  println("Minimum Value: " + heatmapMIN);
+      
+    }
+    
+// Initialize Input Data (store locations, lockers, etc)
+    
+    int[][] facilities, market, obstacles;
+    
+    // Runs once when initializes
+    void initInputData() {
+      facilities = new int[gridU][gridV];
+      market = new int[gridU][gridV];
+      obstacles = new int[gridU][gridV];
+      for (int u=0; u<gridU; u++) {
+        for (int v=0; v<gridV; v++) {
+          facilities[u][v] = 0;
+          market[u][v] = 0;
+          obstacles[u][v] = 0;
+        }
+      }
+      
+      fauxInputData(0, facilities, 7);
+      fauxInputData(0, market, 1);
+      fauxInputData(0, obstacles, 1);
+    }
+    
+    void fauxInputData(int code, int[][] inputs, int maxInput) {
+
+      if (code == 2 ) {
+        
+        // Sets all grids to have "no object" (-1) with no rotation (0)
+        for (int i=0; i<inputs.length; i++) {
+          for (int j=0; j<inputs[0].length; j++) {
+            inputs[i][j] = -1;
+          }
+        }
+      } else if (code == 1 ) {
+        
+        // Sets grids to be alternating one of each N piece types (0-N) with no rotation (0)
+        for (int i=0; i<inputs.length; i++) {
+          for (int j=0; j<inputs[0].length; j++) {
+            inputs[i][j] = i  % maxInput+1;
+          }
+        }
+      } else if (code == 0 ) {
+        
+        // Sets grids to be random piece types (0-N) with random rotation (0-3)
+        for (int i=0; i<inputs.length; i++) {
+          for (int j=0; j<inputs[0].length; j++) {
+            inputs[i][j] = int(random(-1.99, maxInput+1));
+          }
+        }
+      }
       
     }
