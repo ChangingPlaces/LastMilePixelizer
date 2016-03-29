@@ -217,6 +217,8 @@ void draw() {
   
   image(table, tablex_0, tabley_0, tablex_1, tabley_1);  
   
+  projector = get(tablex_0, tabley_0, tablex_1, tabley_1);
+  
   screen.beginDraw();
   screen.clear();
   

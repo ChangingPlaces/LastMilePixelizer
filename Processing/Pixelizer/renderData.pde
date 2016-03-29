@@ -1,4 +1,5 @@
 PGraphics screen, table;
+PImage projector;
 PGraphics h, s, l, i, c, p;
 float gridWidth, gridHeight;
 PGraphics legendH, legendP;
