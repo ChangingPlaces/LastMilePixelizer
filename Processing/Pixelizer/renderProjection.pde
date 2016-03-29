@@ -34,6 +34,7 @@ Keystone ks;
 // defines various drawing surfaces, all pre-calibrated, to project
 CornerPinSurface surface;
 PGraphics offscreen;
+PImage projector;
 
 // New Application Window Parameters
 PFrame proj2D = null; // f defines window to open new applet in
@@ -124,7 +125,7 @@ public class projApplet extends PApplet {
     p.beginDraw();
     p.clear();
     p.translate(x_offset, 0);
-    p.image(table, 0, 0);
+    p.image(projector, 0, 0);
     p.endDraw();
   }
   

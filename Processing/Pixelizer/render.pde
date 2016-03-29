@@ -9,8 +9,15 @@ String align = "RIGHT";
 
 boolean flagResize = true;
 
+/* Graphics Architecture:
+ * 
+ * projector  <-  main  <-  table  <-  (p)opulation, (h)eatmap, (s)tores(s), (l)ines, (c)ursor
+ *                 ^
+ *                 |
+ *               screen <-  (i)nfo <-  minimap, legendH, legendP
+ */
+ 
 PGraphics screen, table;
-PImage projector;
 PGraphics h, s, l, i, c, p;
 float gridWidth, gridHeight;
 PGraphics legendH, legendP;
@@ -18,6 +25,66 @@ PGraphics legendH, legendP;
 int tabley_0 = 25;
 int tablex_0 = 25;
 int tabley_1, tablex_1;
+
+void renderTable() {
+  table.beginDraw();
+  table.clear();
+  table.background(background);
+  
+  // Draws a Google Satellite Image
+  renderBasemap(table);
+  
+  if (showPopulationData){
+    table.image(p, 0, 0);
+  }
+  
+  if (showDeliveryData) {
+    table.image(h, 0, 0);
+  }
+ 
+  if (showStores) {
+    table.image(s, 0, 0);
+  }
+  
+  // Draws lines
+  table.image(l, 0, 0);
+  
+  // Draws Cursor
+  renderCursor(c);
+  table.image(c, 0, 0);
+  
+  table.endDraw();
+}
+
+void renderScreen() {
+  screen.beginDraw();
+  screen.clear();
+  renderInfo(i, 2*tablex_0 + tablex_1, tabley_0, mapRatio*tablex_1, mapRatio*tabley_1);
+  screen.image(i, 0, 0);
+  
+  // Draws Menu
+  buttonHovering = false;
+  hideMenu.draw(screen);
+  if (showMainMenu) {
+    mainMenu.draw(screen);
+  }
+  screen.endDraw();
+}
+
+void reRender() {
+  
+  // Renders false color heatmap to canvas
+  renderData(h, s, p);
+  
+  // Renders Outlines of Lego Data Modules (a 4x4 lego stud piece)
+  renderLines(l);
+  
+  // Renders Legends
+  renderLegends();
+  
+  // Renders Text
+  renderInfo(i, 2*tablex_0 + tablex_1, tabley_0, mapRatio*tablex_1, mapRatio*tabley_1);
+}
 
 // Graphics Objects for Data Layers
 void initDataGraphics() {
@@ -58,21 +125,6 @@ void renderBasemap(PGraphics graphic) {
     tabley_1 = screenHeight - 2*tabley_0;
     tablex_1 = int(((float)displayU/displayV)*tabley_1);
   }
-
-void reRender() {
-  
-  // Renders false color heatmap to canvas
-  renderData(h, s, p);
-  
-  // Renders Outlines of Lego Data Modules (a 4x4 lego stud piece)
-  renderLines(l);
-  
-  // Renders Legends
-  renderLegends();
-  
-  // Renders Text
-  renderInfo(i, 2*tablex_0 + tablex_1, tabley_0, mapRatio*tablex_1, mapRatio*tabley_1);
-}
 
 // Methods for drawing Static Data onto Table
 

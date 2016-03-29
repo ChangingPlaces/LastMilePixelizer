@@ -16,6 +16,14 @@
  * Write Date: January, 2015
  * 
  */
+ 
+/* Graphics Architecture:
+ * 
+ * projector  <-  main  <-  table  <-  (p)opulation, (h)eatmap, (s)tores(s), (l)ines, (c)ursor
+ *                 ^
+ *                 |
+ *               screen <-  (i)nfo <-  minimap, legendH, legendP
+ */
 
 // Library needed for ComponentAdapter()
 import java.awt.event.*;
@@ -113,50 +121,5 @@ void draw() {
   
   // Exports table Graphic to Projector
   projector = get(tablex_0, tabley_0, tablex_1, tabley_1);
-}
-
-void renderTable() {
-  table.beginDraw();
-  table.clear();
-  table.background(background);
-  
-  // Draws a Google Satellite Image
-  renderBasemap(table);
-  
-  if (showPopulationData){
-    table.image(p, 0, 0);
-  }
-  
-  if (showDeliveryData) {
-    table.image(h, 0, 0);
-  }
- 
-  if (showStores) {
-    table.image(s, 0, 0);
-  }
-  
-  // Draws lines
-  table.image(l, 0, 0);
-  
-  // Draws Cursor
-  renderCursor(c);
-  table.image(c, 0, 0);
-  
-  table.endDraw();
-}
-
-void renderScreen() {
-  screen.beginDraw();
-  screen.clear();
-  renderInfo(i, 2*tablex_0 + tablex_1, tabley_0, mapRatio*tablex_1, mapRatio*tabley_1);
-  screen.image(i, 0, 0);
-  
-  // Draws Menu
-  buttonHovering = false;
-  hideMenu.draw(screen);
-  if (showMainMenu) {
-    mainMenu.draw(screen);
-  }
-  screen.endDraw();
 }
   
