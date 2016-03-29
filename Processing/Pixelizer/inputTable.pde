@@ -1,13 +1,18 @@
-// Input Piece Types
-
-ArrayList<Integer[][]> inputDef = new ArrayList<Integer[][]>();
-
-int NPieces = 16;
+int inputUMax = 18;
+int inputVMax = 22;
+int IDMax = 15;
 
 // Arrays that holds ID information of rectilinear tile arrangement.
-int codeArray[][][] = new int[displayU/4][displayV/4][2]; 
+int tablePieceInput[][][] = new int[displayU/4][displayV/4][2]; 
+int tablePixelInput[][] = new int[displayU][displayV];
 
-void setupInputDef() {
+int[][] facilities = new int[gridU][gridV];
+int[][] market = new int[gridU][gridV];
+int[][] obstacles = new int[gridU][gridV];
+
+// Input Piece Types
+ArrayList<Integer[][]> inputDef = new ArrayList<Integer[][]>();
+void setupPieces() {
   
   // 0: IMN
   Integer[][] piece_0 = {
@@ -154,37 +159,33 @@ void setupInputDef() {
   inputDef.add(piece_15);
 }
 
-void setupCodeArray(int code) {
+void setupTablePieceInput(int code) {
 
   if (code == 2 ) {
     
     // Sets all grids to have "no object" (-1) with no rotation (0)
-    for (int i=0; i<codeArray.length; i++) {
-      for (int j=0; j<codeArray[0].length; j++) {
-        codeArray[i][j][0] = -1;
-        codeArray[i][j][1] = 0;
+    for (int i=0; i<tablePieceInput.length; i++) {
+      for (int j=0; j<tablePieceInput[0].length; j++) {
+        tablePieceInput[i][j][0] = -1;
+        tablePieceInput[i][j][1] = 0;
       }
     }
   } else if (code == 1 ) {
     
     // Sets grids to be alternating one of each N piece types (0-N) with no rotation (0)
-    int testID = 0; // Sets first grid cell to ID = 0
-    for (int i=0; i<codeArray.length; i++) {
-      for (int j=0; j<codeArray[0].length; j++) {
-        codeArray[i][j][0] = i  % NPieces;
-        codeArray[i][j][1] = 0;
-        testID++;
+    for (int i=0; i<tablePieceInput.length; i++) {
+      for (int j=0; j<tablePieceInput[0].length; j++) {
+        tablePieceInput[i][j][0] = i  % IDMax+1;
+        tablePieceInput[i][j][1] = 0;
       }
     }
   } else if (code == 0 ) {
     
     // Sets grids to be random piece types (0-N) with random rotation (0-3)
-    int testID = 0; // Sets first grid cell to ID = 0
-    for (int i=0; i<codeArray.length; i++) {
-      for (int j=0; j<codeArray[0].length; j++) {
-        codeArray[i][j][0] = int(random(-1.99, NPieces));
-        codeArray[i][j][1] = int(random(0, 4));
-        testID++;
+    for (int i=0; i<tablePieceInput.length; i++) {
+      for (int j=0; j<tablePieceInput[0].length; j++) {
+        tablePieceInput[i][j][0] = int(random(-1.99, IDMax+1));
+        tablePieceInput[i][j][1] = int(random(0, 4));
       }
     }
   }

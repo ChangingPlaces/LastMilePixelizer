@@ -39,6 +39,12 @@ PGraphics offscreen;
 PFrame proj2D = null; // f defines window to open new applet in
 projApplet applet; // applet acts as new set of setup() and draw() functions that operate in parallel
 
+// Run Anything Needed to have Projection mapping work
+void initializeProjection2D() {
+  println("Projector Info: " + projectorWidth + ", " + projectorHeight + ", " + projectorOffset);
+  //toggleProjection(getButtonIndex(buttonNames[21]));
+}
+
 public class PFrame extends JFrame {
   public PFrame() {
     setBounds(0, 0, projectorWidth, projectorHeight );
@@ -52,10 +58,6 @@ public class PFrame extends JFrame {
     show();
     setTitle("Projection2D");
   }
-}
-
-void initializeProjection2D() {
-  println("Projector Info: " + projectorWidth + ", " + projectorHeight + ", " + projectorOffset);
 }
 
 public void showProjection2D() {
@@ -122,7 +124,7 @@ public class projApplet extends PApplet {
     p.beginDraw();
     p.clear();
     p.translate(x_offset, 0);
-    p.image(projector, 0, 0);
+    p.image(table, 0, 0);
     p.endDraw();
   }
   

@@ -70,6 +70,52 @@ int getButtonIndex(String name) {
 String[] hide = {"Hide Main Menu (h)"};
 String[] show = {"Show Main Menu (h)"};
 
+// creates all the menu objects
+void loadMenu(int screenWidth, int screenHeight) {
+  // Initializes Menu Items (screenWidth, screenHeight, button width[pix], button height[pix], 
+  // number of buttons to offset downward, String[] names of buttons)
+  hideMenu = new Menu(screenWidth, screenHeight, 170, 20, 0, hide, align);
+  mainMenu = new Menu(screenWidth, screenHeight, 170, 20, 2, menuOrder, align);
+  // Selects one of the mutually exclusive heatmps
+  depressHeatmapButtons();
+  // Selects one of the mutually exclusive population maps
+  depressPopulationButtons();
+  // Selects one of the mutually exclusive pixel scales
+  depressZoomButtons(gridSize);
+  // Checks whether these true/false button should be pressed
+  pressButton(showStores, getButtonIndex(buttonNames[6]));
+  pressButton(showBasemap, getButtonIndex(buttonNames[14]));
+  pressButton(showFrameRate, getButtonIndex(buttonNames[15]));
+  pressButton(showDeliveryData, getButtonIndex(buttonNames[16]));
+  pressButton(showPopulationData, getButtonIndex(buttonNames[17]));
+  pressButton(displayProjection2D, getButtonIndex(buttonNames[21]));
+  
+  if (!showPopulationData) {
+    for (int i=18; i<=19; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
+    }
+  } else {
+    for (int i=18; i<=19; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
+    }
+  }
+  
+  if (!showDeliveryData) {
+    for (int i=2; i<=5; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
+    }
+  } else {
+    for (int i=2; i<=5; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
+    }
+  }
+  
+  mainMenu.buttons[getButtonIndex(buttonNames[0])].isPressed = true;
+  mainMenu.buttons[getButtonIndex(buttonNames[1])].isPressed = true;
+  mainMenu.buttons[getButtonIndex(buttonNames[10])].isPressed = true;
+  mainMenu.buttons[getButtonIndex(buttonNames[20])].isPressed = true;
+}
+
 // The result of each button click is defined here
 void mouseClicked() {
   
@@ -188,7 +234,7 @@ void mouseClicked() {
   
   //function20
   if(mainMenu.buttons[getButtonIndex(buttonNames[20])].over()){ 
-    setGridParameters();
+    resetGridParameters();
   }
   
   //function21
@@ -271,7 +317,7 @@ void keyPressed() {
       setHousing(getButtonIndex(buttonNames[19]));
       break;
     case 'R': //  "Recenter Grid (R)",      // 20
-      setGridParameters();
+      resetGridParameters();
       break;
     case '`': //  "Enable Projection (`)"   // 21
       toggleProjection(getButtonIndex(buttonNames[21]));
@@ -394,8 +440,8 @@ void toggleMainMenu() {
 // Loads Next Data Set
 void nextModeIndex() {
   modeIndex = next(modeIndex, 1);
-  loadData(gridU, gridV, modeIndex);
-  renderMiniMap(miniMap);
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
   println("Mode Index = " + modeIndex + ": " + fileName);
 }
 
@@ -409,70 +455,70 @@ void printScreen() {
 void setDeliveries(int button) {
   valueMode = "deliveries";
   depressHeatmapButtons();
-  loadData(gridU, gridV, modeIndex);
-  renderMiniMap(miniMap);
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
   println("valueMode: " + valueMode);
 }
 
 void setTotes(int button) {
   valueMode = "totes";
   depressHeatmapButtons();
-  loadData(gridU, gridV, modeIndex);
-  renderMiniMap(miniMap);
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
   println("valueMode: " + valueMode);
 }
 
 void setSource(int button) {
   valueMode = "source";
   depressHeatmapButtons();
-  loadData(gridU, gridV, modeIndex);
-  renderMiniMap(miniMap);
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
   println("valueMode: " + valueMode);
 }
 
 void setDoorstep(int button) {
   valueMode = "doorstep";
   depressHeatmapButtons();
-  loadData(gridU, gridV, modeIndex);
-  renderMiniMap(miniMap);
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
   println("valueMode: " + valueMode);
 }
 
 void setStores(int button) {
   showStores = toggle(showStores);
   pressButton(showStores, button);
-  renderMiniMap(miniMap);
+  reRenderMiniMap(miniMap);
   println("showStores: " + showStores);
 }
 
 void setPop(int button) {
   popMode = "POP10";
   depressPopulationButtons();
-  loadData(gridU, gridV, modeIndex);
-  renderMiniMap(miniMap);
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
   println("popMode: " + popMode);
 }
 
 void setHousing(int button) {
   popMode = "HOUSING10";
   depressPopulationButtons();
-  loadData(gridU, gridV, modeIndex);
-  renderMiniMap(miniMap);
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
   println("popMode: " + popMode);
 }
 
 void setGridSize(float size, int button) {
   gridSize = size;
-  setGridParameters();
+  resetGridParameters();
   depressZoomButtons(size);
-  loadData(gridU, gridV, modeIndex);
-  renderMiniMap(miniMap);
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
   println("gridSize: " + gridSize + "km");
 }
 
 void toggleBaseMap(int button) {
   showBasemap = toggle(showBasemap);
-  renderMiniMap(miniMap);
+  reRenderMiniMap(miniMap);
   pressButton(showBasemap, button);
   println("showBasemap = " + showBasemap);
 } 
@@ -491,7 +537,7 @@ void toggleProjection(int button) {
 
 void toggleDeliveryData(int button) {
   showDeliveryData = toggle(showDeliveryData);
-  renderMiniMap(miniMap);
+  reRenderMiniMap(miniMap);
   pressButton(showDeliveryData, button);
   println("showDeliveryData = " + showDeliveryData);
   
@@ -508,7 +554,7 @@ void toggleDeliveryData(int button) {
 
 void togglePopulationData(int button) {
   showPopulationData = toggle(showPopulationData);
-  renderMiniMap(miniMap);
+  reRenderMiniMap(miniMap);
   pressButton(showPopulationData, button);
   println("showPopulationData = " + showPopulationData);
   
@@ -639,7 +685,7 @@ void invertColors() {
   }
   initializeBaseMap();
   loadBasemap();
-  renderMiniMap(miniMap);
+  reRenderMiniMap(miniMap);
   println ("background: " + background + ", textColor: " + textColor);
 }
 

@@ -1,5 +1,5 @@
 // Principally, this script ensures that a string is "caught" via UDP and coded into principal inputs of:
-// - codeArray[][] or codeArray[][][2] (rotation)
+// - tablePieceInput[][] or tablePieceInput[][][2] (rotation)
 // - UMax, VMax
 //
 //
@@ -11,8 +11,6 @@ UDP udp;  // define the UDP object
 boolean busyImporting = false;
 boolean viaUDP = true;
 boolean changeDetected = false;
-
-int inputUMax, inputVMax, IDMax;
 
 void initUDP() {
   if (viaUDP) {
@@ -54,10 +52,10 @@ void parseCodeStrings(String data[]) {
       if (split.length == 3 && !split[0].equals("gridExtents")) { // If 3 columns
           
         // detects if different from previous value
-        if ( v_temp < codeArray.length && u_temp < codeArray[0].length ) {
-          if ( codeArray[v_temp][u_temp][0] != int(split[0]) ) {
+        if ( v_temp < tablePieceInput.length && u_temp < tablePieceInput[0].length ) {
+          if ( tablePieceInput[v_temp][u_temp][0] != int(split[0]) ) {
             // Sets ID
-            codeArray[v_temp][u_temp][0] = int(split[0]);
+            tablePieceInput[v_temp][u_temp][0] = int(split[0]);
             changeDetected = true;
           }
         }
@@ -65,12 +63,12 @@ void parseCodeStrings(String data[]) {
       } else if (split.length == 4) {   // If 4 columns
         
         // detects if different from previous value
-        if ( v_temp < codeArray.length && u_temp < codeArray[0].length ) {
-          if ( codeArray[v_temp][u_temp][0] != int(split[0]) || codeArray[v_temp][u_temp][1] != int(split[3])/90 ) {
+        if ( v_temp < tablePieceInput.length && u_temp < tablePieceInput[0].length ) {
+          if ( tablePieceInput[v_temp][u_temp][0] != int(split[0]) || tablePieceInput[v_temp][u_temp][1] != int(split[3])/90 ) {
             // Sets ID
-            codeArray[v_temp][u_temp][0] = int(split[0]); 
+            tablePieceInput[v_temp][u_temp][0] = int(split[0]); 
             //Identifies rotation vector of piece [WARNING: Colortizer supplies rotation in degrees (0, 90, 180, and 270)]
-            codeArray[v_temp][u_temp][1] = int(split[3])/90; 
+            tablePieceInput[v_temp][u_temp][1] = int(split[3])/90; 
             changeDetected = true;
           }
         }
