@@ -1,5 +1,6 @@
 // Arrays that holds ID information of rectilinear tile arrangement.
 int tablePieceInput[][][] = new int[displayU/4][displayV/4][2];
+int rotationMod = 0;
 
 // Input Piece Types
 ArrayList<Integer[][]> inputData;
@@ -253,7 +254,7 @@ void decodePieces() {
       if (ID >= 0 && ID <= IDMax) {
         
         // Rotation Parameters
-        int rotation = tablePieceInput[i][j][1];
+        int rotation = (tablePieceInput[i][j][1] + rotationMod)%4;
         int X =0;
         int Y =0;
         

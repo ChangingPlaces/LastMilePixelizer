@@ -374,6 +374,12 @@ void keyPressed() {
     case 'A': //  "Piece Data (A)"          // 25
       setPieceData();
       break;
+      
+    case 'k': 
+      rotationMod = next(rotationMod, 3);
+      decodePieces();
+      reRender();
+      break;
   }
   
   //------arrow keys and how to code keys that aren't characters exactly----- 
