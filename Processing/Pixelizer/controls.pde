@@ -4,6 +4,7 @@
 String[] menuOrder = 
 {
   "Next City (n)",
+  "Randomize Pieces (z)",
   "VOID",
   "2km per pixel (3)",
   "1km per pixel (2)",
@@ -54,7 +55,8 @@ String[] buttonNames =
   "Population Counts (u)",   // 18
   "Household Counts (e)",    // 19
   "Recenter Grid (R)",       // 20
-  "Enable Projection (`)"    // 21
+  "Enable Projection (`)",   // 21
+  "Randomize Pieces (z)"     // 22
 };
 
 int getButtonIndex(String name) {
@@ -63,7 +65,7 @@ int getButtonIndex(String name) {
       return i;
     }
   }
-  return 1;
+  return 2;
 }
 
 // These Strings are for the hideMenu, formatted as arrays for Menu Class Constructor
@@ -114,6 +116,7 @@ void loadMenu(int screenWidth, int screenHeight) {
   mainMenu.buttons[getButtonIndex(buttonNames[1])].isPressed = true;
   mainMenu.buttons[getButtonIndex(buttonNames[10])].isPressed = true;
   mainMenu.buttons[getButtonIndex(buttonNames[20])].isPressed = true;
+  mainMenu.buttons[getButtonIndex(buttonNames[22])].isPressed = true;
 }
 
 // The result of each button click is defined here
@@ -129,118 +132,122 @@ void mouseClicked() {
     toggleMainMenu();
   }
   
+    // Main Menu Functions:
+    
+    //function0
+    if(mainMenu.buttons[getButtonIndex(buttonNames[0])].over()){  
+      nextModeIndex();
+    }
+    
+    //function1
+    if(mainMenu.buttons[getButtonIndex(buttonNames[1])].over()){ 
+      printScreen();
+    }
   
-  // Main Menu Functions:
-  
-  //function0
-  if(mainMenu.buttons[getButtonIndex(buttonNames[0])].over()){  
-    nextModeIndex();
-  }
-  
-  //function1
-  if(mainMenu.buttons[getButtonIndex(buttonNames[1])].over()){ 
-    printScreen();
-  }
-
-  //function2
-  if(mainMenu.buttons[getButtonIndex(buttonNames[2])].over()){  
-    setDeliveries(getButtonIndex(buttonNames[2]));
-  }
-  
-  //function3
-  if(mainMenu.buttons[getButtonIndex(buttonNames[3])].over()){  
-    setTotes(getButtonIndex(buttonNames[3]));
-  }
-  
-  //function4
-  if(mainMenu.buttons[getButtonIndex(buttonNames[4])].over()){  
-    setSource(getButtonIndex(buttonNames[4]));
-  }
-  
-  //function5
-  if(mainMenu.buttons[getButtonIndex(buttonNames[5])].over()){  
-    setDoorstep(getButtonIndex(buttonNames[5]));
-  }
-  
-  //function6
-  if(mainMenu.buttons[getButtonIndex(buttonNames[6])].over()){  
-    setStores(getButtonIndex(buttonNames[6]));
-  }
-  
-  //function7
-  if(mainMenu.buttons[getButtonIndex(buttonNames[7])].over()){  
-    alignLeft();
-  }
-  
-  //function8
-  if(mainMenu.buttons[getButtonIndex(buttonNames[8])].over()){ 
-    alignRight();
-  }
-  
-  //function9
-  if(mainMenu.buttons[getButtonIndex(buttonNames[9])].over()){ 
-    alignCenter();
-  }
-  
-  //function10
-  if(mainMenu.buttons[getButtonIndex(buttonNames[10])].over()){ 
-    invertColors();
-  }
-  
-  //function11
-  if(mainMenu.buttons[getButtonIndex(buttonNames[11])].over()){ 
-    setGridSize(2.0, getButtonIndex(buttonNames[11]));
-  }
-  
-  //function12
-  if(mainMenu.buttons[getButtonIndex(buttonNames[12])].over()){ 
-    setGridSize(1.0, getButtonIndex(buttonNames[12]));
-  }
-  
-  //function13
-  if(mainMenu.buttons[getButtonIndex(buttonNames[13])].over()){ 
-    setGridSize(0.5, getButtonIndex(buttonNames[13]));
-  }
-  
-  //function14
-  if(mainMenu.buttons[getButtonIndex(buttonNames[14])].over()){ 
-    toggleBaseMap(getButtonIndex(buttonNames[14]));
-  }
-  
-  //function15
-  if(mainMenu.buttons[getButtonIndex(buttonNames[15])].over()){ 
-    toggleFramerate(getButtonIndex(buttonNames[15]));
-  }
-  
-  //function16
-  if(mainMenu.buttons[getButtonIndex(buttonNames[16])].over()){ 
-    toggleDeliveryData(getButtonIndex(buttonNames[16]));
-  }
-  
-  //function17
-  if(mainMenu.buttons[getButtonIndex(buttonNames[17])].over()){ 
-    togglePopulationData(getButtonIndex(buttonNames[17]));
-  }
-  
-  //function18
-  if(mainMenu.buttons[getButtonIndex(buttonNames[18])].over()){ 
-    setPop(getButtonIndex(buttonNames[18]));
-  }
-  
-  //function19
-  if(mainMenu.buttons[getButtonIndex(buttonNames[19])].over()){ 
-    setHousing(getButtonIndex(buttonNames[19]));
-  }
-  
-  //function20
-  if(mainMenu.buttons[getButtonIndex(buttonNames[20])].over()){ 
-    resetGridParameters();
-  }
-  
-  //function21
-  if(mainMenu.buttons[getButtonIndex(buttonNames[21])].over()){ 
-    toggleProjection(21);
-  }
+    //function2
+    if(mainMenu.buttons[getButtonIndex(buttonNames[2])].over()){  
+      setDeliveries(getButtonIndex(buttonNames[2]));
+    }
+    
+    //function3
+    if(mainMenu.buttons[getButtonIndex(buttonNames[3])].over()){  
+      setTotes(getButtonIndex(buttonNames[3]));
+    }
+    
+    //function4
+    if(mainMenu.buttons[getButtonIndex(buttonNames[4])].over()){  
+      setSource(getButtonIndex(buttonNames[4]));
+    }
+    
+    //function5
+    if(mainMenu.buttons[getButtonIndex(buttonNames[5])].over()){  
+      setDoorstep(getButtonIndex(buttonNames[5]));
+    }
+    
+    //function6
+    if(mainMenu.buttons[getButtonIndex(buttonNames[6])].over()){  
+      setStores(getButtonIndex(buttonNames[6]));
+    }
+    
+//    //function7
+//    if(mainMenu.buttons[getButtonIndex(buttonNames[7])].over()){  
+//      alignLeft();
+//    }
+//    
+//    //function8
+//    if(mainMenu.buttons[getButtonIndex(buttonNames[8])].over()){ 
+//      alignRight();
+//    }
+//    
+//    //function9
+//    if(mainMenu.buttons[getButtonIndex(buttonNames[9])].over()){ 
+//      alignCenter();
+//    }
+    
+    //function10
+    if(mainMenu.buttons[getButtonIndex(buttonNames[10])].over()){ 
+      invertColors();
+    }
+    
+    //function11
+    if(mainMenu.buttons[getButtonIndex(buttonNames[11])].over()){ 
+      setGridSize(2.0, getButtonIndex(buttonNames[11]));
+    }
+    
+    //function12
+    if(mainMenu.buttons[getButtonIndex(buttonNames[12])].over()){ 
+      setGridSize(1.0, getButtonIndex(buttonNames[12]));
+    }
+    
+    //function13
+    if(mainMenu.buttons[getButtonIndex(buttonNames[13])].over()){ 
+      setGridSize(0.5, getButtonIndex(buttonNames[13]));
+    }
+    
+    //function14
+    if(mainMenu.buttons[getButtonIndex(buttonNames[14])].over()){ 
+      toggleBaseMap(getButtonIndex(buttonNames[14]));
+    }
+    
+    //function15
+    if(mainMenu.buttons[getButtonIndex(buttonNames[15])].over()){ 
+      toggleFramerate(getButtonIndex(buttonNames[15]));
+    }
+    
+    //function16
+    if(mainMenu.buttons[getButtonIndex(buttonNames[16])].over()){ 
+      toggleDeliveryData(getButtonIndex(buttonNames[16]));
+    }
+    
+    //function17
+    if(mainMenu.buttons[getButtonIndex(buttonNames[17])].over()){ 
+      togglePopulationData(getButtonIndex(buttonNames[17]));
+    }
+    
+    //function18
+    if(mainMenu.buttons[getButtonIndex(buttonNames[18])].over()){ 
+      setPop(getButtonIndex(buttonNames[18]));
+    }
+    
+    //function19
+    if(mainMenu.buttons[getButtonIndex(buttonNames[19])].over()){ 
+      setHousing(getButtonIndex(buttonNames[19]));
+    }
+    
+    //function20
+    if(mainMenu.buttons[getButtonIndex(buttonNames[20])].over()){ 
+      resetGridParameters();
+    }
+    
+    //function21
+    if(mainMenu.buttons[getButtonIndex(buttonNames[21])].over()){ 
+      toggleProjection(21);
+    }
+    
+    //function22
+    if(mainMenu.buttons[getButtonIndex(buttonNames[22])].over()){ 
+      toggleRandomPieces();
+    }
   
   reRender();
 }
@@ -321,6 +328,9 @@ void keyPressed() {
       break;
     case '`': //  "Enable Projection (`)"   // 21
       toggleProjection(getButtonIndex(buttonNames[21]));
+      break;
+    case 'z': //  "Randomize Pieces (z)"    // 22
+      toggleRandomPieces();
       break;
   }
   
@@ -442,6 +452,7 @@ void nextModeIndex() {
   modeIndex = next(modeIndex, 1);
   reloadData(gridU, gridV, modeIndex);
   reRenderMiniMap(miniMap);
+  fauxPieces(randomType, tablePieceInput, IDMax);
   println("Mode Index = " + modeIndex + ": " + fileName);
 }
 
@@ -513,6 +524,7 @@ void setGridSize(float size, int button) {
   depressZoomButtons(size);
   reloadData(gridU, gridV, modeIndex);
   reRenderMiniMap(miniMap);
+  fauxPieces(randomType, tablePieceInput, IDMax);
   println("gridSize: " + gridSize + "km");
 }
 
@@ -533,6 +545,12 @@ void toggleProjection(int button) {
   toggle2DProjection();
   pressButton(displayProjection2D, button);
   println("displayProjection2D = " + displayProjection2D);
+}
+
+void toggleRandomPieces() {
+  randomType = next(randomType, 2);
+  fauxPieces(randomType, tablePieceInput, IDMax);
+  println("randomType = " + randomType);
 }
 
 void toggleDeliveryData(int button) {

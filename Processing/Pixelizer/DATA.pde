@@ -1,8 +1,12 @@
 // Data Extents Parameters
 
     // Display Matrix Size (cells rendered to screen)
-    int displayV = 22*4; // Height of Lego Table
-    int displayU = 18*4; // Width of Lego Table
+    int inputUMax = 18;
+    int inputVMax = 22;
+    int IDMax = 15;
+    int legoPerPiece = 4;
+    int displayV = inputVMax*legoPerPiece; // Height of Lego Table
+    int displayU = inputUMax*legoPerPiece; // Width of Lego Table
     int gridPanV, gridPanU; // Integers that describe how much to offset grid pixels when drawing
     int scaler, gridU, gridV;
     
@@ -183,11 +187,6 @@
           form[u][v] = 0;
         }
       }
-      
-      fauxData(0, facilities, 7);
-      fauxData(0, market, 1);
-      fauxData(0, obstacles, 1);
-      fauxData(0, form, 0);
     }
     
     void fauxData(int code, int[][] inputs, int maxInput) {

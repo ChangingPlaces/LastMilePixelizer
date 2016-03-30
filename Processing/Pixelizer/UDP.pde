@@ -36,12 +36,6 @@ void parseCodeStrings(String data[]) {
       IDMax = int(split[1]);
     }
     
-    // Checks if row formatted for UMax and VMax
-    if (split.length == 3 && split[0].equals("gridExtents")) {
-      inputUMax = int(split[2]);
-      inputVMax = int(split[1]);
-    }
-    
     // Checks if row format is compatible with piece recognition.  3 columns for ID, U, V; 4 columns for ID, U, V, rotation
     if (split.length == 3 || split.length == 4) { 
       
@@ -73,7 +67,6 @@ void parseCodeStrings(String data[]) {
           }
         }
       }
-      
     } 
   }
 }

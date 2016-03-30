@@ -32,6 +32,11 @@ import java.awt.event.*;
 // 1 = San Jose
 int modeIndex = 0;
 
+// 0 = random
+// 1 = rows
+// 2 = clear
+int randomType = 2;
+
 int projectorWidth = 1920;
 int projectorHeight = 1200;
 int projectorOffset = 1842;
@@ -49,8 +54,8 @@ boolean showPopulationData = true;
 boolean showBasemap = true;
 
 boolean showInputData = true;
-boolean showFacilities = false;
-boolean showMarket = false;
+boolean showFacilities = true;
+boolean showMarket = true;
 boolean showObstacles = false;
 boolean showForm = true;
 
@@ -75,7 +80,7 @@ void setup() {
        }
        );
   
-  // Functions run only once during setup (from INIT tab)
+  // Functions run only once during setup
   
       // Graphics Objects for Data Layers
       initDataGraphics();
@@ -96,13 +101,9 @@ void setup() {
       
       // Reads point data from TSV file, converts to JSON, prints to JSON, and reads in from JSON
       reloadData(gridU, gridV, modeIndex);
-    
-      // Initializes inputs with Random numbers
-      initInputData();
       
       // Initializes Pieces with Random Placement
-      fauxPieces(0, tablePieceInput, IDMax);
-      decodePieces();
+      fauxPieces(randomType, tablePieceInput, IDMax);
       
       // Renders Minimap
       reRenderMiniMap(miniMap);
@@ -120,6 +121,13 @@ void draw() {
     initScreenOffsets();
     loadMenu(screenWidth, screenHeight);
     flagResize = false;
+  }
+  
+  // Decode pieces only if there is a change in Colortizer input
+  if (changeDetected) {
+    decodePieces();
+    renderDynamicTableLayers(input);
+    changeDetected = false;
   }
   
   background(background);

@@ -196,11 +196,12 @@ void renderBasemap(PGraphics graphic) {
             //STORES
             normalized = findStoreFill(s, stores[u+gridPanU][v+gridPanV]);
             //Outlines stores
-            s.strokeWeight(2);
-            s.stroke(textColor);
+            s.strokeWeight(4);
+            s.stroke(background);
+            s.fill(greenBrick);
             // Doesn't draw a rectangle for values of 0
             if (normalized != 0) {
-              s.ellipse((u+.5)*gridWidth, (v+.5)*gridHeight, 0.75*gridWidth, 0.75*gridHeight);
+              s.ellipse((u+.5)*gridWidth, (v+.5)*gridHeight, gridWidth, gridHeight);
             }
           }
         }
@@ -324,15 +325,15 @@ void renderBasemap(PGraphics graphic) {
             if (showFacilities) {
               ID = facilities[u+gridPanU][v+gridPanV];
               input.fill(#00FF00);
-              if (ID == 1) {
+              if (ID >= 1) {
                 input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
             
             if (showMarket) {
               ID = market[u+gridPanU][v+gridPanV];
-              input.fill(#FF0000);
-              if (ID == 1) {
+              input.fill(#FFFFFF);
+              if (ID >= 1) {
                 input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
@@ -605,7 +606,7 @@ void renderBasemap(PGraphics graphic) {
     
     void reRenderMiniMap(PGraphics miniMap) {
       
-      println(miniMap.width, miniMap.height);
+      //println(miniMap.width, miniMap.height);
       
       miniMap.beginDraw();
       miniMap.clear();
@@ -657,9 +658,12 @@ void renderBasemap(PGraphics graphic) {
             if (stores[u][v] != 0) {
               // HEATMAP
               normalized = findStoreFill(miniMap, stores[u][v]);
-              if (normalized == 0) {miniMap.noFill();}
-              //miniMap.fill(#FF0000);
-              miniMap.stroke(textColor);
+              if (normalized == 0) {
+                miniMap.noFill();
+              } else {
+                miniMap.fill(greenBrick);
+              }
+              miniMap.stroke(background);
               miniMap.strokeWeight(4);
               miniMap.ellipse(u*pixel_per_U,v*pixel_per_V,12,12);
             }

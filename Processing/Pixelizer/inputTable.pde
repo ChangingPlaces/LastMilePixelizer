@@ -1,7 +1,3 @@
-int inputUMax = 18;
-int inputVMax = 22;
-int IDMax = 15;
-
 // Arrays that holds ID information of rectilinear tile arrangement.
 int tablePieceInput[][][] = new int[displayU/4][displayV/4][2];
 
@@ -248,26 +244,79 @@ void setupPieces() {
 }
 
 void decodePieces() {
+  
+  clearInputData();
+  
   for (int i=0; i<tablePieceInput.length; i++) {
     for (int j=0; j<tablePieceInput[0].length; j++) {
       int ID = tablePieceInput[i][j][0];
-      int rot = tablePieceInput[i][j][1];
       if (ID >= 0 && ID <= IDMax) {
+        
+        // Rotation Parameters
+        int rotation = tablePieceInput[i][j][1];
+        int X =0;
+        int Y =0;
+        
+        // Update "Form" Layer
         Integer[][] form = inputForm.get(ID);
         for (int u=0; u<form.length; u++) {
           for (int v=0; v<form[0].length; v++) {
-            if (rot == 0) {
-              this.form[4*i + u][4*j + v] = form[v][u];
-            } else if (rot == 1) {
-              this.form[4*i + v][4*j + (3-u)] = form[v][u];
-            } else if (rot == 2) {
-              this.form[4*i + (3-u)][4*j + (3-v)] = form[v][u];
-            } else if (rot == 3) {
-              this.form[4*i + (3-v)][4*j + u] = form[v][u];
+            
+            if (rotation == 0) {
+              X = 4*i + u;
+              Y = 4*j + v;
+            } else if (rotation == 1) {
+              X = 4*i + v;
+              Y = 4*j + (3-u);
+            } else if (rotation == 2) {
+              X = 4*i + (3-u);
+              Y = 4*j + (3-v);
+            } else if (rotation == 3) {
+              X = 4*i + (3-v);
+              Y = 4*j + u;
             }
+          
+            this.form[gridPanU+X][gridPanV+Y] = form[v][u];
+          }
+        }
+        
+        // Update Facility, Market, and Obstacle Layers
+        Integer[][] data = inputData.get(ID);
+        for (int u=0; u<data.length; u++) {
+          for (int v=0; v<data[0].length; v++) {
+            
+            if (rotation == 0) {
+              X = 4*i + u;
+              Y = 4*j + v;
+            } else if (rotation == 1) {
+              X = 4*i + v;
+              Y = 4*j + (3-u);
+            } else if (rotation == 2) {
+              X = 4*i + (3-u);
+              Y = 4*j + (3-v);
+            } else if (rotation == 3) {
+              X = 4*i + (3-v);
+              Y = 4*j + u;
+            }
+        
+            if (ID >= 0 && ID <= 6) {
+              this.facilities[gridPanU+X][gridPanV+Y] = data[v][u];
+            } else if (ID ==8 || ID == 9) {
+              this.market[gridPanU+X][gridPanV+Y] = data[v][u];
+            } 
           }
         }
       }
+    }
+  }
+}
+
+void clearInputData() {
+  for (int u=0; u<gridU; u++) {
+    for (int v=0; v<gridV; v++) {
+      this.form[u][v] = 0;
+      this.facilities[u][v] = 0;
+      this.market[u][v] = 0;
     }
   }
 }
@@ -301,4 +350,7 @@ void fauxPieces(int code, int[][][] pieces, int maxID) {
       }
     }
   }
+  
+  decodePieces();
 }
+  
