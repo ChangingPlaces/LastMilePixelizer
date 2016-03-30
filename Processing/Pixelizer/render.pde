@@ -89,6 +89,9 @@ void reRender() {
   // Renders Dynamic Table Layers to Canvases
   renderDynamicTableLayers(input);
   
+  // reRender Minimap
+  reRenderMiniMap(miniMap);
+  
   // Renders Outlines of Lego Data Modules (a 4x4 lego stud piece)
   renderLines(l);
   
@@ -319,6 +322,7 @@ void renderBasemap(PGraphics graphic) {
         for (int v=0; v<displayV; v++) {
           // Only loads data within bounds of dataset
           if (u+gridPanU>=0 && u+gridPanU<gridU && v+gridPanV>=0 && v+gridPanV<gridV) {
+            
             float ID;
             input.noStroke(); // No lines draw around grid cells
             
@@ -347,20 +351,7 @@ void renderBasemap(PGraphics graphic) {
             }
             
             if (showForm) {
-              ID = form[u+gridPanU][v+gridPanV];
-              if (ID == 0) {
-                input.noFill();
-              } else if (ID == 1) {
-                input.fill(tanBrick);
-              } else if (ID == 2) {
-                input.fill(blueBrick);
-              } else if (ID == 3) {
-                input.fill(redBrick);
-              } else if (ID == 4) {
-                input.fill(blackBrick);
-              } else if (ID == 5) {
-                input.fill(greenBrick);
-              }
+              findFormFill(input, u+gridPanU, v+gridPanV);
               input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
             }
             
@@ -368,6 +359,23 @@ void renderBasemap(PGraphics graphic) {
         }
       }
       input.endDraw();
+    }
+    
+    void findFormFill(PGraphics input, int u, int v) {
+      int ID = form[u][v];
+      if (ID == 0) {
+        input.noFill();
+      } else if (ID == 1) {
+        input.fill(tanBrick);
+      } else if (ID == 2) {
+        input.fill(blueBrick);
+      } else if (ID == 3) {
+        input.fill(redBrick);
+      } else if (ID == 4) {
+        input.fill(blackBrick);
+      } else if (ID == 5) {
+        input.fill(greenBrick);
+      }
     }
 
 // Methods for drawing lines representing lego piece boundaries
@@ -645,7 +653,26 @@ void renderBasemap(PGraphics graphic) {
               miniMap.rect(u*pixel_per_U,v*pixel_per_V, pixel_per_U, pixel_per_V);
             }
           }
-          
+          if (showInputData) {
+            if (showForm) {
+              findFormFill(miniMap, u, v);
+              miniMap.noStroke();
+              miniMap.rect(u*pixel_per_U,v*pixel_per_V, pixel_per_U, pixel_per_V);
+            } else {
+              if (facilities[u][v] > 0) {
+                // HEATMAP
+                miniMap.fill(greenBrick);
+                miniMap.noStroke();
+                miniMap.rect(u*pixel_per_U,v*pixel_per_V, pixel_per_U, pixel_per_V);
+              }
+              if (market[u][v] > 0) {
+                // HEATMAP
+                miniMap.fill(blackBrick);
+                miniMap.noStroke();
+                miniMap.rect(u*pixel_per_U,v*pixel_per_V, pixel_per_U, pixel_per_V);
+              }
+            }
+          }
         }
       }
       

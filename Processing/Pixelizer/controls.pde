@@ -11,8 +11,11 @@ String[] menuOrder =
   "500m per pixel (1)",
   "Recenter Grid (R)",
   "VOID",
-  "Store Locations (s)",
+  "Show Input Data (I)",
+  "Piece Forms (F)", 
+  "Piece Data (A)",     
   "VOID",
+  "Store Locations (s)",
   "Show Delivery Data (D)",
   "Delivery Counts (d)",
   "Tote Counts (t)",
@@ -56,7 +59,10 @@ String[] buttonNames =
   "Household Counts (e)",    // 19
   "Recenter Grid (R)",       // 20
   "Enable Projection (`)",   // 21
-  "Randomize Pieces (z)"     // 22
+  "Randomize Pieces (z)",    // 22
+  "Show Input Data (I)",     // 23
+  "Piece Forms (F)",         // 24
+  "Piece Data (A)"           // 25
 };
 
 int getButtonIndex(String name) {
@@ -84,6 +90,8 @@ void loadMenu(int screenWidth, int screenHeight) {
   depressPopulationButtons();
   // Selects one of the mutually exclusive pixel scales
   depressZoomButtons(gridSize);
+  // Selects one of the mutually exclusive Input Data Types
+  depressInputButtons();
   // Checks whether these true/false button should be pressed
   pressButton(showStores, getButtonIndex(buttonNames[6]));
   pressButton(showBasemap, getButtonIndex(buttonNames[14]));
@@ -112,6 +120,16 @@ void loadMenu(int screenWidth, int screenHeight) {
     }
   }
   
+  if (!showInputData) {
+    for (int i=24; i<=25; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
+    }
+  } else {
+    for (int i=24; i<=25; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
+    }
+  }
+  
   mainMenu.buttons[getButtonIndex(buttonNames[0])].isPressed = true;
   mainMenu.buttons[getButtonIndex(buttonNames[1])].isPressed = true;
   mainMenu.buttons[getButtonIndex(buttonNames[10])].isPressed = true;
@@ -132,43 +150,43 @@ void mouseClicked() {
     toggleMainMenu();
   }
   
-    // Main Menu Functions:
-    
-    //function0
-    if(mainMenu.buttons[getButtonIndex(buttonNames[0])].over()){  
-      nextModeIndex();
-    }
-    
-    //function1
-    if(mainMenu.buttons[getButtonIndex(buttonNames[1])].over()){ 
-      printScreen();
-    }
+  // Main Menu Functions:
   
-    //function2
-    if(mainMenu.buttons[getButtonIndex(buttonNames[2])].over()){  
-      setDeliveries(getButtonIndex(buttonNames[2]));
-    }
-    
-    //function3
-    if(mainMenu.buttons[getButtonIndex(buttonNames[3])].over()){  
-      setTotes(getButtonIndex(buttonNames[3]));
-    }
-    
-    //function4
-    if(mainMenu.buttons[getButtonIndex(buttonNames[4])].over()){  
-      setSource(getButtonIndex(buttonNames[4]));
-    }
-    
-    //function5
-    if(mainMenu.buttons[getButtonIndex(buttonNames[5])].over()){  
-      setDoorstep(getButtonIndex(buttonNames[5]));
-    }
-    
-    //function6
-    if(mainMenu.buttons[getButtonIndex(buttonNames[6])].over()){  
-      setStores(getButtonIndex(buttonNames[6]));
-    }
-    
+  //function0
+  if(mainMenu.buttons[getButtonIndex(buttonNames[0])].over()){  
+    nextModeIndex();
+  }
+  
+  //function1
+  if(mainMenu.buttons[getButtonIndex(buttonNames[1])].over()){ 
+    printScreen();
+  }
+
+  //function2
+  if(mainMenu.buttons[getButtonIndex(buttonNames[2])].over()){  
+    setDeliveries(getButtonIndex(buttonNames[2]));
+  }
+  
+  //function3
+  if(mainMenu.buttons[getButtonIndex(buttonNames[3])].over()){  
+    setTotes(getButtonIndex(buttonNames[3]));
+  }
+  
+  //function4
+  if(mainMenu.buttons[getButtonIndex(buttonNames[4])].over()){  
+    setSource(getButtonIndex(buttonNames[4]));
+  }
+  
+  //function5
+  if(mainMenu.buttons[getButtonIndex(buttonNames[5])].over()){  
+    setDoorstep(getButtonIndex(buttonNames[5]));
+  }
+  
+  //function6
+  if(mainMenu.buttons[getButtonIndex(buttonNames[6])].over()){  
+    setStores(getButtonIndex(buttonNames[6]));
+  }
+  
 //    //function7
 //    if(mainMenu.buttons[getButtonIndex(buttonNames[7])].over()){  
 //      alignLeft();
@@ -183,71 +201,86 @@ void mouseClicked() {
 //    if(mainMenu.buttons[getButtonIndex(buttonNames[9])].over()){ 
 //      alignCenter();
 //    }
-    
-    //function10
-    if(mainMenu.buttons[getButtonIndex(buttonNames[10])].over()){ 
-      invertColors();
-    }
-    
-    //function11
-    if(mainMenu.buttons[getButtonIndex(buttonNames[11])].over()){ 
-      setGridSize(2.0, getButtonIndex(buttonNames[11]));
-    }
-    
-    //function12
-    if(mainMenu.buttons[getButtonIndex(buttonNames[12])].over()){ 
-      setGridSize(1.0, getButtonIndex(buttonNames[12]));
-    }
-    
-    //function13
-    if(mainMenu.buttons[getButtonIndex(buttonNames[13])].over()){ 
-      setGridSize(0.5, getButtonIndex(buttonNames[13]));
-    }
-    
-    //function14
-    if(mainMenu.buttons[getButtonIndex(buttonNames[14])].over()){ 
-      toggleBaseMap(getButtonIndex(buttonNames[14]));
-    }
-    
-    //function15
-    if(mainMenu.buttons[getButtonIndex(buttonNames[15])].over()){ 
-      toggleFramerate(getButtonIndex(buttonNames[15]));
-    }
-    
-    //function16
-    if(mainMenu.buttons[getButtonIndex(buttonNames[16])].over()){ 
-      toggleDeliveryData(getButtonIndex(buttonNames[16]));
-    }
-    
-    //function17
-    if(mainMenu.buttons[getButtonIndex(buttonNames[17])].over()){ 
-      togglePopulationData(getButtonIndex(buttonNames[17]));
-    }
-    
-    //function18
-    if(mainMenu.buttons[getButtonIndex(buttonNames[18])].over()){ 
-      setPop(getButtonIndex(buttonNames[18]));
-    }
-    
-    //function19
-    if(mainMenu.buttons[getButtonIndex(buttonNames[19])].over()){ 
-      setHousing(getButtonIndex(buttonNames[19]));
-    }
-    
-    //function20
-    if(mainMenu.buttons[getButtonIndex(buttonNames[20])].over()){ 
-      resetGridParameters();
-    }
-    
-    //function21
-    if(mainMenu.buttons[getButtonIndex(buttonNames[21])].over()){ 
-      toggleProjection(21);
-    }
-    
-    //function22
-    if(mainMenu.buttons[getButtonIndex(buttonNames[22])].over()){ 
-      toggleRandomPieces();
-    }
+  
+  //function10
+  if(mainMenu.buttons[getButtonIndex(buttonNames[10])].over()){ 
+    invertColors();
+  }
+  
+  //function11
+  if(mainMenu.buttons[getButtonIndex(buttonNames[11])].over()){ 
+    setGridSize(2.0, getButtonIndex(buttonNames[11]));
+  }
+  
+  //function12
+  if(mainMenu.buttons[getButtonIndex(buttonNames[12])].over()){ 
+    setGridSize(1.0, getButtonIndex(buttonNames[12]));
+  }
+  
+  //function13
+  if(mainMenu.buttons[getButtonIndex(buttonNames[13])].over()){ 
+    setGridSize(0.5, getButtonIndex(buttonNames[13]));
+  }
+  
+  //function14
+  if(mainMenu.buttons[getButtonIndex(buttonNames[14])].over()){ 
+    toggleBaseMap(getButtonIndex(buttonNames[14]));
+  }
+  
+  //function15
+  if(mainMenu.buttons[getButtonIndex(buttonNames[15])].over()){ 
+    toggleFramerate(getButtonIndex(buttonNames[15]));
+  }
+  
+  //function16
+  if(mainMenu.buttons[getButtonIndex(buttonNames[16])].over()){ 
+    toggleDeliveryData(getButtonIndex(buttonNames[16]));
+  }
+  
+  //function17
+  if(mainMenu.buttons[getButtonIndex(buttonNames[17])].over()){ 
+    togglePopulationData(getButtonIndex(buttonNames[17]));
+  }
+  
+  //function18
+  if(mainMenu.buttons[getButtonIndex(buttonNames[18])].over()){ 
+    setPop(getButtonIndex(buttonNames[18]));
+  }
+  
+  //function19
+  if(mainMenu.buttons[getButtonIndex(buttonNames[19])].over()){ 
+    setHousing(getButtonIndex(buttonNames[19]));
+  }
+  
+  //function20
+  if(mainMenu.buttons[getButtonIndex(buttonNames[20])].over()){ 
+    resetGridParameters();
+  }
+  
+  //function21
+  if(mainMenu.buttons[getButtonIndex(buttonNames[21])].over()){ 
+    toggleProjection(21);
+  }
+  
+  //function22
+  if(mainMenu.buttons[getButtonIndex(buttonNames[22])].over()){ 
+    toggleRandomPieces();
+  }
+  
+  //function23
+  if(mainMenu.buttons[getButtonIndex(buttonNames[23])].over()){ 
+    toggleInputData(getButtonIndex(buttonNames[23]));
+  }
+  
+  //function24
+  if(mainMenu.buttons[getButtonIndex(buttonNames[24])].over()){ 
+    setPieceForm();
+  }
+  
+  //function25
+  if(mainMenu.buttons[getButtonIndex(buttonNames[25])].over()){ 
+    setPieceData();
+  }
   
   reRender();
 }
@@ -331,6 +364,15 @@ void keyPressed() {
       break;
     case 'z': //  "Randomize Pieces (z)"    // 22
       toggleRandomPieces();
+      break;
+    case 'I': //  "Show Input Data (I)",    // 23
+      toggleInputData(getButtonIndex(buttonNames[23]));
+      break;
+    case 'F': //  "Piece Forms (F)",        // 24
+      setPieceForm();
+      break;
+    case 'A': //  "Piece Data (A)"          // 25
+      setPieceData();
       break;
   }
   
@@ -434,6 +476,7 @@ void mouseReleased() {
   }
   scroll_x_0 = scroll_x;
   scroll_y_0 = scroll_y;
+  reRender();
 }
 
 // Show or Hide Main Menu Items 
@@ -518,6 +561,24 @@ void setHousing(int button) {
   println("popMode: " + popMode);
 }
 
+void setPieceForm() {
+  showForm = true;
+  showFacilities = false;
+  showMarket = false;
+  renderDynamicTableLayers(input);
+  depressInputButtons();
+  reRenderMiniMap(miniMap);
+}
+
+void setPieceData() {
+  showForm = false;
+  showFacilities = true;
+  showMarket = true;
+  renderDynamicTableLayers(input);
+  depressInputButtons();
+  reRenderMiniMap(miniMap);
+}
+
 void setGridSize(float size, int button) {
   gridSize = size;
   resetGridParameters();
@@ -550,6 +611,8 @@ void toggleProjection(int button) {
 void toggleRandomPieces() {
   randomType = next(randomType, 2);
   fauxPieces(randomType, tablePieceInput, IDMax);
+  renderDynamicTableLayers(input);
+  reRenderMiniMap(miniMap);
   println("randomType = " + randomType);
 }
 
@@ -582,6 +645,24 @@ void togglePopulationData(int button) {
     }
   } else {
     for (int i=18; i<=19; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
+    }
+  }
+} 
+
+void toggleInputData(int button) {
+  showInputData = toggle(showInputData);
+  reRenderMiniMap(miniMap);
+  renderDynamicTableLayers(input);
+  pressButton(showInputData, button);
+  println("showInputData = " + showInputData);
+  
+  if (!showInputData) {
+    for (int i=24; i<=25; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
+    }
+  } else {
+    for (int i=24; i<=25; i++) {
       mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
     }
   }
@@ -632,6 +713,28 @@ void depressPopulationButtons() {
   if (popMode.equals("POP10")) {
     button += 0;
   } else if (popMode.equals("HOUSING10")) {
+    button += 1;
+  }
+  
+  // Turns all buttons off
+  for(int i=min; i<=max; i++) { //heatmap buttons min-max are mutually exclusive
+    mainMenu.buttons[i].isPressed = true;
+  }
+  // highlighted the heatmap button that is activated only
+  mainMenu.buttons[button].isPressed = false;
+}
+
+// Presses all buttons in a set of mutually exclusive buttons except for the index specified
+// min-max specifies a range of button indices; valueMode specifies the currently selected button
+void depressInputButtons() {
+
+  int min = getButtonIndex(buttonNames[24]);
+  int max = getButtonIndex(buttonNames[25]);
+  
+  int button = min;
+  if (showForm) {
+    button += 0;
+  } else {
     button += 1;
   }
   

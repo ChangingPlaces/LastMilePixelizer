@@ -41,8 +41,8 @@ int projectorWidth = 1920;
 int projectorHeight = 1200;
 int projectorOffset = 1842;
 
-int screenWidth = 1200;
-int screenHeight = 800;
+int screenWidth = 1500;
+int screenHeight = 1000;
 
 // Set this to true to display the main menu upon start
 boolean showMainMenu = true;
@@ -54,8 +54,8 @@ boolean showPopulationData = true;
 boolean showBasemap = true;
 
 boolean showInputData = true;
-boolean showFacilities = true;
-boolean showMarket = true;
+boolean showFacilities = false;
+boolean showMarket = false;
 boolean showObstacles = false;
 boolean showForm = true;
 
