@@ -1,9 +1,6 @@
-// Principally, this script ensures that a string is "caught" via UDP and coded into principal inputs of:
-// - tablePieceInput[][] or tablePieceInput[][][2] (rotation)
-// - UMax, VMax
+// Principally, this script ensures that a string is "caught" via UDP:
 
-
-int portIN = 6152;
+int portIN = 6252;
 
 import hypermedia.net.*;
 UDP udp;  // define the UDP object
