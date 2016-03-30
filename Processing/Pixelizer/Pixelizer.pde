@@ -19,7 +19,7 @@
  
 /* Graphics Architecture:
  * 
- * projector  <-  main  <-  table  <-  (p)opulation, (h)eatmap, (s)tores(s), (l)ines, (c)ursor
+ * projector  <-  main  <-  table  <-  (p)opulation, (h)eatmap, (s)tores(s), (l)ines, (c)ursor, input
  *                 ^
  *                 |
  *               screen <-  (i)nfo <-  minimap, legendH, legendP
@@ -47,7 +47,12 @@ boolean showStores = true;
 boolean showDeliveryData = false;
 boolean showPopulationData = true;
 boolean showBasemap = true;
+
 boolean showInputData = true;
+boolean showFacilities = false;
+boolean showMarket = false;
+boolean showObstacles = false;
+boolean showForm = true;
 
 // Class that holds a button menu
 Menu mainMenu, hideMenu;
@@ -94,6 +99,10 @@ void setup() {
     
       // Initializes inputs with Random numbers
       initInputData();
+      
+      // Initializes Pieces with Random Placement
+      fauxPieces(0, tablePieceInput, IDMax);
+      decodePieces();
       
       // Renders Minimap
       reRenderMiniMap(miniMap);

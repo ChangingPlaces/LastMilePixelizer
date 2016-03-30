@@ -167,27 +167,30 @@
     
 // Initialize Input Data (store locations, lockers, etc)
     
-    int[][] facilities, market, obstacles;
+    int[][] facilities, market, obstacles, form;
     
     // Runs once when initializes
     void initInputData() {
       facilities = new int[gridU][gridV];
       market = new int[gridU][gridV];
       obstacles = new int[gridU][gridV];
+      form = new int[gridU][gridV];
       for (int u=0; u<gridU; u++) {
         for (int v=0; v<gridV; v++) {
           facilities[u][v] = 0;
           market[u][v] = 0;
           obstacles[u][v] = 0;
+          form[u][v] = 0;
         }
       }
       
-      fauxInputData(0, facilities, 7);
-      fauxInputData(0, market, 1);
-      fauxInputData(0, obstacles, 1);
+      fauxData(0, facilities, 7);
+      fauxData(0, market, 1);
+      fauxData(0, obstacles, 1);
+      fauxData(0, form, 0);
     }
     
-    void fauxInputData(int code, int[][] inputs, int maxInput) {
+    void fauxData(int code, int[][] inputs, int maxInput) {
 
       if (code == 2 ) {
         

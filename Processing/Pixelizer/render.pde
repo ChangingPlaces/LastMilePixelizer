@@ -7,6 +7,12 @@ int textColor = 255;
 int background = 0;
 String align = "RIGHT";
 
+color tanBrick =   #FFEA00;
+color blueBrick =  #0000FF;
+color redBrick =   #FF0000;
+color blackBrick = #818181;
+color greenBrick = #00FF00;
+
 boolean flagResize = true;
 
 /* Graphics Architecture:
@@ -18,7 +24,7 @@ boolean flagResize = true;
  */
  
 PGraphics screen, table;
-PGraphics h, s, l, i, c, p, input;
+PGraphics h, s, l, i, c, p, input, pieces;
 float gridWidth, gridHeight;
 PGraphics legendH, legendP;
 
@@ -108,6 +114,7 @@ void initDataGraphics() {
   l = createGraphics(table.width, table.height);   // lines
   c = createGraphics(table.width, table.height);   // Cursor
   input = createGraphics(table.width, table.height);   // Input Data
+  pieces = createGraphics(table.width, table.height);  // Superficial coloring of Pieces
   
   int legendWidth = 40;
   int legendHeight = 100;
@@ -314,21 +321,45 @@ void renderBasemap(PGraphics graphic) {
             float ID;
             input.noStroke(); // No lines draw around grid cells
             
-            ID = facilities[u+gridPanU][v+gridPanV];
-            input.fill(#00FF00);
-            if (ID == 1) {
-              input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+            if (showFacilities) {
+              ID = facilities[u+gridPanU][v+gridPanV];
+              input.fill(#00FF00);
+              if (ID == 1) {
+                input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
             }
             
-            ID = market[u+gridPanU][v+gridPanV];
-            input.fill(#FF0000);
-            if (ID == 1) {
-              input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+            if (showMarket) {
+              ID = market[u+gridPanU][v+gridPanV];
+              input.fill(#FF0000);
+              if (ID == 1) {
+                input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
             }
             
-            ID = obstacles[u+gridPanU][v+gridPanV];
-            input.fill(0);
-            if (ID == 1) {
+            if (showObstacles) {
+              ID = obstacles[u+gridPanU][v+gridPanV];
+              input.fill(0);
+              if (ID == 1) {
+                input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
+            }
+            
+            if (showForm) {
+              ID = form[u+gridPanU][v+gridPanV];
+              if (ID == 0) {
+                input.noFill();
+              } else if (ID == 1) {
+                input.fill(tanBrick);
+              } else if (ID == 2) {
+                input.fill(blueBrick);
+              } else if (ID == 3) {
+                input.fill(redBrick);
+              } else if (ID == 4) {
+                input.fill(blackBrick);
+              } else if (ID == 5) {
+                input.fill(greenBrick);
+              }
               input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
             }
             
