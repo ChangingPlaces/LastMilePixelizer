@@ -1,83 +1,54 @@
 // Principally, this script ensures that a string is "caught" via UDP:
 
-int portIN = 6252;
+String LOCAL_IP = "127.0.0.1";
+int LOCAL_PORT = 6252;
+
+String CLIENT_IP = "127.0.0.1";
+int CLIENT_PORT = 6152;
 
 import hypermedia.net.*;
 UDP udp;  // define the UDP object
 
 boolean busyImporting = false;
+boolean importReady = false;
 boolean viaUDP = true;
-boolean changeDetected = false;
 
 void initUDP() {
   if (viaUDP) {
-    udp = new UDP( this, portIN );
+    udp = new UDP( this, LOCAL_PORT );
     //udp.log( true );     // <-- printout the connection activity
     udp.listen( true );
   }
 }
 
-void ImportData(String inputStr[]) {
-  parseCodeStrings(inputStr);
-  busyImporting = false;
-}
-
-void parseCodeStrings(String data[]) {
+void ImportData(String data[]) {
   
   for (int i=0 ; i<data.length;i++) {
     
     String[] split = split(data[i], "\t");
     
-    // Checks maximum possible ID value
-    if (split.length == 2 && split[0].equals("IDMax")) {
-      IDMax = int(split[1]);
+    if (split.length == 1) {
+      // Check for Input Tag Type (i.e. "facilities")
     }
-    
-    // Checks if row format is compatible with piece recognition.  3 columns for ID, U, V; 4 columns for ID, U, V, rotation
-    if (split.length == 3 || split.length == 4) { 
-      
-      //Finds UV values of Lego Grid:
-      int u_temp = int(split[1]);
-      int v_temp = int(split[2]);
-      
-      if (split.length == 3 && !split[0].equals("gridExtents")) { // If 3 columns
-          
-        // detects if different from previous value
-        if ( v_temp < tablePieceInput.length && u_temp < tablePieceInput[0].length ) {
-          if ( tablePieceInput[v_temp][u_temp][0] != int(split[0]) ) {
-            // Sets ID
-            tablePieceInput[v_temp][u_temp][0] = int(split[0]);
-            changeDetected = true;
-          }
-        }
-        
-      } else if (split.length == 4) {   // If 4 columns
-        
-        // detects if different from previous value
-        if ( v_temp < tablePieceInput.length && u_temp < tablePieceInput[0].length ) {
-          if ( tablePieceInput[v_temp][u_temp][0] != int(split[0]) || tablePieceInput[v_temp][u_temp][1] != int(split[3])/90 ) {
-            // Sets ID
-            tablePieceInput[v_temp][u_temp][0] = int(split[0]); 
-            //Identifies rotation vector of piece [WARNING: Colortizer supplies rotation in degrees (0, 90, 180, and 270)]
-            tablePieceInput[v_temp][u_temp][1] = int(split[3])/90; 
-            changeDetected = true;
-          }
-        }
-      }
-    } 
+    if (split.length == 3) {
+      // Check for (ID,  U,  V) row format
+    }
   }
+  busyImporting = false;
 }
 
 void receive( byte[] data, String ip, int port ) {  // <-- extended handler
   // get the "real" message =
   String message = new String( data ); 
-  //println(message);
-  //saveStrings("data.txt", split(message, "\n"));
   String[] split = split(message, "\n");
+  //println(message);
+  //println(ip, port);
+  //saveStrings("data.txt", split);
   
   if (!busyImporting) {
     busyImporting = true;
     ImportData(split);
+    importReady = true;
   }
 }
 
@@ -85,7 +56,7 @@ void sendCommand(String command, int port) {
   if (viaUDP) {
     String dataToSend = "";
     dataToSend += command;
-    udp.send( dataToSend, "localhost", port );
+    udp.send( dataToSend, CLIENT_IP, CLIENT_PORT );
   }
 }
 

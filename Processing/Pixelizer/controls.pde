@@ -619,6 +619,7 @@ void toggleRandomPieces() {
   fauxPieces(randomType, tablePieceInput, IDMax);
   renderDynamicTableLayers(input);
   reRenderMiniMap(miniMap);
+  changeDetected = true;
   println("randomType = " + randomType);
 }
 

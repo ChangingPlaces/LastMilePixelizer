@@ -93,6 +93,10 @@ void setup() {
       
       // Sets up Lego Piece Data Information
       setupPieces();
+      
+      // Initialize Input Packages for CTL Data
+      dataForCTL = new ClientPackage(CTL_ADDRESS, CTL_PORT, CTL_SCALE);
+      dataFromCTL = new OutputPackage(CTL_SCALE);
   
   // Functions called during setup, but also called again at other points
     
@@ -126,6 +130,7 @@ void draw() {
   // Decode pieces only if there is a change in Colortizer input
   if (changeDetected) {
     decodePieces();
+    sendCTLData();
     renderDynamicTableLayers(input);
     changeDetected = false;
   }
