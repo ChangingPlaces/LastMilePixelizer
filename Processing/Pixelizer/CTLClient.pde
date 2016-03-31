@@ -9,6 +9,8 @@ int CTL_KM_V = 110;
 int CTL_GRID_U = int(CTL_KM_U/CTL_SCALE);
 int CTL_GRID_V = int(CTL_KM_V/CTL_SCALE);
 
+String LOCAL_FRIENDLY_NAME = "PIXELIZER";
+
 ClientPackage dataForCTL;
 OutputPackage dataFromCTL;
 
@@ -39,22 +41,26 @@ class ClientPackage {
   // addToPackage() appends a TSV-style matrix to the packageString:
   //
   //  facilities
-  //  1  34  101     // ID  U  V
-  //  5  104  165
-  //  4  76  181
+  //  34  101  1       //  U  V  ID
+  //  104  165  5
+  //  76  181  4
   //  ...
   //  market
-  //  9  6  9
-  //  10  6  137
-  //  9  26  101
+  //  6  9  9
+  //  6  137  10
+  //  26  101  9
   //  ...
   //  obstacles
-  //  1  6  9
-  //  1  6  137
-  //  1  26  101
+  //  6  9  1
+  //  6  137  1
+  //  26  101  1
   //  ... 
   
   void addToPackage( String packageName, int[][] input, float localScale) {
+    // Define Package Name
+    packageString += LOCAL_FRIENDLY_NAME;
+    packageString += "\n";
+    
     // Define Package Name
     packageString += packageName;
     packageString += "\n";
@@ -70,11 +76,11 @@ class ClientPackage {
           uDisaggregated = int(u*localScale/clientScale) + 2;
           vDisaggregated = int(v*localScale/clientScale) + 1;
           
-          packageString += input[u][v];
-          packageString += "\t";
           packageString += uDisaggregated;
           packageString += "\t";
           packageString += vDisaggregated;
+          packageString += "\t";
+          packageString += input[u][v];
           packageString += "\n";
         }
       }

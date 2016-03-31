@@ -21,11 +21,43 @@ void initUDP() {
 }
 
 void ImportData(String inputStr[]) {
-  parseCodeStrings(inputStr);
+  if (inputStr[0].equals("COLORTIZER")) {
+    parseColortizerStrings(inputStr);
+  } else if (inputStr[0].equals("CTLMIRROR")) {
+    parseCTLStrings(inputStr);
+  }
   busyImporting = false;
 }
 
-void parseCodeStrings(String data[]) {
+void parseCTLStrings(String data[]) {
+  
+  String dataType = "";
+  
+  for (int i=0 ; i<data.length;i++) {
+    
+    String[] split = split(data[i], "\t");
+    
+    // Checks maximum possible ID value
+    if (split.length == 1 && split[0].equals("cost")) {
+      dataType = split[0];
+    }
+    
+    // Checks if row format is compatible with piece recognition.  3 columns for ID, U, V; 4 columns for ID, U, V, rotation
+    if (split.length == 3) { 
+      
+      //Finds UV values of Lego Grid:
+      int u_temp = int(split[0]);
+      int v_temp = int(split[1]);
+      
+      if (split.length == 3) { // If 3 columns
+     
+      }
+      
+    } 
+  }
+}
+
+void parseColortizerStrings(String data[]) {
   
   for (int i=0 ; i<data.length;i++) {
     

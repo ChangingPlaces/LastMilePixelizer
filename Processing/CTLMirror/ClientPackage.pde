@@ -1,3 +1,5 @@
+String LOCAL_FRIENDLY_NAME = "CTLMIRROR";
+
 // A Class that handles and sends a matrix of data formatted for the scale of the reciever
 class ClientPackage {
   
@@ -7,6 +9,7 @@ class ClientPackage {
   String clientAddress;
   int clientPort;
   float clientScale;
+  int chunks;
   
   ClientPackage(String address, int port, float scale) {
     packageString = "";
@@ -33,7 +36,33 @@ class ClientPackage {
   //  1  26  101
   //  ... 
   
+  void sendChunks(String packageName, int[][] input, float localScale, int chunkRowCount) {
+    int[][] inputSubset = new int[input.length][chunkRowCount];
+    
+    for (int i=0; i<input[0].length/chunkRowCount; i++) {
+      for (int u=0; u<inputSubset.length; u++) {
+        for (int v=0; v<inputSubset[0].length; v++) {
+          // breaks if last chunk is not a complete chunk
+          if ( i*chunkRowCount + v >= input[0].length ) break;
+          
+          inputSubset[u][v] = input[u][v+i*chunkRowCount];
+        }
+      }
+      
+      // Sends Data Chunk String
+      clearPackage();
+      addToPackage(packageName, inputSubset, localScale);
+      sendPackage();
+      
+    }
+  }
+  
   void addToPackage( String packageName, int[][] input, float localScale) {
+    
+    // tag to denote that tag comes from colortizer
+    packageString += LOCAL_FRIENDLY_NAME;
+    packageString += "\n" ;
+    
     // Define Package Name
     packageString += packageName;
     packageString += "\n";
@@ -71,6 +100,7 @@ class ClientPackage {
   void sendPackage() {
     if (viaUDP) {
       udp.send( packageString, clientAddress, clientPort );
+      println("Package sent from CTLMirror to Pixelizer");
       //println(packageString);
       clearPackage();
     }

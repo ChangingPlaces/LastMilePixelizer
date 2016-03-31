@@ -3,6 +3,7 @@
 
 int CTL_U = 180;
 int CTL_V = 220;
+int V_SEND_LIMIT = CTL_V/10;
 int[][] cost = new int[CTL_U][CTL_V];
 
 float CLIENT_SCALE = 2.0; //KM PER PIXEL
@@ -21,9 +22,8 @@ void draw() {
     println("CTLMirror received input!");
     
     generateFauxData();
-    dataForIra.addToPackage("cost", cost, LOCAL_SCALE);
-    dataForIra.savePackage("cost.tsv");
-    dataForIra.sendPackage();
+    dataForIra.sendChunks("cost", cost, LOCAL_SCALE, V_SEND_LIMIT);
+    //dataForIra.savePackage("cost.tsv");
     importReady = false;
   }
 }
