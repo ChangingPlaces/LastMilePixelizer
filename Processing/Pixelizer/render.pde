@@ -29,7 +29,7 @@ float gridWidth, gridHeight;
 PGraphics legendH, legendP, legendI, legendO;
 
 int tabley_0 = 25;
-int tablex_0 = 25;
+int tablex_0 = 225;
 int tabley_1, tablex_1;
 
 void renderTable() {
@@ -491,7 +491,7 @@ void renderBasemap(PGraphics graphic) {
       
         // Draw Scale
         int scale_0 = 10;
-        int scale_1 = int(w + tablex_0);
+        int scale_1 = int(w + tabley_0);
         float scalePix = tabley_1/displayV;
         i.line(scale_0, 0, scale_1, 0);
         i.line(scale_0, -4*scalePix, scale_1, -4*scalePix);
@@ -502,7 +502,7 @@ void renderBasemap(PGraphics graphic) {
         if (showPopulationData) {
           float legendPix = -tabley_0-4*scalePix-legendP.height;
           // Draw Legends
-          i.image(legendP, tablex_0, legendPix);
+          i.image(legendP, tabley_0, legendPix);
           
           int demandMIN = 0;
           int demandMAX = 0;
@@ -515,10 +515,10 @@ void renderBasemap(PGraphics graphic) {
             demandMAX = int(popMAX*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
           }
           
-          i.text("Demand Potential", tablex_0, legendPix - 35);
-          i.text("Source: 2010 U.S. Census Data", tablex_0, legendPix - 20);
-          i.text(int(demandMIN) + " deliveries per day", 1.5*tablex_0 + legendP.width, legendPix + legendP.height);
-          i.text(int(demandMAX) + " deliveries per day", 1.5*tablex_0 + legendP.width, legendPix+10);
+          i.text("Demand Potential", tabley_0, legendPix - 35);
+          i.text("Source: 2010 U.S. Census Data", tabley_0, legendPix - 20);
+          i.text(int(demandMIN) + " deliveries per day", 1.5*tabley_0 + legendP.width, legendPix + legendP.height);
+          i.text(int(demandMAX) + " deliveries per day", 1.5*tabley_0 + legendP.width, legendPix+10);
         }
         
         if (showDeliveryData) {
@@ -526,22 +526,22 @@ void renderBasemap(PGraphics graphic) {
           if (valueMode.equals("source")) {
             float normalized;
             int column = -1;
-            i.text("Delivery Facility Allocations", tablex_0, legendPix - 35);
-            i.text("Source: Walmart 2015", tablex_0, legendPix - 20);
+            i.text("Delivery Facility Allocations", tabley_0, legendPix - 35);
+            i.text("Source: Walmart 2015", tabley_0, legendPix - 20);
             for (int j=0; j<storeID.size(); j++) {
               if (j % 8 == 0) {
                 column++;
               }
               normalized = findHeatmapFill(i, (float)storeID.get(j));
-              for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), tablex_0*(column*5+1), legendPix+10+(j-column*8)*15);
+              for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), tabley_0*(column*5+1), legendPix+10+(j-column*8)*15);
             }
           } else { 
             // Draw Legends
-            i.image(legendH, tablex_0, legendPix);
-            i.text("Delivery Data", tablex_0, legendPix - 35);
-            i.text("Source: Walmart 2015", tablex_0, legendPix - 20);
-            i.text(int(heatmapMIN+1) + " " + valueMode, 1.5*tablex_0 + legendP.width, legendPix + legendP.height);
-            i.text(int(heatmapMAX) + " " + valueMode, 1.5*tablex_0 + legendP.width, legendPix+10);
+            i.image(legendH, tabley_0, legendPix);
+            i.text("Delivery Data", tabley_0, legendPix - 35);
+            i.text("Source: Walmart 2015", tabley_0, legendPix - 20);
+            i.text(int(heatmapMIN+1) + " " + valueMode, 1.5*tabley_0 + legendP.width, legendPix + legendP.height);
+            i.text(int(heatmapMAX) + " " + valueMode, 1.5*tabley_0 + legendP.width, legendPix+10);
           }
         }
       
@@ -564,7 +564,20 @@ void renderBasemap(PGraphics graphic) {
         suffix = " seconds";
       }
       
-      i.translate(x_0, 2*y_0 + h + 10);
+      
+      
+      
+      
+      i.translate(tablex_0 + tablex_1 + tabley_0, y_0 + 10);
+      
+      // Main Info
+      i.fill(textColor);
+      i.text(fileName.toUpperCase(), 0, 0);
+      i.text("Last Mile Logistics", 0, 15);
+      
+      if (showFrameRate) {
+        i.text("FrameRate: " + frameRate, 0, 45);
+      }
       
       if (showDeliveryData || showPopulationData) {
         i.text("CELL INFO", 0, 100);
@@ -601,29 +614,16 @@ void renderBasemap(PGraphics graphic) {
         }
       }
       
-      i.fill(textColor);
-      i.text(fileName.toUpperCase(), 0, 0);
-      i.text("Last Mile Logistics", 0, 15);
-    //  i.text(fileName.toUpperCase() + " Grid Statistics:", 0, 0);
-    //  i.text("Min Cell Value: " + prefix + (int)heatmapMIN + suffix, 0, 30);
-    //  i.text("Max Cell Value: " + prefix + (int)heatmapMAX + suffix, 0, 45);
-    //  i.text("1 grid square = " + gridSize + "km", 0, 60);
-      
-      if (showFrameRate) {
-        i.text("FrameRate: " + frameRate, 0, 45);
-      }
-      
       i.endDraw();
       
       
       // Draw MiniMap
       i.beginDraw();
-      i.translate(x_0, y_0);  
+      i.translate(tabley_0, y_0);  
       i.image(miniMap, 0, 0, w, h);
       i.noFill();
       i.stroke(textColor);
       i.rect(w*gridPanU/gridU, h*gridPanV/gridV, w*(0.5*gridSize), h*(0.5*gridSize));
-      
     
       i.endDraw();
     }
