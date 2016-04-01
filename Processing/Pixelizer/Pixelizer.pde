@@ -158,6 +158,6 @@ void draw() {
   
   // Exports table Graphic to Projector
   projector = get(tablex_0, tabley_0, tablex_1, tabley_1);
-  margin = get(tablex_0 + tablex_1 + tabley_0, tabley_0, miniMap.width, tabley_1+3);
+  margin = get(tablex_0 + tablex_1 + tabley_0, tabley_0, miniMap.width, tabley_1);
 }
   

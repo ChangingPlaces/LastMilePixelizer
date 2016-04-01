@@ -492,7 +492,8 @@ void renderBasemap(PGraphics graphic) {
         // Draw Scale
         int scale_0 = 10;
         int scale_1 = int(w + tabley_0);
-        float scalePix = tabley_1/displayV;
+        float scalePix = float(tabley_1)/displayV;
+        i.translate(0, -4*scalePix);
         i.line(scale_0, 0, scale_1, 0);
         i.line(scale_0, -4*scalePix, scale_1, -4*scalePix);
         i.line(scale_1 - scale_0, 0, scale_1 - scale_0, -scalePix);
@@ -544,6 +545,8 @@ void renderBasemap(PGraphics graphic) {
             i.text(int(heatmapMAX) + " " + valueMode, 1.5*tabley_0 + legendP.width, legendPix+10);
           }
         }
+      
+      i.translate(0, +4*scalePix);
       
       i.translate(-(tablex_0 + tablex_1), -(tabley_0 + tabley_1));
       
