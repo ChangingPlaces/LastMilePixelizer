@@ -492,23 +492,26 @@ void renderBasemap(PGraphics graphic) {
       i.rect(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
       
       
-      i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
+      i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
       
         // Draw Scale
+        
         int scale_0 = 10;
         int scale_1 = int(w + STANDARD_MARGIN);
+        i.translate(-scale_0, 0);
         float scalePix = float(TABLE_IMAGE_HEIGHT)/displayV;
         i.translate(0, -4*scalePix);
         i.line(scale_0, 0, scale_1, 0);
         i.line(scale_0, -4*scalePix, scale_1, -4*scalePix);
-        i.line(scale_1 - scale_0, 0, scale_1 - scale_0, -scalePix);
-        i.line(scale_1 - scale_0, -3*scalePix, scale_1 - scale_0, -4*scalePix);
-        i.text(4*gridSize + " km", scale_1 - 2*scale_0, -1.5*scalePix);
+        i.line(2*scale_0, 0, 2*scale_0, -scalePix);
+        i.line(2*scale_0, -3*scalePix, 2*scale_0, -4*scalePix);
+        i.text(4*gridSize + " km", 0, -1.5*scalePix);
+        i.translate(scale_0, 0);
         
         if (showPopulationData) {
           float legendPix = -STANDARD_MARGIN-4*scalePix-legendP.height;
           // Draw Legends
-          i.image(legendP, STANDARD_MARGIN, legendPix);
+          i.image(legendP, 0, legendPix);
           
           int demandMIN = 0;
           int demandMAX = 0;
@@ -521,10 +524,10 @@ void renderBasemap(PGraphics graphic) {
             demandMAX = int(popMAX*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
           }
           
-          i.text("Demand Potential", STANDARD_MARGIN, legendPix - 35);
-          i.text("Source: 2010 U.S. Census Data", STANDARD_MARGIN, legendPix - 20);
-          i.text(int(demandMIN) + " deliveries per day", 1.5*STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
-          i.text(int(demandMAX) + " deliveries per day", 1.5*STANDARD_MARGIN + legendP.width, legendPix+10);
+          i.text("Demand Potential", 0, legendPix - 35);
+          i.text("Source: 2010 U.S. Census Data", 0, legendPix - 20);
+          i.text(int(demandMIN) + " deliveries per day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+          i.text(int(demandMAX) + " deliveries per day", STANDARD_MARGIN + legendP.width, legendPix+10);
         }
         
         if (showDeliveryData) {
@@ -532,8 +535,8 @@ void renderBasemap(PGraphics graphic) {
           if (valueMode.equals("source")) {
             float normalized;
             int column = -1;
-            i.text("Delivery Facility Allocations", STANDARD_MARGIN, legendPix - 35);
-            i.text("Source: Walmart 2015", STANDARD_MARGIN, legendPix - 20);
+            i.text("Delivery Facility Allocations", 0, legendPix - 35);
+            i.text("Source: Walmart 2015", 0, legendPix - 20);
             for (int j=0; j<storeID.size(); j++) {
               if (j % 8 == 0) {
                 column++;
@@ -543,17 +546,17 @@ void renderBasemap(PGraphics graphic) {
             }
           } else { 
             // Draw Legends
-            i.image(legendH, STANDARD_MARGIN, legendPix);
-            i.text("Delivery Data", STANDARD_MARGIN, legendPix - 35);
-            i.text("Source: Walmart 2015", STANDARD_MARGIN, legendPix - 20);
-            i.text(int(heatmapMIN+1) + " " + valueMode, 1.5*STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
-            i.text(int(heatmapMAX) + " " + valueMode, 1.5*STANDARD_MARGIN + legendP.width, legendPix+10);
+            i.image(legendH, 0, legendPix);
+            i.text("Delivery Data", 0, legendPix - 35);
+            i.text("Source: Walmart 2015", 0, legendPix - 20);
+            i.text(int(heatmapMIN+1) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+            i.text(int(heatmapMAX) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix+10);
           }
         }
       
       i.translate(0, +4*scalePix);
       
-      i.translate(-(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
+      i.translate(-(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
       
       i.fill(textColor);
       i.textAlign(RIGHT);
@@ -572,11 +575,7 @@ void renderBasemap(PGraphics graphic) {
         suffix = " seconds";
       }
       
-      
-      
-      
-      
-      i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, y_0 + 10);
+      i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, 2*STANDARD_MARGIN + h + 10);
       
       // Main Info
       i.fill(textColor);
@@ -587,11 +586,13 @@ void renderBasemap(PGraphics graphic) {
         i.text("FrameRate: " + frameRate, 0, 45);
       }
       
+      i.translate(0, 80);
+      
       if (showDeliveryData || showPopulationData) {
-        i.text("CELL INFO", 0, 100);
-        i.text("Delivery Value:", 0, 120);
-        i.text("Population Value:", 0, 150);
-        i.text("Demand Potential:", 0, 180);
+        i.text("CELL INFO", 0, 0);
+        i.text("Delivery Value:", 0, 20);
+        i.text("Population Value:", 0, 50);
+        i.text("Demand Potential:", 0, 80);
       }
       i.colorMode(RGB);
       i.fill(0,255,255);
@@ -602,7 +603,7 @@ void renderBasemap(PGraphics graphic) {
           value = "NO_DATA";
         } else {
           value += (int)getCellValue(mouseToU(), mouseToV());
-          i.text(prefix + value + suffix, 0, 135);
+          i.text(prefix + value + suffix, 0, 35);
         }
       }
       if (showPopulationData) {
@@ -611,12 +612,12 @@ void renderBasemap(PGraphics graphic) {
           value = "NO_DATA";
         } else {
           value += (int)getCellPop(mouseToU(), mouseToV());
-          i.text(value + " " + popMode, 0, 165);
+          i.text(value + " " + popMode, 0, 65);
           float temp = float(value);
           if (popMode.equals("POP10")) {
-            i.text(int(temp/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR) + " Deliveries per Day", 0, 195);
+            i.text(int(temp/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR) + " Deliveries per Day", 0, 95);
           } else if (popMode.equals("HOUSING10")) {
-            i.text(int(temp*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR) + " Deliveries per Day", 0, 195);
+            i.text(int(temp*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR) + " Deliveries per Day", 0, 95);
           }
           
         }
@@ -715,7 +716,7 @@ void renderBasemap(PGraphics graphic) {
 
     PGraphics miniMap;
     PImage miniBaseMap;
-    float mapRatio = 0.2;
+    float mapRatio = 0.3;
     
     void loadMiniBaseMap() {
       miniBaseMap = loadImage("data/" + mapColor + "/" + fileName + "_2000.png");
