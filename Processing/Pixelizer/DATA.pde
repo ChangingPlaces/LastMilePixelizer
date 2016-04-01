@@ -10,6 +10,12 @@
     int gridPanV, gridPanU; // Integers that describe how much to offset grid pixels when drawing
     int scaler, gridU, gridV;
     
+    // Demand Parameters
+    int WEEKS_IN_YEAR = 52;
+    int DAYS_IN_YEAR = 365;
+    float WALMART_MARKET_SHARE = 0.20;
+    float HOUSEHOLD_SIZE = 2.54;
+    
     void resetGridParameters() {
       scaler = int(MAX_GRID_SIZE/gridSize);
       // Total Matrix Size (includes cells beyond extents of screen)
@@ -70,10 +76,8 @@
       
       // Loads extents of Output data
       initOutputData(); 
-//      clearFloatData(cost, -1);
-//      clearIntData(allocation, 0);
-//      clearIntData(vehicle, 0);
-      fauxFloatData(cost, 1);
+      fauxFloatData(totalCost, 1);
+      fauxFloatData(deliveryCost, 1);
       fauxIntData(allocation, 5);
       fauxIntData(vehicle, 5);
       println("faux data loaded");
@@ -203,17 +207,19 @@
 // Initialize Output Data (Cost, Allocations, etc)
 
     // Output Matrices
-    float[][] cost;
+    float[][] totalCost, deliveryCost;
     int[][] allocation, vehicle;
     
     // Runs once when initializes
     void initOutputData() {
-      cost = new float[gridU][gridV];
+      totalCost = new float[gridU][gridV];
+      deliveryCost = new float[gridU][gridV];
       allocation = new int[gridU][gridV];
       vehicle = new int[gridU][gridV];
       for (int u=0; u<gridU; u++) {
         for (int v=0; v<gridV; v++) {
-          cost[u][v] = 0;
+          totalCost[u][v] = 0;
+          deliveryCost[u][v] = 0;
           allocation[u][v] = 0;
           vehicle[u][v] = 0;
         }

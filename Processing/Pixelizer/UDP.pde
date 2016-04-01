@@ -50,7 +50,7 @@ void parseCTLStrings(String data[]) {
     
     // Checks Output Data Type
     if (split.length == 1) {
-      if (split[0].equals("cost") || split[0].equals("allocation") || split[0].equals("vehicle")) dataType = split[0];
+      if (split[0].equals(CTL_COST_TOTAL) || split[0].equals(CTL_FACILITIES_ALLOCATION) || split[0].equals(CTL_ALLOCATION_VEHICLES) || split[0].equals(CTL_COST_PER_DELIVERY)) dataType = split[0];
     }
     
     // Checks if row format is compatible with piece recognition.  3 columns for ID, U, V; 4 columns for ID, U, V, rotation
@@ -77,13 +77,16 @@ void parseCTLStrings(String data[]) {
         v_local = int( (CTL_SCALE/gridSize)*v_local );
         
         if (u_local < gridU && v_local < gridV) {
-          if (dataType.equals("cost")) {
+          if (dataType.equals(CTL_COST_TOTAL)) {
             float value = float(split[2]);
-            cost[u_local][v_local] = value;
-          } else if (dataType.equals("allocation")) {
+            totalCost[u_local][v_local] = value;
+          } else if (dataType.equals(CTL_COST_PER_DELIVERY)) {
+            float value = float(split[2]);
+            deliveryCost[u_local][v_local] = value;
+          } else if (dataType.equals(CTL_FACILITIES_ALLOCATION)) {
             int value = int(split[2]);
             allocation[u_local][v_local] = value;
-          } else if (dataType.equals("vehicle")) {
+          } else if (dataType.equals(CTL_ALLOCATION_VEHICLES)) {
             int value = int(split[2]);
             vehicle[u_local][v_local] = value;
           } 

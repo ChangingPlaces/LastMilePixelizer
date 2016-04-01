@@ -13,6 +13,11 @@ int CTL_GRID_V = int(CTL_KM_V/CTL_SCALE);
 
 String LOCAL_FRIENDLY_NAME = "PIXELIZER";
 
+String CTL_COST_TOTAL = "cost_total";
+String CTL_COST_PER_DELIVERY = "cost_per_delivery";
+String CTL_FACILITIES_ALLOCATION = "allocation_facilities";
+String CTL_ALLOCATION_VEHICLES = "allocation_vehicles";
+
 ClientPackage dataForCTL;
 OutputPackage dataFromCTL;
 

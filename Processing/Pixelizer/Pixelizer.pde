@@ -60,7 +60,8 @@ boolean showObstacles = false;
 boolean showForm = true;
 
 boolean showOutputData = false;
-boolean showCost = true;
+boolean showDeliveryCost = true;
+boolean showTotalCost = false;
 boolean showAllocation = false;
 boolean showVehicle = false;
 

@@ -16,12 +16,13 @@ String[] menuOrder =
   "Piece Data (A)",  
   "VOID",
   "Show Output Data (O)",
-  "Show Cost (C)",
-  "Show Allocation (L)",
-  "Show Vehicle (v)",
+  "Delivery Cost (C)",
+  "Total Cost (T)", 
+  "Facility Allocation (L)",
+  "Vehicle Allocation (v)",
   "VOID",
   "Store Locations (s)",
-  "Show Delivery Data (D)",
+  "2015 Delivery Data (D)",
   "Delivery Counts (d)",
   "Tote Counts (t)",
   "Store Source (o)",
@@ -58,7 +59,7 @@ String[] buttonNames =
   "500m per pixel (1)",      // 13
   "Show Basemap (m)",        // 14
   "Show Framerate (f)",      // 15
-  "Show Delivery Data (D)",  // 16
+  "2015 Delivery Data (D)",  // 16
   "Show Population Data (P)",// 17
   "Population Counts (u)",   // 18
   "Household Counts (e)",    // 19
@@ -69,9 +70,11 @@ String[] buttonNames =
   "Piece Forms (F)",         // 24
   "Piece Data (A)",          // 25
   "Show Output Data (O)",    // 26
-  "Show Cost (C)",           // 27
-  "Show Allocation (L)",     // 28
-  "Show Vehicle (v)"         // 29
+  "Delivery Cost (C)",       // 27
+  "Total Cost (T)",          // 28
+  "Facility Allocation (L)", // 29
+  "Vehicle Allocation (v)"   // 30
+  
 };
 
 int getButtonIndex(String name) {
@@ -142,11 +145,11 @@ void loadMenu(int screenWidth, int screenHeight) {
   }
   
   if (!showOutputData) {
-    for (int i=27; i<=29; i++) {
+    for (int i=27; i<=30; i++) {
       mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
     }
   } else {
-    for (int i=27; i<=29; i++) {
+    for (int i=27; i<=30; i++) {
       mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
     }
   }
@@ -310,16 +313,21 @@ void mouseClicked() {
   
   //function27
   if(mainMenu.buttons[getButtonIndex(buttonNames[27])].over()){ 
-    setCost();
+    setDeliveryCost();
   }
   
   //function28
   if(mainMenu.buttons[getButtonIndex(buttonNames[28])].over()){ 
-    setAllocation();
+    setTotalCost();
   }
   
   //function29
   if(mainMenu.buttons[getButtonIndex(buttonNames[29])].over()){ 
+    setAllocation();
+  }
+  
+  //function30
+  if(mainMenu.buttons[getButtonIndex(buttonNames[30])].over()){ 
     setVehicle();
   }
   
@@ -418,15 +426,19 @@ void keyPressed() {
     case 'O': //  "Show Output Data (O)"    // 26
       toggleOutputData(getButtonIndex(buttonNames[26]));
       break;
-    case 'C': //  "Show Cost (C)",          // 27
-      setCost();
+    case 'C': //  "Delivery Cost (C)",          // 27
+      setDeliveryCost();
       break;
-    case 'L': //  "Show Allocation (L)",    // 28
+    case 'T': //  "Total Cost (T)"              // 28
+      setTotalCost();
+      break;
+    case 'L': //  "Facility Allocation (L)",    // 29
       setAllocation();
       break;
-    case 'v': //  "Show Vehicle (v)"        // 29
+    case 'v': //  "Vehicle Allocation (v)"      // 30
       setVehicle();
       break;
+
   }
   
   //------arrow keys and how to code keys that aren't characters exactly----- 
@@ -632,10 +644,21 @@ void setPieceData() {
   reRenderMiniMap(miniMap);
 }
 
-void setCost() {
+void setDeliveryCost() {
   showAllocation = false;
   showVehicle = false;
-  showCost = true;
+  showDeliveryCost = true;
+  showTotalCost = false;
+  renderOutputTableLayers(input);
+  depressOutputButtons();
+  reRenderMiniMap(miniMap);
+}
+
+void setTotalCost() {
+  showAllocation = false;
+  showVehicle = false;
+  showDeliveryCost = false;
+  showTotalCost = true;
   renderOutputTableLayers(input);
   depressOutputButtons();
   reRenderMiniMap(miniMap);
@@ -644,7 +667,8 @@ void setCost() {
 void setAllocation() {
   showAllocation = true;
   showVehicle = false;
-  showCost = false;
+  showDeliveryCost = false;
+  showTotalCost = false;
   renderOutputTableLayers(input);
   depressOutputButtons();
   reRenderMiniMap(miniMap);
@@ -653,7 +677,8 @@ void setAllocation() {
 void setVehicle() {
   showAllocation = false;
   showVehicle = true;
-  showCost = false;
+  showDeliveryCost = false;
+  showTotalCost = false;
   renderOutputTableLayers(input);
   depressOutputButtons();
   reRenderMiniMap(miniMap);
@@ -757,11 +782,11 @@ void toggleOutputData(int button) {
   println("showOutputData = " + showOutputData);
   
   if (!showOutputData) {
-    for (int i=27; i<=29; i++) {
+    for (int i=27; i<=30; i++) {
       mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
     }
   } else {
-    for (int i=27; i<=29; i++) {
+    for (int i=27; i<=30; i++) {
       mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
     }
   }
@@ -850,15 +875,17 @@ void depressInputButtons() {
 void depressOutputButtons() {
 
   int min = getButtonIndex(buttonNames[27]);
-  int max = getButtonIndex(buttonNames[29]);
+  int max = getButtonIndex(buttonNames[30]);
   
   int button = min;
-  if (showCost) {
+  if (showDeliveryCost) {
     button += 0;
-  } else if (showAllocation) {
+  } else if (showTotalCost) {
     button += 1;
-  } else {
+  } else if (showAllocation) {
     button += 2;
+  } else {
+    button += 3;
   }
   
   // Turns all buttons off

@@ -10,7 +10,7 @@ String align = "RIGHT";
 color tanBrick =   #FFEA00;
 color blueBrick =  #0000FF;
 color redBrick =   #FF0000;
-color blackBrick = #818181;
+color blackBrick = #000000;
 color greenBrick = #00FF00;
 
 boolean flagResize = true;
@@ -417,8 +417,16 @@ void renderBasemap(PGraphics graphic) {
             float value;
             output.noStroke(); // No lines draw around grid cells
             
-            if (showCost) {
-              value = cost[u+gridPanU][v+gridPanV];
+            if (showDeliveryCost) {
+              value = deliveryCost[u+gridPanU][v+gridPanV];
+              if (value >= 0) {
+                output.fill(lerpColor(from, to, value));
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
+            }
+            
+            if (showTotalCost) {
+              value = totalCost[u+gridPanU][v+gridPanV];
               if (value >= 0) {
                 output.fill(lerpColor(from, to, value));
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
@@ -493,7 +501,19 @@ void renderBasemap(PGraphics graphic) {
           float legendPix = -tabley_0-4*scalePix-legendP.height;
           // Draw Legends
           i.image(legendP, tablex_0, legendPix);
-          i.text("Population Legend", tablex_0, legendPix - 20);
+          
+          int demandMIN = 0;
+          int demandMAX = 0;
+          
+          if (popMode.equals("POP10")) {
+            demandMIN = int((popMIN+1)/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
+            demandMAX = int(popMAX/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
+          } else if (popMode.equals("HOUSING10")) {
+            demandMIN = int((popMIN+1)*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
+            demandMAX = int(popMAX*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
+          }
+          
+          i.text("Demand Potential", tablex_0, legendPix - 20);
           i.text(int(popMIN+1) + " " + popMode, 1.5*tablex_0 + legendP.width, legendPix + legendP.height);
           i.text(int(popMAX) + " " + popMode, 1.5*tablex_0 + legendP.width, legendPix+10);
         }

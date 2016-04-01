@@ -131,17 +131,17 @@ void setupPieces() {
   inputData.add(data_7);
   inputForm.add(form_7);
   
-  // 8: Market Close
+  // 8: Market Freeze
   Integer[][] data_8 = {
     { 0, 0, 0, 0 },
     { 0, 0, 0, 0 },
     { 0, 9, 0, 0 },
     { 0, 0, 0, 0 } };
   Integer[][] form_8 = {
-    { 0, 0, 0, 0 },
-    { 0, 4, 4, 0 },
-    { 0, 4, 4, 0 },
-    { 0, 0, 0, 0 } };
+    { 4, 4, 4, 4 },
+    { 4, 4, 4, 4 },
+    { 4, 4, 4, 4 },
+    { 4, 4, 4, 4 } };
   inputData.add(data_8);
   inputForm.add(form_8);
   
