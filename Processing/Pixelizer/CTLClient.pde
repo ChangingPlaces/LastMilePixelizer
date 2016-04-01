@@ -2,7 +2,7 @@
 //String CTL_ADDRESS = "localhost";
 //int CTL_PORT = 6252;
 String CTL_ADDRESS = "169.254.130.238";
-int CTL_PORT = 3456;
+int CTL_PORT = 5678;
 
 // CTL Dimension Constants
 float CTL_SCALE = 0.5; //km per pixel unit
@@ -84,9 +84,9 @@ class ClientPackage {
           vDisaggregated = int(v*localScale/clientScale) + 1;
           
           packageString += uDisaggregated;
-          packageString += "\t";
+          packageString += ",";
           packageString += vDisaggregated;
-          packageString += "\t";
+          packageString += ",";
           packageString += input[u][v];
           packageString += "\n";
         }
