@@ -93,8 +93,8 @@ public class projApplet extends PApplet {
     
     ks = new Keystone(this);;
     
-    surface = ks.createCornerPinSurface(tablex_1, tabley_1, 20);
-    offscreen = createGraphics(tablex_1, tabley_1);
+    surface = ks.createCornerPinSurface(tabley_1, tabley_1, 20);
+    offscreen = createGraphics(tabley_1, tabley_1);
     
     try{
       ks.load();
@@ -115,7 +115,7 @@ public class projApplet extends PApplet {
     background(0);
       
     // Draw the scene, offscreen
-    renderCanvas(offscreen, int(tablex_1*(float)(displayV-displayU)/displayV));
+    renderCanvas(offscreen, int(tabley_1*(float)(displayV-displayU)/displayV));
     surface.render(offscreen);
   
   }

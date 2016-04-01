@@ -24,7 +24,7 @@ boolean flagResize = true;
  */
  
 PGraphics screen, table;
-PGraphics h, s, l, i, c, p, input, pieces;
+PGraphics h, s, l, i, c, p, input, output, pieces;
 float gridWidth, gridHeight;
 PGraphics legendH, legendP;
 
@@ -54,6 +54,10 @@ void renderTable() {
   
   if (showInputData) {
     table.image(input, 0, 0);
+  }
+  
+  if (showOutputData) {
+    table.image(output, 0, 0);
   }
   
   // Draws lines
@@ -89,6 +93,9 @@ void reRender() {
   // Renders Dynamic Table Layers to Canvases
   renderDynamicTableLayers(input);
   
+  // Renders Output Table Layers to Canvases
+  renderOutputTableLayers(output);
+  
   // reRender Minimap
   reRenderMiniMap(miniMap);
   
@@ -117,6 +124,7 @@ void initDataGraphics() {
   l = createGraphics(table.width, table.height);   // lines
   c = createGraphics(table.width, table.height);   // Cursor
   input = createGraphics(table.width, table.height);   // Input Data
+  output = createGraphics(table.width, table.height);  // Output Data
   pieces = createGraphics(table.width, table.height);  // Superficial coloring of Pieces
   
   int legendWidth = 40;
@@ -304,7 +312,7 @@ void renderBasemap(PGraphics graphic) {
         return normalized;
     }
     
-    // Rully Renders Every Possible Layer we would want to draw on canvas
+    // Rully Renders Every Possible Dynamic Layer we would want to draw on canvas
     void renderDynamicTableLayers(PGraphics input) {
       
       // Dynamically adjusts grid size to fit within canvas dimensions
@@ -376,6 +384,67 @@ void renderBasemap(PGraphics graphic) {
       } else if (ID == 5) {
         input.fill(greenBrick);
       }
+    }
+
+    // Methods for Drawing "Output" Layers 
+    // Rully Renders Every Possible Output Layer we would want to draw on canvas
+    // (i.e. layers resulting from an external simulation client)
+    void renderOutputTableLayers(PGraphics output) {
+      
+      float normalized;
+      color from, to;  
+      
+      //BEGIN Drawing POPULATION
+      from = color(#FF0000, 50); // Red
+      to = color(#00FF00, 50);   // Green
+        
+      // Dynamically adjusts grid size to fit within canvas dimensions
+      gridWidth = float(table.width)/displayU;
+      gridHeight= float(table.height)/displayV;
+      
+      // clear canvases
+      output.beginDraw();
+      output.clear();
+      
+      // makes it so that colors are defined by Hue, Saturation, and Brightness values (0-255 by default)
+      output.colorMode(HSB);
+      
+      for (int u=0; u<displayU; u++) {
+        for (int v=0; v<displayV; v++) {
+          // Only loads data within bounds of dataset
+          if (u+gridPanU>=0 && u+gridPanU<gridU && v+gridPanV>=0 && v+gridPanV<gridV) {
+            
+            float value;
+            output.noStroke(); // No lines draw around grid cells
+            
+            if (showCost) {
+              value = cost[u+gridPanU][v+gridPanV];
+              if (value >= 0) {
+                output.fill(lerpColor(from, to, value));
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
+            }
+            
+            if (showAllocation) {
+              value = allocation[u+gridPanU][v+gridPanV];
+              if (value != 0) {
+                output.fill(value/5.0*255, 255, 255); // Temp Color Gradient
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
+            }
+            
+            if (showVehicle) {
+              value = vehicle[u+gridPanU][v+gridPanV];
+              if (value != 0) {
+                output.fill(value/5.0*255, 255, 255); // Temp Color Gradient
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
+            }
+            
+          }
+        }
+      }
+      output.endDraw();
     }
 
 // Methods for drawing lines representing lego piece boundaries

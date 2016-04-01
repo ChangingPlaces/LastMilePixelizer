@@ -13,7 +13,12 @@ String[] menuOrder =
   "VOID",
   "Show Input Data (I)",
   "Piece Forms (F)", 
-  "Piece Data (A)",     
+  "Piece Data (A)",  
+  "VOID",
+  "Show Output Data (O)",
+  "Show Cost (C)",
+  "Show Allocation (L)",
+  "Show Vehicle (v)",
   "VOID",
   "Store Locations (s)",
   "Show Delivery Data (D)",
@@ -62,7 +67,11 @@ String[] buttonNames =
   "Randomize Pieces (z)",    // 22
   "Show Input Data (I)",     // 23
   "Piece Forms (F)",         // 24
-  "Piece Data (A)"           // 25
+  "Piece Data (A)",          // 25
+  "Show Output Data (O)",    // 26
+  "Show Cost (C)",           // 27
+  "Show Allocation (L)",     // 28
+  "Show Vehicle (v)"         // 29
 };
 
 int getButtonIndex(String name) {
@@ -92,6 +101,8 @@ void loadMenu(int screenWidth, int screenHeight) {
   depressZoomButtons(gridSize);
   // Selects one of the mutually exclusive Input Data Types
   depressInputButtons();
+  // Selects one of the mutually exclusive Output Data Types
+  depressOutputButtons();
   // Checks whether these true/false button should be pressed
   pressButton(showStores, getButtonIndex(buttonNames[6]));
   pressButton(showBasemap, getButtonIndex(buttonNames[14]));
@@ -126,6 +137,16 @@ void loadMenu(int screenWidth, int screenHeight) {
     }
   } else {
     for (int i=24; i<=25; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
+    }
+  }
+  
+  if (!showOutputData) {
+    for (int i=27; i<=29; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
+    }
+  } else {
+    for (int i=27; i<=29; i++) {
       mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
     }
   }
@@ -282,6 +303,26 @@ void mouseClicked() {
     setPieceData();
   }
   
+  //function26
+  if(mainMenu.buttons[getButtonIndex(buttonNames[26])].over()){ 
+    toggleOutputData(getButtonIndex(buttonNames[26]));
+  }
+  
+  //function27
+  if(mainMenu.buttons[getButtonIndex(buttonNames[27])].over()){ 
+    setCost();
+  }
+  
+  //function28
+  if(mainMenu.buttons[getButtonIndex(buttonNames[28])].over()){ 
+    setAllocation();
+  }
+  
+  //function29
+  if(mainMenu.buttons[getButtonIndex(buttonNames[29])].over()){ 
+    setVehicle();
+  }
+  
   reRender();
 }
 
@@ -374,7 +415,19 @@ void keyPressed() {
     case 'A': //  "Piece Data (A)"          // 25
       setPieceData();
       break;
-      
+    case 'O': //  "Show Output Data (O)"    // 26
+      toggleOutputData(getButtonIndex(buttonNames[26]));
+      break;
+    case 'C': //  "Show Cost (C)",          // 27
+      setCost();
+      break;
+    case 'L': //  "Show Allocation (L)",    // 28
+      setAllocation();
+      break;
+    case 'v': //  "Show Vehicle (v)"        // 29
+      setVehicle();
+      break;
+  
     case 'k': 
       rotationMod = next(rotationMod, 3);
       decodePieces();
@@ -585,6 +638,33 @@ void setPieceData() {
   reRenderMiniMap(miniMap);
 }
 
+void setCost() {
+  showAllocation = false;
+  showVehicle = false;
+  showCost = true;
+  renderOutputTableLayers(input);
+  depressOutputButtons();
+  reRenderMiniMap(miniMap);
+}
+
+void setAllocation() {
+  showAllocation = true;
+  showVehicle = false;
+  showCost = false;
+  renderOutputTableLayers(input);
+  depressOutputButtons();
+  reRenderMiniMap(miniMap);
+}
+
+void setVehicle() {
+  showAllocation = false;
+  showVehicle = true;
+  showCost = false;
+  renderOutputTableLayers(input);
+  depressOutputButtons();
+  reRenderMiniMap(miniMap);
+}
+
 void setGridSize(float size, int button) {
   gridSize = size;
   resetGridParameters();
@@ -673,7 +753,25 @@ void toggleInputData(int button) {
       mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
     }
   }
-} 
+}
+
+void toggleOutputData(int button) {
+  showOutputData = toggle(showOutputData);
+  reRenderMiniMap(miniMap);
+  renderOutputTableLayers(input);
+  pressButton(showOutputData, button);
+  println("showOutputData = " + showOutputData);
+  
+  if (!showOutputData) {
+    for (int i=27; i<=29; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
+    }
+  } else {
+    for (int i=27; i<=29; i++) {
+      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
+    }
+  }
+}
 
 void pressButton(boolean bool, int button) {
   if (bool) {
@@ -743,6 +841,30 @@ void depressInputButtons() {
     button += 0;
   } else {
     button += 1;
+  }
+  
+  // Turns all buttons off
+  for(int i=min; i<=max; i++) { //heatmap buttons min-max are mutually exclusive
+    mainMenu.buttons[i].isPressed = true;
+  }
+  // highlighted the heatmap button that is activated only
+  mainMenu.buttons[button].isPressed = false;
+}
+
+// Presses all buttons in a set of mutually exclusive buttons except for the index specified
+// min-max specifies a range of button indices; valueMode specifies the currently selected button
+void depressOutputButtons() {
+
+  int min = getButtonIndex(buttonNames[27]);
+  int max = getButtonIndex(buttonNames[29]);
+  
+  int button = min;
+  if (showCost) {
+    button += 0;
+  } else if (showAllocation) {
+    button += 1;
+  } else {
+    button += 2;
   }
   
   // Turns all buttons off

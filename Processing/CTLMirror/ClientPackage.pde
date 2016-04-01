@@ -4,7 +4,7 @@ String LOCAL_FRIENDLY_NAME = "CTLMIRROR";
 class ClientPackage {
   
   String packageString;
-  int VOID_VALUE = 0;
+  int VOID_VALUE = -1;
   
   String clientAddress;
   int clientPort;
@@ -36,8 +36,8 @@ class ClientPackage {
   //  1  26  101
   //  ... 
   
-  void sendChunks(String packageName, int[][] input, float localScale, int chunkRowCount) {
-    int[][] inputSubset = new int[input.length][chunkRowCount];
+  void sendChunks(String packageName, float[][] input, float localScale, int chunkRowCount) {
+    float[][] inputSubset = new float[input.length][chunkRowCount];
     
     for (int i=0; i<input[0].length/chunkRowCount; i++) {
       for (int u=0; u<inputSubset.length; u++) {
@@ -57,7 +57,7 @@ class ClientPackage {
     }
   }
   
-  void addToPackage( String packageName, int[][] input, float localScale) {
+  void addToPackage( String packageName, float[][] input, float localScale) {
     
     // tag to denote that tag comes from colortizer
     packageString += LOCAL_FRIENDLY_NAME;
@@ -74,15 +74,18 @@ class ClientPackage {
       for (int v=0; v<input[0].length; v++) {
         if (input[u][v] != VOID_VALUE) {
           
-          // Converts local u,v values to client coordinate system
-          uDisaggregated = int(u*localScale/clientScale) + 2;
-          vDisaggregated = int(v*localScale/clientScale) + 1;
-          
+//          // Converts local u,v values to client coordinate system
+//          uDisaggregated = int(u*localScale/clientScale) + 2;
+//          vDisaggregated = int(v*localScale/clientScale) + 1;
+//          
+//          packageString += uDisaggregated;
+//          packageString += "\t";
+//          packageString += vDisaggregated;
+          packageString += u;
+          packageString += "\t";
+          packageString += v;
+          packageString += "\t";
           packageString += input[u][v];
-          packageString += "\t";
-          packageString += uDisaggregated;
-          packageString += "\t";
-          packageString += vDisaggregated;
           packageString += "\n";
         }
       }

@@ -59,6 +59,11 @@ boolean showMarket = false;
 boolean showObstacles = false;
 boolean showForm = true;
 
+boolean showOutputData = false;
+boolean showCost = true;
+boolean showAllocation = false;
+boolean showVehicle = false;
+
 // Class that holds a button menu
 Menu mainMenu, hideMenu;
 
@@ -133,6 +138,11 @@ void draw() {
     sendCTLData();
     renderDynamicTableLayers(input);
     changeDetected = false;
+  }
+  
+  if (outputReady) {
+    renderOutputTableLayers(output);
+    outputReady = false;
   }
   
   background(background);

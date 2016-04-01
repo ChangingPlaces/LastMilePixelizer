@@ -11,6 +11,7 @@ UDP udp;  // define the UDP object
 boolean busyImporting = false;
 boolean viaUDP = true;
 boolean changeDetected = false;
+boolean outputReady = false;
 
 void initUDP() {
   if (viaUDP) {
@@ -31,30 +32,60 @@ void ImportData(String inputStr[]) {
 
 void parseCTLStrings(String data[]) {
   
+  println("CTL Strings Recieved by " + LOCAL_FRIENDLY_NAME);
+  
   String dataType = "";
   
   for (int i=0 ; i<data.length;i++) {
     
     String[] split = split(data[i], "\t");
     
-    // Checks maximum possible ID value
-    if (split.length == 1 && split[0].equals("cost")) {
-      dataType = split[0];
+    // Checks Output Data Type
+    if (split.length == 1) {
+      if (split[0].equals("cost") || split[0].equals("allocation") || split[0].equals("vehicle")) dataType = split[0];
     }
     
     // Checks if row format is compatible with piece recognition.  3 columns for ID, U, V; 4 columns for ID, U, V, rotation
     if (split.length == 3) { 
       
-      //Finds UV values of Lego Grid:
-      int u_temp = int(split[0]);
-      int v_temp = int(split[1]);
-      
-      if (split.length == 3) { // If 3 columns
-     
+      if (dataType.equals("")) {
+        // Do Nothing
+        println("No Data Type Specified");
+      } else {
+        
+//        println("CTL Row Processed by " + LOCAL_FRIENDLY_NAME);
+        
+        //Finds UV values of Lego Grid in CTL units
+        int u_temp = int(split[0]);
+        int v_temp = int(split[1]);
+        
+        // Adds offset assuming CTL grid is centered on same point as local Coordinate system
+        // Still in CTL Units
+        u_temp += int( ((MAX_GRID_SIZE*displayU - CTL_KM_U)/2) / CTL_SCALE);
+        v_temp += int( ((MAX_GRID_SIZE*displayV - CTL_KM_V)/2) / CTL_SCALE);
+        
+//        println(CTL_SCALE, gridSize, dataType);
+//        println(gridU, gridV);
+        if (CTL_SCALE == gridSize) {
+        
+          if (u_temp < gridU && v_temp <= gridV) {
+            if (dataType.equals("cost")) {
+              float value = float(split[2]);
+              cost[u_temp][v_temp] = value;
+            } else if (dataType.equals("allocation")) {
+              int value = int(split[2]);
+              allocation[u_temp][v_temp] = value;
+            } else if (dataType.equals("vehicle")) {
+              int value = int(split[2]);
+              vehicle[u_temp][v_temp] = value;
+            } 
+          }
+        }
       }
-      
     } 
   }
+  renderOutputTableLayers(output);
+  outputReady = true;
 }
 
 void parseColortizerStrings(String data[]) {
@@ -73,7 +104,7 @@ void parseColortizerStrings(String data[]) {
       
       //Finds UV values of Lego Grid:
       int u_temp = int(split[1]);
-      int v_temp = int(split[2]);
+      int v_temp = tablePieceInput.length - int(split[2]) - 1;
       
       if (split.length == 3 && !split[0].equals("gridExtents")) { // If 3 columns
           

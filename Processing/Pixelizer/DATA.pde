@@ -11,7 +11,7 @@
     int scaler, gridU, gridV;
     
     void resetGridParameters() {
-      scaler = int(maxGridSize/gridSize);
+      scaler = int(MAX_GRID_SIZE/gridSize);
       // Total Matrix Size (includes cells beyond extents of screen)
       gridV = displayV*scaler; // Height of Lego Table
       gridU = displayU*scaler; // Width of Lego Table
@@ -67,6 +67,16 @@
       
       // Loads extents of Input data
       initInputData(); 
+      
+      // Loads extents of Output data
+      initOutputData(); 
+//      clearFloatData(cost, -1);
+//      clearIntData(allocation, 0);
+//      clearIntData(vehicle, 0);
+      fauxFloatData(cost, 1);
+      fauxIntData(allocation, 5);
+      fauxIntData(vehicle, 5);
+      println("faux data loaded");
       
       // Initializes Basemap file
       initializeBaseMap();
@@ -171,6 +181,7 @@
     
 // Initialize Input Data (store locations, lockers, etc)
     
+    // Input Matrices
     int[][] facilities, market, obstacles, form;
     
     // Runs once when initializes
@@ -189,32 +200,56 @@
       }
     }
     
-    void fauxData(int code, int[][] inputs, int maxInput) {
+// Initialize Output Data (Cost, Allocations, etc)
 
-      if (code == 2 ) {
-        
-        // Sets all grids to have "no object" (-1) with no rotation (0)
-        for (int i=0; i<inputs.length; i++) {
-          for (int j=0; j<inputs[0].length; j++) {
-            inputs[i][j] = -1;
-          }
-        }
-      } else if (code == 1 ) {
-        
-        // Sets grids to be alternating one of each N piece types (0-N) with no rotation (0)
-        for (int i=0; i<inputs.length; i++) {
-          for (int j=0; j<inputs[0].length; j++) {
-            inputs[i][j] = i  % maxInput+1;
-          }
-        }
-      } else if (code == 0 ) {
-        
-        // Sets grids to be random piece types (0-N) with random rotation (0-3)
-        for (int i=0; i<inputs.length; i++) {
-          for (int j=0; j<inputs[0].length; j++) {
-            inputs[i][j] = int(random(-1.99, maxInput+1));
-          }
+    // Output Matrices
+    float[][] cost;
+    int[][] allocation, vehicle;
+    
+    // Runs once when initializes
+    void initOutputData() {
+      cost = new float[gridU][gridV];
+      allocation = new int[gridU][gridV];
+      vehicle = new int[gridU][gridV];
+      for (int u=0; u<gridU; u++) {
+        for (int v=0; v<gridV; v++) {
+          cost[u][v] = 0;
+          allocation[u][v] = 0;
+          vehicle[u][v] = 0;
         }
       }
-      
+    }
+
+    // Create Faux Data Set for Debugging
+    void fauxIntData(int[][] data, int maxInput) {
+      for (int i=0; i<data.length; i++) {
+        for (int j=0; j<data[0].length; j++) {
+          data[i][j] = int(random(-0.99, maxInput));
+        }
+      }
+    }
+    
+    // Create Faux Data Set for Debugging
+    void fauxFloatData(float[][] data, int maxInput) {
+      for (int i=0; i<data.length; i++) {
+        for (int j=0; j<data[0].length; j++) {
+          data[i][j] = random(0, maxInput);
+        }
+      }
+    }
+    
+    void clearIntData(int[][] data, int clearValue) {
+      for (int i=0; i<data.length; i++) {
+        for (int j=0; j<data[0].length; j++) {
+          data[i][j] = clearValue;
+        }
+      }
+    }
+    
+    void clearFloatData(float[][] data, float clearValue) {
+      for (int i=0; i<data.length; i++) {
+        for (int j=0; j<data[0].length; j++) {
+          data[i][j] = clearValue;
+        }
+      }
     }

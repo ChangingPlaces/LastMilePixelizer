@@ -33,30 +33,30 @@ void setupPieces() {
   inputData.add(data_0);
   inputForm.add(form_0);
   
-  // 1: Large Store
+  // 1: Small Store
   Integer[][] data_1 = {
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 2, 0, 0 },
-    { 0, 0, 0, 0 } };
-  Integer[][] form_1 = {
-    { 0, 0, 0, 0 },
-    { 1, 1, 1, 1 },
-    { 2, 2, 2, 2 },
-    { 0, 0, 0, 0 } };
-  inputData.add(data_1);
-  inputForm.add(form_1);
-  
-  // 2: Small Store
-  Integer[][] data_2 = {
     { 0, 0, 0, 0 },
     { 0, 0, 0, 0 },
     { 0, 3, 0, 0 },
     { 0, 0, 0, 0 } };
-  Integer[][] form_2 = {
+  Integer[][] form_1 = {
     { 0, 0, 0, 0 },
     { 0, 1, 1, 0 },
     { 0, 2, 2, 0 },
+    { 0, 0, 0, 0 } };
+  inputData.add(data_1);
+  inputForm.add(form_1);
+  
+  // 2: Large Store
+  Integer[][] data_2 = {
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
+    { 0, 2, 0, 0 },
+    { 0, 0, 0, 0 } };
+  Integer[][] form_2 = {
+    { 0, 0, 0, 0 },
+    { 1, 1, 1, 1 },
+    { 2, 2, 2, 2 },
     { 0, 0, 0, 0 } };
   inputData.add(data_2);
   inputForm.add(form_2);
