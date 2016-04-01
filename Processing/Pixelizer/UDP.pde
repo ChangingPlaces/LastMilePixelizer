@@ -27,7 +27,7 @@ void ImportData(String inputStr[]) {
   } else if (inputStr[0].equals("LAST_MILE_SIM")) {
     parseLastMileSimStrings(inputStr);
   } else if (inputStr[0].equals("CTL")) {
-    saveStrings("CTLdata.txt", inputStr);
+    //saveStrings("CTLdata.txt", inputStr);
     parseCTLStrings(inputStr);
   }
   busyImporting = false;
@@ -74,10 +74,11 @@ void parseCTLStrings(String data[]) {
         
         // Converts u/v coordinates to local grid.  Results in data being "lost"
         u_local = int( (CTL_SCALE/gridSize)*u_local );
-        v_local = int( (CTL_SCALE/gridSize)*v_local );
+        v_local = gridV - int( (CTL_SCALE/gridSize)*v_local ) - 1;
         
         if (u_local < gridU && v_local < gridV) {
           if (dataType.equals(CTL_COST_TOTAL)) {
+            println("Total_Cost Received");
             float value = float(split[2]);
             totalCost[u_local][v_local] = value;
           } else if (dataType.equals(CTL_COST_PER_DELIVERY)) {
@@ -146,7 +147,7 @@ void parseColortizerStrings(String data[]) {
 void receive( byte[] data, String ip, int port ) {  // <-- extended handler
   // get the "real" message =
   String message = new String( data ); 
-  println(message);
+  //println(message);
   //saveStrings("data.txt", split(message, "\n"));
   String[] split = split(message, "\n");
   
