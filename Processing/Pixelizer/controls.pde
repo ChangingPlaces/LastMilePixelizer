@@ -370,9 +370,9 @@ void keyPressed() {
     case 'r': // "Align Right (r)"        // 8
       alignRight();
       break;
-    case 'c': // "Align Center (c)"       // 9
-      alignCenter();
-      break;
+//    case 'c': // "Align Center (c)"       // 9
+//      alignCenter();
+//      break;
     case 'i': // "Invert Colors (i)"      // 10
       invertColors();
       break;

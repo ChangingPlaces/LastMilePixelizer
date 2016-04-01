@@ -627,7 +627,7 @@ void renderBasemap(PGraphics graphic) {
       
       // Draw MiniMap
       i.beginDraw();
-      i.translate(STANDARD_MARGIN, y_0);  
+      i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, y_0);  
       i.image(miniMap, 0, 0, w, h);
       i.noFill();
       i.stroke(textColor);
