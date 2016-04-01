@@ -39,10 +39,10 @@ int randomType = 2;
 
 int projectorWidth = 1920;
 int projectorHeight = 1200;
-int projectorOffset = 1842;
+int projectorOffset = 1920;
 
-int screenWidth = 1500;
-int screenHeight = 1000;
+int screenWidth = 1920;
+int screenHeight = 1080;
 
 // Set this to true to display the main menu upon start
 boolean showMainMenu = true;
@@ -136,7 +136,7 @@ void draw() {
   // Decode pieces only if there is a change in Colortizer input
   if (changeDetected) {
     decodePieces();
-    sendCTLData();
+    // sendCTLData();
     renderDynamicTableLayers(input);
     changeDetected = false;
   }

@@ -438,6 +438,10 @@ void keyPressed() {
     case 'v': //  "Vehicle Allocation (v)"      // 30
       setVehicle();
       break;
+      
+    case ' ': // Send data to CTL
+      sendCTLData();
+      break;
 
   }
   

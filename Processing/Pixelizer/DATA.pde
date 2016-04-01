@@ -76,10 +76,7 @@
       
       // Loads extents of Output data
       initOutputData(); 
-      fauxFloatData(totalCost, 1);
-      fauxFloatData(deliveryCost, 1);
-      fauxIntData(allocation, 5);
-      fauxIntData(vehicle, 5);
+      clearOutputData();
       println("faux data loaded");
       
       // Initializes Basemap file
@@ -224,6 +221,20 @@
           vehicle[u][v] = 0;
         }
       }
+    }
+    
+    void fauxOutputData() {
+      fauxFloatData(totalCost, 1);
+      fauxFloatData(deliveryCost, 1);
+      fauxIntData(allocation, 5);
+      fauxIntData(vehicle, 5);
+    }
+    
+    void clearOutputData() {
+      clearFloatData(totalCost, -1);
+      clearFloatData(deliveryCost, -1);
+      clearIntData(allocation, 0);
+      clearIntData(vehicle, 0);
     }
 
     // Create Faux Data Set for Debugging

@@ -1,7 +1,7 @@
 // CTL Web Address
 //String CTL_ADDRESS = "localhost";
 //int CTL_PORT = 6252;
-String CTL_ADDRESS = "169.254.130.238";
+String CTL_ADDRESS = "192.168.173.97";
 int CTL_PORT = 5678;
 
 // CTL Dimension Constants
@@ -21,11 +21,18 @@ String CTL_ALLOCATION_VEHICLES = "allocation_vehicles";
 ClientPackage dataForCTL;
 OutputPackage dataFromCTL;
 
+boolean waitingForCTL = false;
+
 void sendCTLData() {
-  dataForCTL.addToPackage("facilities", facilities, gridSize);
-  dataForCTL.addToPackage("market", market, gridSize);
-  dataForCTL.addToPackage("obstacles", obstacles, gridSize);
-  dataForCTL.sendPackage();
+  if (!waitingForCTL) {
+    waitingForCTL = true;
+    println("sending data to stl ...");
+    dataForCTL.addToPackage("facilities", facilities, gridSize);
+    dataForCTL.addToPackage("market", market, gridSize);
+    dataForCTL.addToPackage("obstacles", obstacles, gridSize);
+    dataForCTL.sendPackage();
+    println("data sent to CTL");
+  }
 }
 
 // A Class that handles and sends a matrix of data formatted for the scale of the reciever
