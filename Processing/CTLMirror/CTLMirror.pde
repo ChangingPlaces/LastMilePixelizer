@@ -4,7 +4,10 @@
 int CTL_U = 180;
 int CTL_V = 220;
 int V_SEND_LIMIT = CTL_V/20;
+
 float[][] cost = new float[CTL_U][CTL_V];
+float[][] allocation = new float[CTL_U][CTL_V];
+float[][] vehicle = new float[CTL_U][CTL_V];
 
 float CLIENT_SCALE = 2.0; //KM PER PIXEL
 float LOCAL_SCALE = 0.5;  //KM PER PIXEL
@@ -23,6 +26,8 @@ void draw() {
     
     generateFauxData();
     dataForIra.sendChunks("cost", cost, LOCAL_SCALE, V_SEND_LIMIT);
+    dataForIra.sendChunks("allocation", allocation, LOCAL_SCALE, V_SEND_LIMIT);
+    dataForIra.sendChunks("vehicle", vehicle, LOCAL_SCALE, V_SEND_LIMIT);
     //dataForIra.savePackage("cost.tsv");
     importReady = false;
   }
@@ -31,8 +36,9 @@ void draw() {
 void generateFauxData() {
   for (int u=0; u<CTL_U; u++) {
     for (int v=0; v<CTL_V; v++) {
-      //cost[u][v] = random(0,1);
-      cost[u][v] = 0.5;
+      cost[u][v] = random(0,1);
+      allocation[u][v] = float(int(random(-0.99,5)));
+      vehicle[u][v] = float(int(random(-0.99,5)));
     }
   }
 }

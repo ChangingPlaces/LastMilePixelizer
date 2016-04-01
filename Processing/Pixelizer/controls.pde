@@ -427,12 +427,6 @@ void keyPressed() {
     case 'v': //  "Show Vehicle (v)"        // 29
       setVehicle();
       break;
-  
-    case 'k': 
-      rotationMod = next(rotationMod, 3);
-      decodePieces();
-      reRender();
-      break;
   }
   
   //------arrow keys and how to code keys that aren't characters exactly----- 

@@ -32,7 +32,7 @@ void ImportData(String inputStr[]) {
 
 void parseCTLStrings(String data[]) {
   
-  println("CTL Strings Recieved by " + LOCAL_FRIENDLY_NAME);
+  //println("CTL Strings Recieved by " + LOCAL_FRIENDLY_NAME);
   
   String dataType = "";
   
@@ -53,7 +53,7 @@ void parseCTLStrings(String data[]) {
         println("No Data Type Specified");
       } else {
         
-//        println("CTL Row Processed by " + LOCAL_FRIENDLY_NAME);
+        //println("CTL Row Processed by " + LOCAL_FRIENDLY_NAME);
         
         //Finds UV values of Lego Grid in CTL units
         int u_temp = int(split[0]);
@@ -64,11 +64,9 @@ void parseCTLStrings(String data[]) {
         u_temp += int( ((MAX_GRID_SIZE*displayU - CTL_KM_U)/2) / CTL_SCALE);
         v_temp += int( ((MAX_GRID_SIZE*displayV - CTL_KM_V)/2) / CTL_SCALE);
         
-//        println(CTL_SCALE, gridSize, dataType);
-//        println(gridU, gridV);
         if (CTL_SCALE == gridSize) {
         
-          if (u_temp < gridU && v_temp <= gridV) {
+          if (u_temp < gridU && v_temp < gridV) {
             if (dataType.equals("cost")) {
               float value = float(split[2]);
               cost[u_temp][v_temp] = value;
@@ -84,7 +82,6 @@ void parseCTLStrings(String data[]) {
       }
     } 
   }
-  renderOutputTableLayers(output);
   outputReady = true;
 }
 

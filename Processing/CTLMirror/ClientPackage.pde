@@ -9,13 +9,14 @@ class ClientPackage {
   String clientAddress;
   int clientPort;
   float clientScale;
-  int chunks;
+  int chunk;
   
   ClientPackage(String address, int port, float scale) {
     packageString = "";
     clientAddress = address;
     clientPort = port;
     clientScale = scale;
+    chunk = 0;
   }
   
   // addToPackage() appends a TSV-style matrix to the packageString:
@@ -40,6 +41,7 @@ class ClientPackage {
     float[][] inputSubset = new float[input.length][chunkRowCount];
     
     for (int i=0; i<input[0].length/chunkRowCount; i++) {
+      chunk = i;
       for (int u=0; u<inputSubset.length; u++) {
         for (int v=0; v<inputSubset[0].length; v++) {
           // breaks if last chunk is not a complete chunk
@@ -51,13 +53,13 @@ class ClientPackage {
       
       // Sends Data Chunk String
       clearPackage();
-      addToPackage(packageName, inputSubset, localScale);
+      addToPackage(packageName, inputSubset, localScale, chunkRowCount);
       sendPackage();
-      
     }
+    chunk = 0;
   }
   
-  void addToPackage( String packageName, float[][] input, float localScale) {
+  void addToPackage( String packageName, float[][] input, float localScale, int chunkRowCount) {
     
     // tag to denote that tag comes from colortizer
     packageString += LOCAL_FRIENDLY_NAME;
@@ -83,7 +85,7 @@ class ClientPackage {
 //          packageString += vDisaggregated;
           packageString += u;
           packageString += "\t";
-          packageString += v;
+          packageString += chunk*chunkRowCount + v;
           packageString += "\t";
           packageString += input[u][v];
           packageString += "\n";
@@ -103,7 +105,7 @@ class ClientPackage {
   void sendPackage() {
     if (viaUDP) {
       udp.send( packageString, clientAddress, clientPort );
-      println("Package sent from CTLMirror to Pixelizer");
+      //println("Package sent from CTLMirror to Pixelizer");
       //println(packageString);
       clearPackage();
     }
