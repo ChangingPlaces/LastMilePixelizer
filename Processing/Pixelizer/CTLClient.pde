@@ -1,6 +1,8 @@
 // CTL Web Address
-String CTL_ADDRESS = "localhost";
-int CTL_PORT = 6252;
+//String CTL_ADDRESS = "localhost";
+//int CTL_PORT = 6252;
+String CTL_ADDRESS = "169.254.130.238";
+int CTL_PORT = 3456;
 
 // CTL Dimension Constants
 float CTL_SCALE = 0.5; //km per pixel unit
@@ -33,6 +35,9 @@ class ClientPackage {
   
   ClientPackage(String address, int port, float scale) {
     packageString = "";
+    // Define Package Name
+    packageString += LOCAL_FRIENDLY_NAME;
+    packageString += "\n";;
     clientAddress = address;
     clientPort = port;
     clientScale = scale;
@@ -57,9 +62,6 @@ class ClientPackage {
   //  ... 
   
   void addToPackage( String packageName, int[][] input, float localScale) {
-    // Define Package Name
-    packageString += LOCAL_FRIENDLY_NAME;
-    packageString += "\n";
     
     // Define Package Name
     packageString += packageName;
@@ -88,7 +90,10 @@ class ClientPackage {
   }
   
   void clearPackage() {
+    // Define Package Name
     packageString = "";
+    packageString += LOCAL_FRIENDLY_NAME;
+    packageString += "\n";
   }
   
   void sendPackage() {

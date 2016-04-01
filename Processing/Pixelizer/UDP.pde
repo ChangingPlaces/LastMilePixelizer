@@ -25,7 +25,7 @@ void ImportData(String inputStr[]) {
   if (inputStr[0].equals("COLORTIZER")) {
     parseColortizerStrings(inputStr);
   } else if (inputStr[0].equals("LAST_MILE_SIM")) {
-    parseLastMileStrings(inputStr);
+    parseLastMileSimStrings(inputStr);
   } else if (inputStr[0].equals("CTL")) {
     parseCTLStrings(inputStr);
   }
