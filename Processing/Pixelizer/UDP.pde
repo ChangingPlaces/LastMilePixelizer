@@ -24,10 +24,17 @@ void initUDP() {
 void ImportData(String inputStr[]) {
   if (inputStr[0].equals("COLORTIZER")) {
     parseColortizerStrings(inputStr);
-  } else if (inputStr[0].equals("CTLMIRROR")) {
+  } else if (inputStr[0].equals("LAST_MILE_SIM")) {
+    parseLastMileStrings(inputStr);
+  } else if (inputStr[0].equals("CTL")) {
     parseCTLStrings(inputStr);
   }
   busyImporting = false;
+}
+
+void parseLastMileSimStrings(String data[]) {
+  
+  outputReady = true;
 }
 
 void parseCTLStrings(String data[]) {
@@ -56,28 +63,29 @@ void parseCTLStrings(String data[]) {
         //println("CTL Row Processed by " + LOCAL_FRIENDLY_NAME);
         
         //Finds UV values of Lego Grid in CTL units
-        int u_temp = int(split[0]);
-        int v_temp = int(split[1]);
+        int u_local = int(split[0]);
+        int v_local = int(split[1]);
         
         // Adds offset assuming CTL grid is centered on same point as local Coordinate system
         // Still in CTL Units
-        u_temp += int( ((MAX_GRID_SIZE*displayU - CTL_KM_U)/2) / CTL_SCALE);
-        v_temp += int( ((MAX_GRID_SIZE*displayV - CTL_KM_V)/2) / CTL_SCALE);
+        u_local += int( ((MAX_GRID_SIZE*displayU - CTL_KM_U)/2) / CTL_SCALE);
+        v_local += int( ((MAX_GRID_SIZE*displayV - CTL_KM_V)/2) / CTL_SCALE);
         
-        if (CTL_SCALE == gridSize) {
+        // Converts u/v coordinates to local grid.  Results in data being "lost"
+        u_local = int( (CTL_SCALE/gridSize)*u_local );
+        v_local = int( (CTL_SCALE/gridSize)*v_local );
         
-          if (u_temp < gridU && v_temp < gridV) {
-            if (dataType.equals("cost")) {
-              float value = float(split[2]);
-              cost[u_temp][v_temp] = value;
-            } else if (dataType.equals("allocation")) {
-              int value = int(split[2]);
-              allocation[u_temp][v_temp] = value;
-            } else if (dataType.equals("vehicle")) {
-              int value = int(split[2]);
-              vehicle[u_temp][v_temp] = value;
-            } 
-          }
+        if (u_local < gridU && v_local < gridV) {
+          if (dataType.equals("cost")) {
+            float value = float(split[2]);
+            cost[u_local][v_local] = value;
+          } else if (dataType.equals("allocation")) {
+            int value = int(split[2]);
+            allocation[u_local][v_local] = value;
+          } else if (dataType.equals("vehicle")) {
+            int value = int(split[2]);
+            vehicle[u_local][v_local] = value;
+          } 
         }
       }
     } 

@@ -1,4 +1,5 @@
-String LOCAL_FRIENDLY_NAME = "CTLMIRROR";
+String LOCAL_FRIENDLY_NAME = "CTL";
+//String LOCAL_FRIENDLY_NAME = "LAST_MILE_SIM";
 
 // A Class that handles and sends a matrix of data formatted for the scale of the reciever
 class ClientPackage {
