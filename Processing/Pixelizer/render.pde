@@ -29,7 +29,7 @@ float gridWidth, gridHeight;
 PGraphics legendH, legendP, legendI, legendO;
 
 int tabley_0 = 25;
-int tablex_0 = 225;
+int tablex_0 = 550;
 int tabley_1, tablex_1;
 
 void renderTable() {

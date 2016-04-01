@@ -541,6 +541,7 @@ void mouseReleased() {
   }
   scroll_x_0 = scroll_x;
   scroll_y_0 = scroll_y;
+  changeDetected = true;
   reRender();
 }
 
