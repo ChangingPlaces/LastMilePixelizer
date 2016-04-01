@@ -27,6 +27,7 @@ void ImportData(String inputStr[]) {
   } else if (inputStr[0].equals("LAST_MILE_SIM")) {
     parseLastMileSimStrings(inputStr);
   } else if (inputStr[0].equals("CTL")) {
+    saveStrings("CTLdata.txt", inputStr);
     parseCTLStrings(inputStr);
   }
   busyImporting = false;
@@ -142,7 +143,7 @@ void parseColortizerStrings(String data[]) {
 void receive( byte[] data, String ip, int port ) {  // <-- extended handler
   // get the "real" message =
   String message = new String( data ); 
-  //println(message);
+  println(message);
   //saveStrings("data.txt", split(message, "\n"));
   String[] split = split(message, "\n");
   
