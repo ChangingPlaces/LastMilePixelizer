@@ -28,9 +28,14 @@ PGraphics h, s, l, i, c, p, input, output, pieces;
 float gridWidth, gridHeight;
 PGraphics legendH, legendP, legendI, legendO;
 
-int tabley_0 = 25;
-int tablex_0 = 550;
-int tabley_1, tablex_1;
+// Standard Minimum Margin Width
+int STANDARD_MARGIN = 25;
+
+// Horizontal Offset for Table Display Window
+int TABLE_IMAGE_OFFSET = 550;
+
+// Table Canvas Width and Height
+int TABLE_IMAGE_HEIGHT, TABLE_IMAGE_WIDTH;
 
 void renderTable() {
   table.beginDraw();
@@ -73,7 +78,7 @@ void renderTable() {
 void renderScreen() {
   screen.beginDraw();
   screen.clear();
-  renderInfo(i, 2*tablex_0 + tablex_1, tabley_0, mapRatio*tablex_1, mapRatio*tabley_1);
+  renderInfo(i, 2*TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH, STANDARD_MARGIN, mapRatio*TABLE_IMAGE_WIDTH, mapRatio*TABLE_IMAGE_HEIGHT);
   screen.image(i, 0, 0);
   
   // Draws Menu
@@ -106,7 +111,7 @@ void reRender() {
   renderLegends();
   
   // Renders Text
-  renderInfo(i, 2*tablex_0 + tablex_1, tabley_0, mapRatio*tablex_1, mapRatio*tabley_1);
+  renderInfo(i, 2*TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH, STANDARD_MARGIN, mapRatio*TABLE_IMAGE_WIDTH, mapRatio*TABLE_IMAGE_HEIGHT);
 }
 
 // Graphics Objects for Data Layers
@@ -150,8 +155,8 @@ void renderBasemap(PGraphics graphic) {
     screen = createGraphics(screenWidth, screenHeight);
     i = createGraphics(screenWidth, screenHeight);
            
-    tabley_1 = screenHeight - 2*tabley_0;
-    tablex_1 = int(((float)displayU/displayV)*tabley_1);
+    TABLE_IMAGE_HEIGHT = screenHeight - 2*STANDARD_MARGIN;
+    TABLE_IMAGE_WIDTH = int(((float)displayU/displayV)*TABLE_IMAGE_HEIGHT);
   }
 
 // Methods for drawing Layers onto Table
@@ -484,15 +489,15 @@ void renderBasemap(PGraphics graphic) {
       i.noFill();
       i.stroke(textColor);
       i.strokeWeight(1);
-      i.rect(tablex_0, tabley_0, tablex_1, tabley_1);
+      i.rect(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
       
       
-      i.translate(tablex_0 + tablex_1, tabley_0 + tabley_1);
+      i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
       
         // Draw Scale
         int scale_0 = 10;
-        int scale_1 = int(w + tabley_0);
-        float scalePix = float(tabley_1)/displayV;
+        int scale_1 = int(w + STANDARD_MARGIN);
+        float scalePix = float(TABLE_IMAGE_HEIGHT)/displayV;
         i.translate(0, -4*scalePix);
         i.line(scale_0, 0, scale_1, 0);
         i.line(scale_0, -4*scalePix, scale_1, -4*scalePix);
@@ -501,9 +506,9 @@ void renderBasemap(PGraphics graphic) {
         i.text(4*gridSize + " km", scale_1 - 2*scale_0, -1.5*scalePix);
         
         if (showPopulationData) {
-          float legendPix = -tabley_0-4*scalePix-legendP.height;
+          float legendPix = -STANDARD_MARGIN-4*scalePix-legendP.height;
           // Draw Legends
-          i.image(legendP, tabley_0, legendPix);
+          i.image(legendP, STANDARD_MARGIN, legendPix);
           
           int demandMIN = 0;
           int demandMAX = 0;
@@ -516,44 +521,44 @@ void renderBasemap(PGraphics graphic) {
             demandMAX = int(popMAX*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
           }
           
-          i.text("Demand Potential", tabley_0, legendPix - 35);
-          i.text("Source: 2010 U.S. Census Data", tabley_0, legendPix - 20);
-          i.text(int(demandMIN) + " deliveries per day", 1.5*tabley_0 + legendP.width, legendPix + legendP.height);
-          i.text(int(demandMAX) + " deliveries per day", 1.5*tabley_0 + legendP.width, legendPix+10);
+          i.text("Demand Potential", STANDARD_MARGIN, legendPix - 35);
+          i.text("Source: 2010 U.S. Census Data", STANDARD_MARGIN, legendPix - 20);
+          i.text(int(demandMIN) + " deliveries per day", 1.5*STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+          i.text(int(demandMAX) + " deliveries per day", 1.5*STANDARD_MARGIN + legendP.width, legendPix+10);
         }
         
         if (showDeliveryData) {
-          float legendPix = -3*tabley_0-4*scalePix-2*legendH.height-20;
+          float legendPix = -3*STANDARD_MARGIN-4*scalePix-2*legendH.height-20;
           if (valueMode.equals("source")) {
             float normalized;
             int column = -1;
-            i.text("Delivery Facility Allocations", tabley_0, legendPix - 35);
-            i.text("Source: Walmart 2015", tabley_0, legendPix - 20);
+            i.text("Delivery Facility Allocations", STANDARD_MARGIN, legendPix - 35);
+            i.text("Source: Walmart 2015", STANDARD_MARGIN, legendPix - 20);
             for (int j=0; j<storeID.size(); j++) {
               if (j % 8 == 0) {
                 column++;
               }
               normalized = findHeatmapFill(i, (float)storeID.get(j));
-              for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), tabley_0*(column*5+1), legendPix+10+(j-column*8)*15);
+              for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
             }
           } else { 
             // Draw Legends
-            i.image(legendH, tabley_0, legendPix);
-            i.text("Delivery Data", tabley_0, legendPix - 35);
-            i.text("Source: Walmart 2015", tabley_0, legendPix - 20);
-            i.text(int(heatmapMIN+1) + " " + valueMode, 1.5*tabley_0 + legendP.width, legendPix + legendP.height);
-            i.text(int(heatmapMAX) + " " + valueMode, 1.5*tabley_0 + legendP.width, legendPix+10);
+            i.image(legendH, STANDARD_MARGIN, legendPix);
+            i.text("Delivery Data", STANDARD_MARGIN, legendPix - 35);
+            i.text("Source: Walmart 2015", STANDARD_MARGIN, legendPix - 20);
+            i.text(int(heatmapMIN+1) + " " + valueMode, 1.5*STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+            i.text(int(heatmapMAX) + " " + valueMode, 1.5*STANDARD_MARGIN + legendP.width, legendPix+10);
           }
         }
       
       i.translate(0, +4*scalePix);
       
-      i.translate(-(tablex_0 + tablex_1), -(tabley_0 + tabley_1));
+      i.translate(-(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
       
       i.fill(textColor);
       i.textAlign(RIGHT);
-      i.text("Pixelizer v1.0", screen.width - 10, screen.height - tabley_0 - 15);
-      i.text("Ira Winder, jiw@mit.edu", screen.width - 10, screen.height - tabley_0);
+      i.text("Pixelizer v1.0", screen.width - 10, screen.height - STANDARD_MARGIN - 15);
+      i.text("Ira Winder, jiw@mit.edu", screen.width - 10, screen.height - STANDARD_MARGIN);
       
     
       i.textAlign(LEFT);
@@ -571,7 +576,7 @@ void renderBasemap(PGraphics graphic) {
       
       
       
-      i.translate(tablex_0 + tablex_1 + tabley_0, y_0 + 10);
+      i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, y_0 + 10);
       
       // Main Info
       i.fill(textColor);
@@ -622,7 +627,7 @@ void renderBasemap(PGraphics graphic) {
       
       // Draw MiniMap
       i.beginDraw();
-      i.translate(tabley_0, y_0);  
+      i.translate(STANDARD_MARGIN, y_0);  
       i.image(miniMap, 0, 0, w, h);
       i.noFill();
       i.stroke(textColor);
@@ -632,11 +637,11 @@ void renderBasemap(PGraphics graphic) {
     }
     
     int mouseToU() {
-      return int(displayU*(float)(mouseX - tablex_0)/tablex_1) + gridPanU;   
+      return int(displayU*(float)(mouseX - TABLE_IMAGE_OFFSET)/TABLE_IMAGE_WIDTH) + gridPanU;   
     }
     
     int mouseToV() {
-      return int(displayV*(float)(mouseY - tabley_0)/tabley_1) + gridPanV;
+      return int(displayV*(float)(mouseY - STANDARD_MARGIN)/TABLE_IMAGE_HEIGHT) + gridPanV;
     }
     
     float getCellValue(int u, int v) {

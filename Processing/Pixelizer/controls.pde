@@ -1068,13 +1068,13 @@ class Menu{
     for (int i=0; i<buttons.length; i++) {
       if ( this.align.equals("right") || this.align.equals("RIGHT") ) {
         // Right Align
-        buttons[i] = new Button(this.w - this.x - tabley_0, tabley_0 + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, this.names[i]);
+        buttons[i] = new Button(this.w - this.x - STANDARD_MARGIN, STANDARD_MARGIN + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, this.names[i]);
       } else if ( this.align.equals("left") || this.align.equals("LEFT") ) { 
         // Left Align
-        buttons[i] = new Button(tabley_0, tabley_0 + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, names[i]);
+        buttons[i] = new Button(STANDARD_MARGIN, STANDARD_MARGIN + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, names[i]);
       } else if ( this.align.equals("center") || this.align.equals("CENTER") ) { 
         // Center Align
-        buttons[i] = new Button( (this.w-this.x)/2, tabley_0 + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, this.names[i]);
+        buttons[i] = new Button( (this.w-this.x)/2, STANDARD_MARGIN + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, this.names[i]);
       }
       
       // Alows a menu button spacer to be added by setting its string value to "VOID"

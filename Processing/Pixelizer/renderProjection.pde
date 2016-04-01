@@ -93,8 +93,12 @@ public class projApplet extends PApplet {
     
     ks = new Keystone(this);;
     
-    surface = ks.createCornerPinSurface(tabley_1, tabley_1, 20);
-    offscreen = createGraphics(tabley_1, tabley_1);
+    reset();
+  }
+  
+  public void reset() {
+    surface = ks.createCornerPinSurface(TABLE_IMAGE_HEIGHT, TABLE_IMAGE_HEIGHT, 20);
+    offscreen = createGraphics(TABLE_IMAGE_HEIGHT, TABLE_IMAGE_HEIGHT);
     
     try{
       ks.load();
@@ -113,9 +117,9 @@ public class projApplet extends PApplet {
     // most likely, you'll want a black background to minimize
     // bleeding around your projection area
     background(0);
-      
+    
     // Draw the scene, offscreen
-    renderCanvas(offscreen, int(tabley_1*(float)(displayV-displayU)/displayV));
+    renderCanvas(offscreen, int(TABLE_IMAGE_HEIGHT*(float)(displayV-displayU)/displayV));
     surface.render(offscreen);
   
   }

@@ -41,8 +41,8 @@ int projectorWidth = 1920;
 int projectorHeight = 1200;
 int projectorOffset = 1920;
 
-int screenWidth = 1920;
-int screenHeight = 1080;
+int screenWidth = 1900;
+int screenHeight = 1000;
 
 // Set this to true to display the main menu upon start
 boolean showMainMenu = true;
@@ -129,6 +129,7 @@ void draw() {
   
   if (flagResize) {
     initScreenOffsets();
+    if (applet != null) applet.reset(); // Resets Projection Graphics
     loadMenu(screenWidth, screenHeight);
     flagResize = false;
   }
@@ -150,14 +151,14 @@ void draw() {
   
   // Render Table Surface Graphic
   renderTable();
-  image(table, tablex_0, tabley_0, tablex_1, tabley_1); 
+  image(table, TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT); 
 
   // Renders everything else drawn to Screen
   renderScreen();
   image(screen, 0, 0);
   
   // Exports table Graphic to Projector
-  projector = get(tablex_0, tabley_0, tablex_1, tabley_1);
-  margin = get(tablex_0 + tablex_1 + tabley_0, tabley_0, miniMap.width, tabley_1);
+  projector = get(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
+  margin = get(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, STANDARD_MARGIN, miniMap.width, TABLE_IMAGE_HEIGHT);
 }
   
