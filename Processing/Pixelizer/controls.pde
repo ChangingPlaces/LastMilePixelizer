@@ -21,7 +21,7 @@ String[] menuOrder =
   "Facility Allocation (L)",
   "Vehicle Allocation (v)",
   "VOID",
-  "Store Locations (s)",
+  "2015 Store Locations (s)",
   "2015 Delivery Data (D)",
   "Delivery Counts (d)",
   "Tote Counts (t)",
@@ -49,7 +49,7 @@ String[] buttonNames =
   "Tote Counts (t)",         // 3
   "Store Source (o)",        // 4
   "Avg Doorstep Time (a)",   // 5
-  "Store Locations (s)",     // 6
+  "2015 Store Locations (s)",// 6
   "Align Left (l)",          // 7
   "Align Right (r)",         // 8
   "Align Center (c)",        // 9

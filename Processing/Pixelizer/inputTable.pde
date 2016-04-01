@@ -346,8 +346,13 @@ void fauxPieces(int code, int[][][] pieces, int maxID) {
     // Sets grids to be random piece types (0-N) with random rotation (0-3)
     for (int i=0; i<pieces.length; i++) {
       for (int j=0; j<pieces[0].length; j++) {
-        pieces[i][j][0] = int(random(-1.99, maxID+1));
-        pieces[i][j][1] = int(random(0, 4));
+        if (random(0, 1) > 0.95) {
+          pieces[i][j][0] = int(random(-1.99, maxID+1));
+          pieces[i][j][1] = int(random(0, 4));
+        } else { // 95% of pieces are blank
+          pieces[i][j][0] = -1;
+          pieces[i][j][1] = 0;
+        }
       }
     }
   }

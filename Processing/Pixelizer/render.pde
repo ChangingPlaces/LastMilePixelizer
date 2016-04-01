@@ -26,7 +26,7 @@ boolean flagResize = true;
 PGraphics screen, table;
 PGraphics h, s, l, i, c, p, input, output, pieces;
 float gridWidth, gridHeight;
-PGraphics legendH, legendP;
+PGraphics legendH, legendP, legendI, legendO;
 
 int tabley_0 = 25;
 int tablex_0 = 25;
@@ -131,6 +131,8 @@ void initDataGraphics() {
   int legendHeight = 100;
   legendH = createGraphics(legendWidth, legendHeight);
   legendP = createGraphics(legendWidth, legendHeight);
+  legendI = createGraphics(legendWidth, legendHeight);
+  legendO = createGraphics(legendWidth, legendHeight);
 }
 
 // Draws a Google Satellite Image
@@ -513,9 +515,10 @@ void renderBasemap(PGraphics graphic) {
             demandMAX = int(popMAX*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
           }
           
-          i.text("Demand Potential", tablex_0, legendPix - 20);
-          i.text(int(popMIN+1) + " " + popMode, 1.5*tablex_0 + legendP.width, legendPix + legendP.height);
-          i.text(int(popMAX) + " " + popMode, 1.5*tablex_0 + legendP.width, legendPix+10);
+          i.text("Demand Potential", tablex_0, legendPix - 35);
+          i.text("Source: 2010 U.S. Census Data", tablex_0, legendPix - 20);
+          i.text(int(demandMIN) + " deliveries per day", 1.5*tablex_0 + legendP.width, legendPix + legendP.height);
+          i.text(int(demandMAX) + " deliveries per day", 1.5*tablex_0 + legendP.width, legendPix+10);
         }
         
         if (showDeliveryData) {
@@ -523,7 +526,8 @@ void renderBasemap(PGraphics graphic) {
           if (valueMode.equals("source")) {
             float normalized;
             int column = -1;
-            i.text("Delivery Legend", tablex_0, legendPix - 20);
+            i.text("Delivery Facility Allocations", tablex_0, legendPix - 35);
+            i.text("Source: Walmart 2015", tablex_0, legendPix - 20);
             for (int j=0; j<storeID.size(); j++) {
               if (j % 8 == 0) {
                 column++;
@@ -534,7 +538,8 @@ void renderBasemap(PGraphics graphic) {
           } else { 
             // Draw Legends
             i.image(legendH, tablex_0, legendPix);
-            i.text("Delivery Legend", tablex_0, legendPix - 20);
+            i.text("Delivery Data", tablex_0, legendPix - 35);
+            i.text("Source: Walmart 2015", tablex_0, legendPix - 20);
             i.text(int(heatmapMIN+1) + " " + valueMode, 1.5*tablex_0 + legendP.width, legendPix + legendP.height);
             i.text(int(heatmapMAX) + " " + valueMode, 1.5*tablex_0 + legendP.width, legendPix+10);
           }
@@ -562,9 +567,10 @@ void renderBasemap(PGraphics graphic) {
       i.translate(x_0, 2*y_0 + h + 10);
       
       if (showDeliveryData || showPopulationData) {
-        i.text("Cell Information:", 0, 90);
+        i.text("CELL INFO", 0, 100);
         i.text("Delivery Value:", 0, 120);
         i.text("Population Value:", 0, 150);
+        i.text("Demand Potential:", 0, 180);
       }
       i.colorMode(RGB);
       i.fill(0,255,255);
@@ -585,6 +591,13 @@ void renderBasemap(PGraphics graphic) {
         } else {
           value += (int)getCellPop(mouseToU(), mouseToV());
           i.text(value + " " + popMode, 0, 165);
+          float temp = float(value);
+          if (popMode.equals("POP10")) {
+            i.text(int(temp/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR) + " Deliveries per Day", 0, 195);
+          } else if (popMode.equals("HOUSING10")) {
+            i.text(int(temp*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR) + " Deliveries per Day", 0, 195);
+          }
+          
         }
       }
       
