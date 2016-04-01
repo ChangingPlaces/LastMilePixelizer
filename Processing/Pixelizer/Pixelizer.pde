@@ -159,6 +159,6 @@ void draw() {
   
   // Exports table Graphic to Projector
   projector = get(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
-  margin = get(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, STANDARD_MARGIN, miniMap.width, TABLE_IMAGE_HEIGHT);
+  margin = get(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - miniMap.width, STANDARD_MARGIN, miniMap.width, TABLE_IMAGE_HEIGHT);
 }
   
