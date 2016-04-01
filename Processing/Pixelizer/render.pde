@@ -244,7 +244,7 @@ void renderBasemap(PGraphics graphic) {
         
         graphic.colorMode(HSB);
         
-        int alpha = 255;
+        int alpha = 100;
         
         if (valueMode.equals("totes") || valueMode.equals("deliveries")) {
           // Narrower Color Range
@@ -294,7 +294,7 @@ void renderBasemap(PGraphics graphic) {
     
     float findStoreFill(PGraphics graphic, float stores) {
         float normalized;  
-        int alpha = 255;
+        int alpha = 100;
         
         // BEGIN Drawing Draws Store Locations
         try {
@@ -395,8 +395,8 @@ void renderBasemap(PGraphics graphic) {
       color from, to;  
       
       //BEGIN Drawing POPULATION
-      from = color(#FF0000, 50); // Red
-      to = color(#00FF00, 50);   // Green
+      from = color(#FF0000, 75); // Red
+      to = color(#00FF00, 75);   // Green
         
       // Dynamically adjusts grid size to fit within canvas dimensions
       gridWidth = float(table.width)/displayU;
@@ -509,7 +509,7 @@ void renderBasemap(PGraphics graphic) {
                 column++;
               }
               normalized = findHeatmapFill(i, (float)storeID.get(j));
-              i.text("StoreID: " + storeID.get(j), tablex_0*(column*5+1), legendPix+10+(j-column*8)*15);
+              for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), tablex_0*(column*5+1), legendPix+10+(j-column*8)*15);
             }
           } else { 
             // Draw Legends

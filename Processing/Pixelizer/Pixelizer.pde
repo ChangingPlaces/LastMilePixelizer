@@ -30,7 +30,7 @@ import java.awt.event.*;
 
 // 0 = Denver
 // 1 = San Jose
-int modeIndex = 0;
+int modeIndex = 1;
 
 // 0 = random
 // 1 = rows

@@ -124,6 +124,7 @@ public class projApplet extends PApplet {
     // Draw the scene, offscreen
     p.beginDraw();
     p.clear();
+    p.background(#666666);
     p.translate(x_offset, 0);
     p.image(projector, 0, 0);
     p.endDraw();

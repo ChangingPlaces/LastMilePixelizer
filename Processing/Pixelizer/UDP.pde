@@ -46,7 +46,7 @@ void parseCTLStrings(String data[]) {
   
   for (int i=0 ; i<data.length;i++) {
     
-    String[] split = split(data[i], "\t");
+    String[] split = split(data[i], ",");
     
     // Checks Output Data Type
     if (split.length == 1) {
