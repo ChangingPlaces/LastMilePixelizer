@@ -25,6 +25,8 @@
  *               screen <-  (i)nfo <-  minimap, legendH, legendP
  */
 
+String systemOS;
+
 // Library needed for ComponentAdapter()
 import java.awt.event.*;
 
@@ -123,6 +125,9 @@ void setup() {
   
       // Loads and formats menu items
       loadMenu(tableWidth, tableHeight);
+      
+      systemOS = System.getProperty("os.name").substring(0,3);
+      println(systemOS);
 }
 
 void draw() {
@@ -159,6 +164,12 @@ void draw() {
   
   // Exports table Graphic to Projector
   projector = get(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
-  margin = get(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - miniMap.width, STANDARD_MARGIN, miniMap.width, TABLE_IMAGE_HEIGHT);
+  margin = get(TABLE_IMAGE_OFFSET - 2*STANDARD_MARGIN - int(mapRatio*TABLE_IMAGE_WIDTH), STANDARD_MARGIN, int(mapRatio*TABLE_IMAGE_WIDTH) + 2*STANDARD_MARGIN, TABLE_IMAGE_HEIGHT);
+  
+  if (systemOS.equals("Mac") && testProjectorOnMac) {
+    background(textColor);
+    image(margin, 0, 0);
+    image(projector, margin.width, 0);
+  }
 }
   

@@ -28,6 +28,8 @@ import deadpixel.keystone.*;
 boolean displayProjection2D = false;
 //int projectorOffset = screenWidth;
 
+boolean testProjectorOnMac = false;
+
 // defines Keystone settings from xml file in parent folder
 Keystone ks;
 
@@ -167,6 +169,8 @@ public class projApplet extends PApplet {
 
 void toggle2DProjection() {
   if (System.getProperty("os.name").substring(0,3).equals("Mac")) {
+    testProjectorOnMac = !testProjectorOnMac;
+    println("Test on Mac = " + testProjectorOnMac);
     println("Projection Mapping Currently not Supported for MacOS");
   } else {
     if (displayProjection2D) {
