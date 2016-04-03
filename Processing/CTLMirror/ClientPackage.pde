@@ -85,9 +85,9 @@ class ClientPackage {
 //          packageString += "\t";
 //          packageString += vDisaggregated;
           packageString += u;
-          packageString += "\t";
+          packageString += ",";
           packageString += chunk*chunkRowCount + v;
-          packageString += "\t";
+          packageString += ",";
           packageString += input[u][v];
           packageString += "\n";
         }

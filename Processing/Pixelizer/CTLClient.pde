@@ -1,8 +1,8 @@
 // CTL Web Address
-//String CTL_ADDRESS = "localhost";
-//int CTL_PORT = 6252;
-String CTL_ADDRESS = "192.168.173.97";
-int CTL_PORT = 5678;
+String CTL_ADDRESS = "localhost";
+int CTL_PORT = 6252;
+//String CTL_ADDRESS = "192.168.173.97";
+//int CTL_PORT = 5678;
 
 // CTL Dimension Constants
 float CTL_SCALE = 0.5; //km per pixel unit

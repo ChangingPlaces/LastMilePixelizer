@@ -53,6 +53,7 @@ void parseCTLStrings(String data[]) {
     // Checks Output Data Type
     if (split.length == 1) {
       if (split[0].equals(CTL_COST_TOTAL) || split[0].equals(CTL_FACILITIES_ALLOCATION) || split[0].equals(CTL_ALLOCATION_VEHICLES) || split[0].equals(CTL_COST_PER_DELIVERY)) dataType = split[0];
+      //println(dataType);
     }
     
     // Checks if row format is compatible with piece recognition.  3 columns for ID, U, V; 4 columns for ID, U, V, rotation
@@ -78,6 +79,7 @@ void parseCTLStrings(String data[]) {
         u_local = int( (CTL_SCALE/gridSize)*u_local );
         v_local = gridV - int( (CTL_SCALE/gridSize)*v_local ) - 1;
         
+        //println("Choose data Type");
         if (u_local < gridU && v_local < gridV) {
           if (dataType.equals(CTL_COST_TOTAL)) {
             float value = float(split[2]);
@@ -147,8 +149,9 @@ void parseColortizerStrings(String data[]) {
 
 void receive( byte[] data, String ip, int port ) {  // <-- extended handler
   // get the "real" message =
-  String message = new String( data ); 
-  println(message);
+  String message = new String( data );
+  println("catch!"); 
+  //println(message);
   //saveStrings("data.txt", split(message, "\n"));
   String[] split = split(message, "\n");
   
