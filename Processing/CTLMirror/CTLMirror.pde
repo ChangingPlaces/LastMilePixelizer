@@ -31,7 +31,9 @@ void draw() {
     if (USE_CTL_SAMPLE_DATA) {
       for (int i=0; i<CTL_OUTPUT.size(); i++) {
         udp.send( CTL_OUTPUT.getString(i), CLIENT_IP, CLIENT_PORT );
-        delay(1);
+        if (SEND_DELAY != 0 ) {
+          delay(SEND_DELAY);
+        }
       }
     } else {
       generateFauxData();
