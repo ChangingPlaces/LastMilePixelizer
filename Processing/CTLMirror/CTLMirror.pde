@@ -2,7 +2,7 @@
 // It receives a UDP String and Returns an output String
 
 boolean USE_CTL_SAMPLE_DATA = true;
-int SEND_DELAY = 0; // thousanths of a second
+int SEND_DELAY = 1; // thousanths of a second
 
 int CTL_U = 180;
 int CTL_V = 220;
