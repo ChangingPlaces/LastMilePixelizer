@@ -403,8 +403,8 @@ void renderBasemap(PGraphics graphic) {
       color from, to;  
       
       //BEGIN Drawing POPULATION
-      from = color(#FF0000, 75); // Red
-      to = color(#00FF00, 75);   // Green
+      to = color(#FF0000, 75); // Red
+      from = color(#00FF00, 75);   // Green
         
       // Dynamically adjusts grid size to fit within canvas dimensions
       gridWidth = float(table.width)/displayU;
@@ -444,7 +444,7 @@ void renderBasemap(PGraphics graphic) {
             if (showAllocation) {
               value = allocation[u+gridPanU][v+gridPanV];
               if (value != 0) {
-                output.fill(value/5.0*255, 255, 255); // Temp Color Gradient
+                output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
@@ -452,7 +452,7 @@ void renderBasemap(PGraphics graphic) {
             if (showVehicle) {
               value = vehicle[u+gridPanU][v+gridPanV];
               if (value != 0) {
-                output.fill(value/5.0*255, 255, 255); // Temp Color Gradient
+                output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
