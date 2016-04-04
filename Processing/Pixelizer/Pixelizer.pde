@@ -43,7 +43,7 @@ int projectorWidth = 1920;
 int projectorHeight = 1200;
 int projectorOffset = 1920;
 
-int screenWidth = 1900;
+int screenWidth = 1800;
 int screenHeight = 1000;
 
 // Set this to true to display the main menu upon start
@@ -148,6 +148,7 @@ void draw() {
   }
   
   if (outputReady) {
+    println("READY!");
     renderOutputTableLayers(output);
     outputReady = false;
   }

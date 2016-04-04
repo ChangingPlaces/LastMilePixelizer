@@ -136,6 +136,8 @@ void initDataGraphics() {
   int legendHeight = 100;
   legendH = createGraphics(legendWidth, legendHeight);
   legendP = createGraphics(legendWidth, legendHeight);
+  
+  
   legendI = createGraphics(legendWidth, legendHeight);
   legendO = createGraphics(legendWidth, legendHeight);
 }
@@ -366,7 +368,7 @@ void renderBasemap(PGraphics graphic) {
             }
             
             if (showForm) {
-              findFormFill(input, u+gridPanU, v+gridPanV);
+              findFormFill(input, form[u+gridPanU][v+gridPanV]);
               input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
             }
             
@@ -376,8 +378,7 @@ void renderBasemap(PGraphics graphic) {
       input.endDraw();
     }
     
-    void findFormFill(PGraphics input, int u, int v) {
-      int ID = form[u][v];
+    void findFormFill(PGraphics input, int ID) {
       if (ID == 0) {
         input.noFill();
       } else if (ID == 1) {
@@ -394,7 +395,7 @@ void renderBasemap(PGraphics graphic) {
     }
 
     // Methods for Drawing "Output" Layers 
-    // Rully Renders Every Possible Output Layer we would want to draw on canvas
+    // Fully Renders Every Possible Output Layer we would want to draw on canvas
     // (i.e. layers resulting from an external simulation client)
     void renderOutputTableLayers(PGraphics output) {
       
@@ -402,8 +403,8 @@ void renderBasemap(PGraphics graphic) {
       color from, to;  
       
       //BEGIN Drawing POPULATION
-      from = color(#FF0000, 75); // Red
-      to = color(#00FF00, 75);   // Green
+      to = color(#FF0000, 75); // Red
+      from = color(#00FF00, 75);   // Green
         
       // Dynamically adjusts grid size to fit within canvas dimensions
       gridWidth = float(table.width)/displayU;
@@ -443,7 +444,7 @@ void renderBasemap(PGraphics graphic) {
             if (showAllocation) {
               value = allocation[u+gridPanU][v+gridPanV];
               if (value != 0) {
-                output.fill(value/5.0*255, 255, 255); // Temp Color Gradient
+                output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
@@ -451,7 +452,7 @@ void renderBasemap(PGraphics graphic) {
             if (showVehicle) {
               value = vehicle[u+gridPanU][v+gridPanV];
               if (value != 0) {
-                output.fill(value/5.0*255, 255, 255); // Temp Color Gradient
+                output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
@@ -766,7 +767,7 @@ void renderBasemap(PGraphics graphic) {
           }
           if (showInputData) {
             if (showForm) {
-              findFormFill(miniMap, u, v);
+              findFormFill(miniMap, form[u][v]);
               miniMap.noStroke();
               miniMap.rect(u*pixel_per_U,v*pixel_per_V, pixel_per_U, pixel_per_V);
             } else {
@@ -811,3 +812,10 @@ void renderBasemap(PGraphics graphic) {
           
       miniMap.endDraw();
     }
+    
+// Draw Piece Typologies
+
+  void renderPieceLegend(PGraphics legendI) {
+    legendI.beginDraw();
+    
+  }
