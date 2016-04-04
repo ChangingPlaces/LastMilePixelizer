@@ -1,7 +1,7 @@
 // This is a simple script that mimics the UDP behavior of CTL's Math Model
 // It receives a UDP String and Returns an output String
 
-boolean USE_CTL_SAMPLE_DATA = true;
+boolean USE_CTL_SAMPLE_DATA = false;
 int SEND_DELAY = 1; // thousanths of a second
 
 int CTL_U = 180;
@@ -20,7 +20,6 @@ ClientPackage dataForIra;
 
 void setup() {
   initUDP();
-  println(CTL_OUTPUT.size());
   dataForIra = new ClientPackage(CLIENT_IP, CLIENT_PORT, CLIENT_SCALE);
 }
 
@@ -29,12 +28,12 @@ void draw() {
     println("CTLMirror received input!");
     
     if (USE_CTL_SAMPLE_DATA) {
-      for (int i=0; i<CTL_OUTPUT.size(); i++) {
-        udp.send( CTL_OUTPUT.getString(i), CLIENT_IP, CLIENT_PORT );
-        if (SEND_DELAY != 0 ) {
-          delay(SEND_DELAY);
-        }
-      }
+//      for (int i=0; i<CTL_OUTPUT.size(); i++) {
+//        udp.send( CTL_OUTPUT.getString(i), CLIENT_IP, CLIENT_PORT );
+//        if (SEND_DELAY != 0 ) {
+//          delay(SEND_DELAY);
+//        }
+//      }
     } else {
       generateFauxData();
       dataForIra.sendChunks("cost_per_delivery", costPerDelivery, LOCAL_SCALE, V_SEND_LIMIT);
