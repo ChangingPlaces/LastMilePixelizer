@@ -440,7 +440,7 @@ void keyPressed() {
       break;
       
     case ' ': // Send data to CTL
-      sendCTLData();
+      enableCTL = !enableCTL;
       break;
 
   }

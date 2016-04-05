@@ -22,6 +22,7 @@ ClientPackage dataForCTL;
 OutputPackage dataFromCTL;
 
 boolean waitingForCTL = false;
+boolean enableCTL = false;
 
 void sendCTLData() {
   if (!waitingForCTL) {
@@ -49,14 +50,17 @@ class ClientPackage {
     packageString = "";
     // Define Package Name
     packageString += LOCAL_FRIENDLY_NAME;
-    packageString += "\n";;
+    packageString += "\n";
+    
     clientAddress = address;
     clientPort = port;
     clientScale = scale;
   }
   
   // addToPackage() appends a TSV-style matrix to the packageString:
-  //
+  //  PIXELIZER
+  //  gridU  72
+  //  gridV  88
   //  facilities
   //  34  101  1       //  U  V  ID
   //  104  165  5

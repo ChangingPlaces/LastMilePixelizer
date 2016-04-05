@@ -105,7 +105,10 @@ void setup() {
       // Initialize Input Packages for CTL Data
       dataForCTL = new ClientPackage(CTL_ADDRESS, CTL_PORT, CTL_SCALE);
       dataFromCTL = new OutputPackage(CTL_SCALE);
-  
+      
+      // Initializes Facility Configurations
+      updateFacilitiesList();
+      
   // Functions called during setup, but also called again at other points
     
       // Resets the scale, resolution and extents of analysis area
@@ -142,13 +145,17 @@ void draw() {
   // Decode pieces only if there is a change in Colortizer input
   if (changeDetected) {
     decodePieces();
-    // sendCTLData();
+    sendCTLData();
+    if (!enableCTL) {
+      updateFacilitiesList();
+      updateOutput();
+      renderOutputTableLayers(output);
+    }
     renderDynamicTableLayers(input);
     changeDetected = false;
   }
   
   if (outputReady) {
-    println("READY!");
     renderOutputTableLayers(output);
     outputReady = false;
   }
@@ -172,5 +179,7 @@ void draw() {
     image(margin, 0, 0);
     image(projector, margin.width, 0);
   }
+  
+  text("enableCTL = " + enableCTL, 20, 35);
 }
   

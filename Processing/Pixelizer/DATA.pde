@@ -13,8 +13,20 @@
     // Demand Parameters
     int WEEKS_IN_YEAR = 52;
     int DAYS_IN_YEAR = 365;
-    float WALMART_MARKET_SHARE = 0.20;
+    float WALMART_MARKET_SHARE = 0.015;
     float HOUSEHOLD_SIZE = 2.54;
+    
+    float dailyDemand(float pop) {
+      if (popMode.equals("POP10")) {
+        return pop/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR;
+      } else if (popMode.equals("HOUSING10")) {
+        return pop*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR;
+      } else {
+        println("no conversion for daily demand for this input");
+        return 0;
+      }
+    }
+
     
     void resetGridParameters() {
       scaler = int(MAX_GRID_SIZE/gridSize);
@@ -207,6 +219,12 @@
     float[][] totalCost, deliveryCost;
     int[][] allocation, vehicle;
     
+    // minMax Values:
+    float totalCostMIN, totalCostMAX;
+    float deliveryCostMIN, deliveryCostMAX;
+    float allocationMIN, allocationMAX;
+    float vehicleMIN, vehicleMAX;
+    
     // Runs once when initializes
     void initOutputData() {
       totalCost = new float[gridU][gridV];
@@ -224,19 +242,19 @@
     }
     
     void fauxOutputData() {
-      fauxFloatData(totalCost, 1);
-      fauxFloatData(deliveryCost, 1);
-      fauxIntData(allocation, 5);
-      fauxIntData(vehicle, 5);
+      fauxFloatData(totalCost, 100);
+      fauxFloatData(deliveryCost, 100);
+      fauxIntData(allocation, 7);
+      fauxIntData(vehicle, 7);
     }
     
     void clearOutputData() {
-      clearFloatData(totalCost, -1);
-      clearFloatData(deliveryCost, -1);
+      clearFloatData(totalCost, 0);
+      clearFloatData(deliveryCost, Float.POSITIVE_INFINITY);
       clearIntData(allocation, 0);
       clearIntData(vehicle, 0);
     }
-
+    
     // Create Faux Data Set for Debugging
     void fauxIntData(int[][] data, int maxInput) {
       for (int i=0; i<data.length; i++) {

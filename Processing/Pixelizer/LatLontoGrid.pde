@@ -33,14 +33,14 @@ float azimuth; // 0 = North
 String fileName;
 
 // String that specifies which parameter to summarize as pixels
-String valueMode = "totes";
+String valueMode = "deliveries";
   // "totes" for total crates delivered
   // "deliveries" essentially makes all weights set to 1, regardless of totes
   // "doorstep" will average the doorstep time for each grid
   // "source" will describes which store ID(s) serve that grid bucket
   
 // String that specifies what parameter of population data to load
-String popMode = "POP10";
+String popMode = "HOUSING10";
   // "POP10" for population count from 2010 census
   // "HOUSING10" for housing unit count from 2010 census
 

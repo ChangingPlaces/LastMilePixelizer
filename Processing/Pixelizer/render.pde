@@ -57,12 +57,12 @@ void renderTable() {
     table.image(s, 0, 0);
   }
   
-  if (showInputData) {
-    table.image(input, 0, 0);
-  }
-  
   if (showOutputData) {
     table.image(output, 0, 0);
+  }
+  
+  if (showInputData) {
+    table.image(input, 0, 0);
   }
   
   // Draws lines
@@ -163,6 +163,8 @@ void renderBasemap(PGraphics graphic) {
 
 // Methods for drawing Layers onto Table
 
+    float POP_RENDER_MIN = 10.0; // per 1 SQ KM
+      
     // Rully Renders Every Possible Layer we would want to draw on canvas
     void renderStaticTableLayers(PGraphics h, PGraphics s, PGraphics p) {
       
@@ -335,6 +337,16 @@ void renderBasemap(PGraphics graphic) {
       // makes it so that colors are defined by Hue, Saturation, and Brightness values (0-255 by default)
       input.colorMode(HSB);
       
+      if (showFacilities) {
+        for (int i=0; i<facilitiesList.size(); i++) {
+          Facility current = facilitiesList.get(i);
+          input.fill(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+          input.stroke(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+          input.strokeWeight(4);
+          input.rect(current.u*gridWidth, current.v*gridHeight, gridWidth, gridHeight);
+        }
+      }
+            
       for (int u=0; u<displayU; u++) {
         for (int v=0; v<displayV; v++) {
           // Only loads data within bounds of dataset
@@ -342,14 +354,6 @@ void renderBasemap(PGraphics graphic) {
             
             float ID;
             input.noStroke(); // No lines draw around grid cells
-            
-            if (showFacilities) {
-              ID = facilities[u+gridPanU][v+gridPanV];
-              input.fill(#00FF00);
-              if (ID >= 1) {
-                input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
-              }
-            }
             
             if (showMarket) {
               ID = market[u+gridPanU][v+gridPanV];
@@ -397,6 +401,9 @@ void renderBasemap(PGraphics graphic) {
     // Methods for Drawing "Output" Layers 
     // Fully Renders Every Possible Output Layer we would want to draw on canvas
     // (i.e. layers resulting from an external simulation client)
+    
+    float MAX_DELIVERY_COST_RENDER = 30.0;
+    
     void renderOutputTableLayers(PGraphics output) {
       
       float normalized;
@@ -422,41 +429,43 @@ void renderBasemap(PGraphics graphic) {
           // Only loads data within bounds of dataset
           if (u+gridPanU>=0 && u+gridPanU<gridU && v+gridPanV>=0 && v+gridPanV<gridV) {
             
-            float value;
-            output.noStroke(); // No lines draw around grid cells
-            
-            if (showDeliveryCost) {
-              value = deliveryCost[u+gridPanU][v+gridPanV];
-              if (value >= 0) {
-                output.fill(lerpColor(from, to, value));
-                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+//            if ( pop[u][v] > POP_RENDER_MIN ) {
+              float value;
+              output.noStroke(); // No lines draw around grid cells
+              
+              if (showDeliveryCost && pop[u][v] > POP_RENDER_MIN ) {
+                //value = (deliveryCost[u+gridPanU][v+gridPanV] - deliveryCostMIN)/deliveryCostMAX;
+                value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
+                if (value >= 0 && value != Float.POSITIVE_INFINITY) {
+                  output.fill(lerpColor(from, to, value));
+                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+                }
               }
-            }
-            
-            if (showTotalCost) {
-              value = totalCost[u+gridPanU][v+gridPanV];
-              if (value >= 0) {
-                output.fill(lerpColor(from, to, value));
-                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              
+              if (showTotalCost) {
+                value = totalCost[u+gridPanU][v+gridPanV];
+                if (value >= 0  && value != Float.POSITIVE_INFINITY) {
+                  output.fill(lerpColor(from, to, value));
+                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+                }
               }
-            }
-            
-            if (showAllocation) {
-              value = allocation[u+gridPanU][v+gridPanV];
-              if (value != 0) {
-                output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
-                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              
+              if (showAllocation && pop[u][v] > POP_RENDER_MIN ) {
+                value = allocation[u+gridPanU][v+gridPanV];
+                if (value != 0) {
+                  output.fill(value/facilitiesList.size()*255, 255, 255, 100); // Temp Color Gradient
+                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+                }
               }
-            }
-            
-            if (showVehicle) {
-              value = vehicle[u+gridPanU][v+gridPanV];
-              if (value != 0) {
-                output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
-                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              
+              if (showVehicle) {
+                value = vehicle[u+gridPanU][v+gridPanV];
+                if (value != 0) {
+                  output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
+                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+                }
               }
-            }
-            
+//            }
           }
         }
       }
@@ -517,13 +526,8 @@ void renderBasemap(PGraphics graphic) {
           int demandMIN = 0;
           int demandMAX = 0;
           
-          if (popMode.equals("POP10")) {
-            demandMIN = int((popMIN+1)/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
-            demandMAX = int(popMAX/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
-          } else if (popMode.equals("HOUSING10")) {
-            demandMIN = int((popMIN+1)*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
-            demandMAX = int(popMAX*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR);
-          }
+          demandMIN = int(dailyDemand(popMIN+1));
+          demandMAX = int(dailyDemand(popMAX));
           
           i.text("Demand Potential", 0, legendPix - 35);
           i.text("Source: 2010 U.S. Census Data", 0, legendPix - 20);
@@ -589,11 +593,12 @@ void renderBasemap(PGraphics graphic) {
       
       i.translate(0, 80);
       
-      if (showDeliveryData || showPopulationData) {
+      if (showDeliveryData || showPopulationData || showOutputData) {
         i.text("CELL INFO", 0, 0);
-        i.text("Delivery Value:", 0, 20);
+        i.text("2015 Delivery Data:", 0, 20);
         i.text("Population Value:", 0, 50);
         i.text("Demand Potential:", 0, 80);
+        i.text("Cost Per Delivery:", 0, 110);
       }
       i.colorMode(RGB);
       i.fill(0,255,255);
@@ -620,7 +625,15 @@ void renderBasemap(PGraphics graphic) {
           } else if (popMode.equals("HOUSING10")) {
             i.text(int(temp*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR) + " Deliveries per Day", 0, 95);
           }
-          
+        }
+      }
+      if (showOutputData) {
+        value = "";
+        if (getCellDeliveryCost(mouseToU(), mouseToV()) == -1) {
+          value = "NO_DATA";
+        } else {
+          value += getCellDeliveryCost(mouseToU(), mouseToV());
+          i.text(value, 0, 125);
         }
       }
       
@@ -657,6 +670,14 @@ void renderBasemap(PGraphics graphic) {
     float getCellPop(int u, int v) {
       try {  
         return pop[u][v];
+      }  catch(RuntimeException e) {
+        return -1;
+      }
+    }
+    
+    float getCellDeliveryCost(int u, int v) {
+      try {  
+        return deliveryCost[u][v];
       }  catch(RuntimeException e) {
         return -1;
       }
