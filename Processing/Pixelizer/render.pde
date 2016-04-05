@@ -524,13 +524,24 @@ void renderBasemap(PGraphics graphic) {
         i.text("Daily Demand Met", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2+5);
         i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2+20);
         
-        i.text("Average Cost: " + sumTotalCost/demandSupplied + " per delivery", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
+        float average = sumTotalCost/demandSupplied;
+        i.fill(#FFFF00);
+        i.text("Average Cost: " + average + " per delivery", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
+        i.fill(textColor);
         
         //Histogram
         int histogramHeight = 60;
         int histogramWidth = 8*STANDARD_MARGIN;
         i.translate(0, -2.0/3*TABLE_IMAGE_HEIGHT - 30);
           i.line(0, 0, histogramWidth, 0);
+          
+          // Average Indicator
+          float x_position = histogramWidth*average/MAX_DELIVERY_COST_RENDER;
+          i.strokeWeight(1);
+          i.stroke(#FFFF00);
+          i.line(x_position, -histogramHeight - 10, x_position, 10);
+          i.stroke(textColor);
+          
           for (int j=0; j<histogram.length; j++) {
             i.rect(j*float(histogramWidth)/histogram.length, 
               -histogram[j]/histogramMax*histogramHeight, 
