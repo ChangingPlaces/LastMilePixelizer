@@ -433,7 +433,7 @@ void renderBasemap(PGraphics graphic) {
               float value;
               output.noStroke(); // No lines draw around grid cells
               
-              if (showDeliveryCost && pop[u][v] > POP_RENDER_MIN ) {
+              if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
                 //value = (deliveryCost[u+gridPanU][v+gridPanV] - deliveryCostMIN)/deliveryCostMAX;
                 value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
                 if (value >= 0 && value != Float.POSITIVE_INFINITY) {
@@ -450,7 +450,7 @@ void renderBasemap(PGraphics graphic) {
                 }
               }
               
-              if (showAllocation && pop[u][v] > POP_RENDER_MIN ) {
+              if (showAllocation && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
                 value = allocation[u+gridPanU][v+gridPanV];
                 if (value != 0) {
                   output.fill(value/facilitiesList.size()*255, 255, 255, 100); // Temp Color Gradient
