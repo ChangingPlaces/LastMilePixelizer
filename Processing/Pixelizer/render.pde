@@ -534,7 +534,7 @@ void renderBasemap(PGraphics graphic) {
         i.fill(textColor);
         
         //Histogram
-        int histogramHeight = 60;
+        int histogramHeight = 120;
         int histogramWidth = 8*STANDARD_MARGIN;
         i.translate(0, -2.0/3*TABLE_IMAGE_HEIGHT - 30);
           i.line(0, 0, histogramWidth, 0);
