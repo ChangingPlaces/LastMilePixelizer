@@ -514,14 +514,19 @@ void renderBasemap(PGraphics graphic) {
         i.text("Total Daily Demand", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
         i.text(int(dailyDemand(popTotal)) + " deliveries", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
         
+        // Draw Demand Met
+        float ratio = (demandSupplied/dailyDemand(popTotal));
+        
         i.fill(#00FF00);
+        i.noStroke();
+        i.rect(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN, 2*STANDARD_MARGIN, ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN));
+        i.fill(textColor);
         i.stroke(textColor);
         i.strokeWeight(3);
-        float ratio = (demandSupplied/dailyDemand(popTotal));
-        i.rect(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) + - STANDARD_MARGIN, 2*STANDARD_MARGIN, ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN));
-        i.fill(textColor);
-        i.text("Daily Demand Met", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2+5);
-        i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2+20);
+        i.line(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN, 3.25*STANDARD_MARGIN, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN);
+        i.strokeWeight(1);
+        i.text("Daily Demand Met", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
+        i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
         
         float average = sumTotalCost/demandSupplied;
         i.fill(#FFFF00);
