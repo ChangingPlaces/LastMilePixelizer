@@ -6,8 +6,7 @@ void updateOutput() {
   clearOutputData();
   
   calcDeliveryCost();
-  calcFacilityAllocations();
-  //assignDeliveries();
+  assignDeliveries();
 }
 
 void updateFacilitiesList() {
@@ -44,18 +43,25 @@ void updateFacilitiesList() {
 
 void calcDeliveryCost() {
   
+  // Cycle through each Facility
   for (int i=0; i<facilitiesList.size(); i++) {
     Facility current = facilitiesList.get(i);
     current.clearDeliveries();
     float distance, density, currentCost;
+    
+    // Cycle through each pixel
     for (int u=0; u<gridU; u++) {
       for (int v=0; v<gridV; v++) {
+        
         // Cost = A*distance/sqrt(density) + B
         distance = gridSize*sqrt(sq(u - current.u) + sq(v - current.v)); // KM
         density = dailyDemand(pop[u][v]);
         currentCost = distance / sqrt(density);
+        
+        // Assigns a Facility and a Delivery Cost to a cell
         if (currentCost < deliveryCost[u][v]) {
           deliveryCost[u][v] = currentCost;
+          allocation[u][v] = i+1;
         }
       }
     }
@@ -64,57 +70,39 @@ void calcDeliveryCost() {
 
 void assignDeliveries() {
   
+  // Cycle through every grid cell and adds its information to an ArrayList withing the respective Facility object
   for (int u=0; u<gridU; u++) {
     for (int v=0; v<gridV; v++) {
-      if (allocation[u][v] > 0) {
+      if (allocation[u][v] > 0 && pop[u][v] > 0) {
         Facility current = facilitiesList.get(allocation[u][v]-1);
-        current.addDelivery(u,v,deliveryCost[u][v], dailyDemand(pop[u][v]));
+        current.addDelivery(u,v, deliveryCost[u][v], dailyDemand(pop[u][v]));
       }
+      // Resets Allocation
       allocation[u][v] = 0;
     }
   }
   
+  // Cycles through Each Facility
   for (int i=0; i<facilitiesList.size(); i++) {
     Facility current = facilitiesList.get(i);
-    Collections.sort(current.deliveryCost);
     
     // Greedy Algorithm
+    
+    // Sorts the cells to which one might delivery by cost, lowest to highest
+    Collections.sort(current.deliveryInfo);
+    
+    // Assigns deliveries in a greedy manner until the store has fulfilled its maximum order capacity
     float demandMet = 0;
-    for (int j=0; j<current.deliveryDemand.size(); j++) {
-      demandMet += current.deliveryDemand.get(j);
+    for (int j=0; j<current.deliveryInfo.size(); j++) {
+      String[] delivery = split(current.deliveryInfo.get(j), ",");
+      demandMet += int(delivery[1]);
       if (demandMet <= current.maxOrderSize) {
-        totalCost[current.deliveryU.get(j)][current.deliveryV.get(j)] += current.deliveryCost.get(j);
-        allocation[current.deliveryU.get(j)][current.deliveryV.get(j)] = i+1;
+        totalCost[int(delivery[2])][int(delivery[3])] += float(delivery[0]);
+        allocation[int(delivery[2])][int(delivery[3])] = i+1;
       } else {
         break;
       }
     }
-  }
-  
-}
-
-void calcFacilityAllocations() {
-  for (int i=0; i<facilitiesList.size(); i++) {
-    Facility current = facilitiesList.get(i);
-    float distanceCurrent, distanceLeast;
-    for (int u=0; u<gridU; u++) {
-      for (int v=0; v<gridV; v++) {
-        
-        if (i == 0) {
-          allocation[u][v] = i+1;
-        } else {
-          Facility closest = facilitiesList.get(allocation[u][v]-1);
-          // Allocation -> distance
-          distanceCurrent = gridSize*sqrt(sq(u - current.u) + sq(v - current.v)); // KM
-          distanceLeast = gridSize*sqrt(sq(u - closest.u) + sq(v - closest.v)); // KM
-          if (distanceCurrent < distanceLeast) {
-            allocation[u][v] = i+1;
-          }
-        }
-        
-      }
-    }
-    
   }
 }
 
@@ -134,6 +122,7 @@ class Facility {
   int u, v;
   ArrayList<Integer> deliveryU, deliveryV;
   ArrayList<Float> deliveryCost, deliveryDemand;
+  ArrayList<String> deliveryInfo;
   
   Facility(int ID, int u, int v, int maxOrderSize, int maxFleetSize, int maxShifts, boolean delivers, boolean pickup) {
     this.ID = ID;
@@ -149,6 +138,8 @@ class Facility {
     deliveryV = new ArrayList<Integer>();
     deliveryCost = new ArrayList<Float>();
     deliveryDemand = new ArrayList<Float>();
+    
+    deliveryInfo = new ArrayList<String>();
   }
   
   void addDelivery(int u, int v, float cost, float demand) {
@@ -156,6 +147,25 @@ class Facility {
     deliveryV.add(v);
     deliveryCost.add(cost);
     deliveryDemand.add(demand);
+    
+    String info = "";
+    
+    if (cost >= 0 && cost < 10) {
+      info += "00000";
+    } else if (cost >= 10 && cost < 100) {
+      info += "0000";
+    } else if (cost >= 100 && cost < 1000) {
+      info += "000";
+    } else if (cost >= 1000 && cost < 10000) {
+      info += "00";
+    } else if (cost >= 10000 && cost < 100000) {
+      info += "0";
+    } else {
+      // Do nothing
+    }
+    
+    info += cost + "," + demand + "," + u + "," + v;
+    deliveryInfo.add(info);
   }
   
   void clearDeliveries() {
@@ -163,5 +173,7 @@ class Facility {
     deliveryV.clear();
     deliveryCost.clear();
     deliveryDemand.clear();
+    
+    deliveryInfo.clear();
   }
 }
