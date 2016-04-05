@@ -1,4 +1,8 @@
-// How big your table is, in pixels
+float MAX_DELIVERY_COST_RENDER = 30.0;
+float MAX_TOTAL_COST_RENDER = 90.0;
+float POP_RENDER_MIN = 10.0; // per 1 SQ KM
+    
+    // How big your table is, in pixels
 int tableWidth = 800;
 int tableHeight = int(tableWidth * float(displayV)/displayU);
 
@@ -162,8 +166,6 @@ void renderBasemap(PGraphics graphic) {
   }
 
 // Methods for drawing Layers onto Table
-
-    float POP_RENDER_MIN = 10.0; // per 1 SQ KM
       
     // Rully Renders Every Possible Layer we would want to draw on canvas
     void renderStaticTableLayers(PGraphics h, PGraphics s, PGraphics p) {
@@ -401,9 +403,6 @@ void renderBasemap(PGraphics graphic) {
     // Methods for Drawing "Output" Layers 
     // Fully Renders Every Possible Output Layer we would want to draw on canvas
     // (i.e. layers resulting from an external simulation client)
-    
-    float MAX_DELIVERY_COST_RENDER = 30.0;
-    float MAX_TOTAL_COST_RENDER = 90.0;
     
     void renderOutputTableLayers(PGraphics output) {
       
