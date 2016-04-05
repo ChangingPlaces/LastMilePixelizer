@@ -43,7 +43,7 @@ int projectorWidth = 1920;
 int projectorHeight = 1200;
 int projectorOffset = 1920;
 
-int screenWidth = 1800;
+int screenWidth = 1500;
 int screenHeight = 1000;
 
 // Set this to true to display the main menu upon start
@@ -61,10 +61,10 @@ boolean showMarket = false;
 boolean showObstacles = false;
 boolean showForm = true;
 
-boolean showOutputData = false;
-boolean showDeliveryCost = true;
+boolean showOutputData = true;
+boolean showDeliveryCost = false;
 boolean showTotalCost = false;
-boolean showAllocation = false;
+boolean showAllocation = true;
 boolean showVehicle = false;
 
 // Class that holds a button menu
@@ -181,5 +181,7 @@ void draw() {
   }
   
   text("enableCTL = " + enableCTL, 20, 35);
+  text("(Press Spacebar to Toggle)", 20, 50);
+  
 }
   

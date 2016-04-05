@@ -1,12 +1,44 @@
 import java.util.*;
 
 ArrayList<Facility> facilitiesList = new ArrayList<Facility>();
+float demandSupplied;
+float sumTotalCost;
+float[] histogram = new float[20];
+float histogramMax;
+
+void initHistogram() {
+  for (int i=0; i<histogram.length; i++) {
+    histogram[i] = 0;
+  }
+}
+
+void addToHistogram(float cost, float demand) {
+  float interval = MAX_DELIVERY_COST_RENDER/histogram.length;
+  for (int i=0; i<histogram.length; i++) {
+    if (cost > i*interval && cost < (i+1)*interval) {
+      histogram[i] += demand;
+      break;
+    }
+  }
+}
+
+float histogramMax() {
+  float max = Float.NEGATIVE_INFINITY;
+  for (int i=0; i<histogram.length; i++) {
+    max = max(max, histogram[i]);
+  }
+  return max;
+}
 
 void updateOutput() { 
+  initHistogram();
   clearOutputData();
   
   calcDeliveryCost();
   assignDeliveries();
+  
+  aggregate();
+  histogramMax = histogramMax();
 }
 
 void updateFacilitiesList() {
@@ -47,16 +79,15 @@ void calcDeliveryCost() {
   for (int i=0; i<facilitiesList.size(); i++) {
     Facility current = facilitiesList.get(i);
     current.clearDeliveries();
-    float distance, density, currentCost;
     
     // Cycle through each pixel
     for (int u=0; u<gridU; u++) {
       for (int v=0; v<gridV; v++) {
         
         // Cost = A*distance/sqrt(density) + B
-        distance = gridSize*sqrt(sq(u - current.u) + sq(v - current.v)); // KM
-        density = dailyDemand(pop[u][v]);
-        currentCost = distance / sqrt(density);
+        float distance = gridSize*sqrt(sq(u - current.u) + sq(v - current.v)); // KM
+        float density = dailyDemand(pop[u][v]);
+        float currentCost = distance / sqrt(density);
         
         // Assigns a Facility and a Delivery Cost to a cell
         if (currentCost < deliveryCost[u][v]) {
@@ -70,10 +101,12 @@ void calcDeliveryCost() {
 
 void assignDeliveries() {
   
+  demandSupplied = 0;
+  
   // Cycle through every grid cell and adds its information to an ArrayList withing the respective Facility object
   for (int u=0; u<gridU; u++) {
     for (int v=0; v<gridV; v++) {
-      if (allocation[u][v] > 0 && pop[u][v] > 0) {
+      if (allocation[u][v] > 0 && dailyDemand(pop[u][v]) >= 1) {
         Facility current = facilitiesList.get(allocation[u][v]-1);
         current.addDelivery(u,v, deliveryCost[u][v], dailyDemand(pop[u][v]));
       }
@@ -95,13 +128,28 @@ void assignDeliveries() {
     float demandMet = 0;
     for (int j=0; j<current.deliveryInfo.size(); j++) {
       String[] delivery = split(current.deliveryInfo.get(j), ",");
+      //Local
       demandMet += int(delivery[1]);
+      
       if (demandMet <= current.maxOrderSize) {
+        //Global
+        demandSupplied += int(delivery[1]);
+        addToHistogram(float(delivery[0]), float(delivery[1]));
+        //Local
         totalCost[int(delivery[2])][int(delivery[3])] += float(delivery[0])*int(delivery[1]);
         allocation[int(delivery[2])][int(delivery[3])] = i+1;
       } else {
         break;
       }
+    }
+  }
+}
+
+void aggregate() {
+  sumTotalCost = 0;
+  for (int u=0; u<gridU; u++) {
+    for (int v=0; v<gridV; v++) {
+      sumTotalCost += totalCost[u][v];
     }
   }
 }

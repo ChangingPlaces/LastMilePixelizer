@@ -453,7 +453,7 @@ void renderBasemap(PGraphics graphic) {
               if (showAllocation && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
                 value = allocation[u+gridPanU][v+gridPanV];
                 if (value != 0) {
-                  output.fill(value/facilitiesList.size()*255, 255, 255, 100); // Temp Color Gradient
+                  output.fill(value/facilitiesList.size()*255, 255, 255, 175); // Temp Color Gradient
                   output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
                 }
               }
@@ -501,6 +501,46 @@ void renderBasemap(PGraphics graphic) {
       i.strokeWeight(1);
       i.rect(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
       
+      i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
+      
+        // Draw Total Demand Potential
+        i.fill(#666666);
+        i.noStroke();
+        i.rect(0, -TABLE_IMAGE_HEIGHT/2, 2*STANDARD_MARGIN, TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN);
+        
+        i.stroke(textColor);
+        i.strokeWeight(3);
+        i.line(0, -TABLE_IMAGE_HEIGHT/2, 3*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2);
+        i.fill(textColor);
+        i.text("Total Daily Demand", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
+        i.text(int(dailyDemand(popTotal)) + " deliveries", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
+        
+        i.fill(#00FF00);
+        i.stroke(textColor);
+        i.strokeWeight(3);
+        float ratio = (demandSupplied/dailyDemand(popTotal));
+        i.rect(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) + - STANDARD_MARGIN, 2*STANDARD_MARGIN, ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN));
+        i.fill(textColor);
+        i.text("Daily Demand Met", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2+5);
+        i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2+20);
+        
+        i.text("Average Cost: " + sumTotalCost/demandSupplied + " per delivery", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
+        
+        //Histogram
+        int histogramHeight = 60;
+        int histogramWidth = 8*STANDARD_MARGIN;
+        i.translate(0, -2.0/3*TABLE_IMAGE_HEIGHT - 30);
+          i.line(0, 0, histogramWidth, 0);
+          for (int j=0; j<histogram.length; j++) {
+            i.rect(j*float(histogramWidth)/histogram.length, 
+              -histogram[j]/histogramMax*histogramHeight, 
+              float(histogramWidth)/histogram.length, 
+              histogram[j]/histogramMax*histogramHeight);
+          }
+        i.translate(0, +2.0/3*TABLE_IMAGE_HEIGHT + 30);
+      
+      i.translate(-(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
+      
       
       i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
       
@@ -511,6 +551,7 @@ void renderBasemap(PGraphics graphic) {
         i.translate(-scale_0, 0);
         float scalePix = float(TABLE_IMAGE_HEIGHT)/displayV;
         i.translate(0, -4*scalePix);
+        i.stroke(1);
         i.line(scale_0, 0, scale_1, 0);
         i.line(scale_0, -4*scalePix, scale_1, -4*scalePix);
         i.line(2*scale_0, 0, 2*scale_0, -scalePix);
@@ -698,7 +739,7 @@ void renderBasemap(PGraphics graphic) {
     }
     
     float getCellTotalCost(int u, int v) {
-      try {  
+      try {
         return totalCost[u][v];
       }  catch(RuntimeException e) {
         return -1;

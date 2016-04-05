@@ -13,7 +13,7 @@
     // Demand Parameters
     int WEEKS_IN_YEAR = 52;
     int DAYS_IN_YEAR = 365;
-    float WALMART_MARKET_SHARE = 0.005;
+    float WALMART_MARKET_SHARE = 0.020; // 2.0%
     float HOUSEHOLD_SIZE = 2.54;
     
     float dailyDemand(float pop) {
@@ -107,6 +107,7 @@
     float storesMIN, storesMAX;
     float popMIN, popMAX;
     float huMIN, huMAX;
+    float popTotal;
     
     //JSON array holding totes
     JSONArray array;
@@ -135,6 +136,8 @@
         }
       }
       
+      popTotal = 0;
+      
       // MIN and MAX set to arbitrarily large and small values
       heatmapMIN = Float.POSITIVE_INFINITY;
       heatmapMAX = Float.NEGATIVE_INFINITY;
@@ -160,6 +163,7 @@
       for (int i=0; i<popCSV.getRowCount(); i++) {
         for (int j=0; j<popCSV.getColumnCount(); j++) {
           pop[j][i] = popCSV.getFloat(popCSV.getRowCount()-1-i, j);
+          popTotal += pop[j][i];
         }
       }
         
