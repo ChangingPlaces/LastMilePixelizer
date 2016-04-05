@@ -97,7 +97,7 @@ void assignDeliveries() {
       String[] delivery = split(current.deliveryInfo.get(j), ",");
       demandMet += int(delivery[1]);
       if (demandMet <= current.maxOrderSize) {
-        totalCost[int(delivery[2])][int(delivery[3])] += float(delivery[0]);
+        totalCost[int(delivery[2])][int(delivery[3])] += float(delivery[0])*int(delivery[1]);
         allocation[int(delivery[2])][int(delivery[3])] = i+1;
       } else {
         break;

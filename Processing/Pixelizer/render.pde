@@ -403,6 +403,7 @@ void renderBasemap(PGraphics graphic) {
     // (i.e. layers resulting from an external simulation client)
     
     float MAX_DELIVERY_COST_RENDER = 30.0;
+    float MAX_TOTAL_COST_RENDER = 90.0;
     
     void renderOutputTableLayers(PGraphics output) {
       
@@ -434,7 +435,6 @@ void renderBasemap(PGraphics graphic) {
               output.noStroke(); // No lines draw around grid cells
               
               if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
-                //value = (deliveryCost[u+gridPanU][v+gridPanV] - deliveryCostMIN)/deliveryCostMAX;
                 value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
                 if (value >= 0 && value != Float.POSITIVE_INFINITY) {
                   output.fill(lerpColor(from, to, value));
@@ -442,9 +442,9 @@ void renderBasemap(PGraphics graphic) {
                 }
               }
               
-              if (showTotalCost) {
-                value = totalCost[u+gridPanU][v+gridPanV];
-                if (value >= 0  && value != Float.POSITIVE_INFINITY) {
+              if (showTotalCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
+                value = totalCost[u+gridPanU][v+gridPanV]/MAX_TOTAL_COST_RENDER;
+                if (value > 0  && value != Float.POSITIVE_INFINITY) {
                   output.fill(lerpColor(from, to, value));
                   output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
                 }
@@ -593,49 +593,63 @@ void renderBasemap(PGraphics graphic) {
       
       i.translate(0, 80);
       
-      if (showDeliveryData || showPopulationData || showOutputData) {
+//      if (showDeliveryData || showPopulationData || showOutputData) {
         i.text("CELL INFO", 0, 0);
         i.text("2015 Delivery Data:", 0, 20);
         i.text("Population Value:", 0, 50);
         i.text("Demand Potential:", 0, 80);
         i.text("Cost Per Delivery:", 0, 110);
-      }
+        i.text("Total Deliveries Cost:", 0, 140);
+//      }
       i.colorMode(RGB);
       i.fill(0,255,255);
       String value = "";
-      if (showDeliveryData) {
+//      if (showDeliveryData) {
         value = "";
         if ((int)getCellValue(mouseToU(), mouseToV()) == -1) {
           value = "NO_DATA";
         } else {
           value += (int)getCellValue(mouseToU(), mouseToV());
-          i.text(prefix + value + suffix, 0, 35);
         }
-      }
-      if (showPopulationData) {
+        i.text(prefix + value + suffix, 0, 35);
+//      }
+//      if (showPopulationData) {
         value = "";
         if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
           value = "NO_DATA";
         } else {
           value += (int)getCellPop(mouseToU(), mouseToV());
-          i.text(value + " " + popMode, 0, 65);
-          float temp = float(value);
-          if (popMode.equals("POP10")) {
-            i.text(int(temp/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR) + " Deliveries per Day", 0, 95);
-          } else if (popMode.equals("HOUSING10")) {
-            i.text(int(temp*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR) + " Deliveries per Day", 0, 95);
-          }
         }
-      }
-      if (showOutputData) {
+        i.text(value + " " + popMode, 0, 65);
+        
+        value = "";
+        if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
+          value = "NO_DATA";
+        } else {
+          value += dailyDemand(getCellPop(mouseToU(), mouseToV()));
+        }
+        i.text(value, 0, 95);
+//      }
+//      if (showOutputData) {
+        
+        // Delivery Cost
         value = "";
         if (getCellDeliveryCost(mouseToU(), mouseToV()) == -1) {
           value = "NO_DATA";
         } else {
           value += getCellDeliveryCost(mouseToU(), mouseToV());
-          i.text(value, 0, 125);
         }
-      }
+        i.text(value, 0, 125);
+        
+        // Total Cost
+        value = "";
+        if (getCellTotalCost(mouseToU(), mouseToV()) == -1) {
+          value = "NO_DATA";
+        } else {
+          value += getCellTotalCost(mouseToU(), mouseToV());
+        }
+        i.text(value, 0, 155);
+//      }
       
       i.endDraw();
       
@@ -678,6 +692,14 @@ void renderBasemap(PGraphics graphic) {
     float getCellDeliveryCost(int u, int v) {
       try {  
         return deliveryCost[u][v];
+      }  catch(RuntimeException e) {
+        return -1;
+      }
+    }
+    
+    float getCellTotalCost(int u, int v) {
+      try {  
+        return totalCost[u][v];
       }  catch(RuntimeException e) {
         return -1;
       }
