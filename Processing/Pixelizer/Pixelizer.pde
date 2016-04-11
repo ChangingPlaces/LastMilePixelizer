@@ -187,14 +187,14 @@ void draw() {
   }
 
   fill(textColor, 80);
-  text("Advanced Optimization = " + enableCTL, 20, 35);
+  text("CTL Optimization = " + enableCTL, 20, 35);
   text("(Press Spacebar to Toggle)", 20, 50);
   fill(textColor);
-
+  
   if (waitingForCTL){
     if(waiting_blink){
       fill(walmart_light_green);
-      //text("** OPTIMIZING **", 20, 65);
+      text("** OPTIMIZING **", 20, 65);
       fill(textColor);
       waiting_blink = false;
     }

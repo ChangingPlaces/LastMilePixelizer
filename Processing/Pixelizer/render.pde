@@ -629,7 +629,7 @@ void renderBasemap(PGraphics graphic) {
 
       i.translate(-(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
 
-      i.fill(textColor, 80);
+      i.fill(textColor);
       i.textAlign(RIGHT);
       i.text("Pixelizer v1.0", screen.width - 10, screen.height - STANDARD_MARGIN - 15);
       i.text("Ira Winder, jiw@mit.edu", screen.width - 10, screen.height - STANDARD_MARGIN);
@@ -660,77 +660,70 @@ void renderBasemap(PGraphics graphic) {
       if (showFrameRate) {
         i.text("FrameRate: " + frameRate, 0, 45);
       }
-
+      
+      // Grid INFO Summary Values
       i.translate(0, 80);
-
-//      if (showDeliveryData || showPopulationData || showOutputData) {
-        i.fill(walmart_dark_green);
-        i.text("GRID INFO", 0, 0);
-        i.fill(textColor);
-        i.text("2015 Delivery Data:", 0, 20);
-        i.text("Population Value:", 0, 50);
-        i.text("Demand Potential:", 0, 80);
-        i.text("Cost Per Delivery:", 0, 110);
-        i.text("Total Delivery Cost:", 0, 140);
-//      }
+      i.fill(walmart_dark_green);
+      i.text("GRID INFO", 0, 0);
+      i.fill(textColor);
+      i.text("2015 Delivery Data:", 0, 20);
+      i.text("Population Value:", 0, 50);
+      i.text("Demand Potential:", 0, 80);
+      i.text("Cost Per Delivery:", 0, 110);
+      i.text("Total Delivery Cost:", 0, 140);
+        
       i.colorMode(RGB);
       i.fill(0,255,255);
+      
+      // Empirical 2015 Delivery Values
       String value = "";
-//      if (showDeliveryData) {
-        value = "";
-        if ((int)getCellValue(mouseToU(), mouseToV()) == -1) {
-          value = "NO_DATA";
-        } else {
-          value += (int)getCellValue(mouseToU(), mouseToV());
-        }
-        i.text(prefix + value + suffix, 0, 35);
-//      }
-//      if (showPopulationData) {
-        value = "";
-        if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
-          value = "NO_DATA";
-        } else {
-          value += (int)getCellPop(mouseToU(), mouseToV());
-        }
-        i.text(value + " " + popMode, 0, 65);
+      value = "";
+      if ((int)getCellValue(mouseToU(), mouseToV()) == -1) {
+        value = "NO_DATA";
+      } else {
+        value += (int)getCellValue(mouseToU(), mouseToV());
+      }
+      i.text(prefix + value + suffix, 0, 35);
+      
+      // Population Figures
+      value = "";
+      if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
+        value = "NO_DATA";
+      } else {
+        value += (int)getCellPop(mouseToU(), mouseToV());
+      }
+      i.text(value + " " + popMode, 0, 65);
+      
+      // Daily Demand Estimate based on population
+      value = "";
+      if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
+        value = "NO_DATA";
+        i.text(value, 0, 95);
+      } else {
+        value += dailyDemand(getCellPop(mouseToU(), mouseToV()));
+        i.text(int(float(value)*10.0)/10.0, 0, 95);
+      }
 
-        value = "";
-        if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
-          value = "NO_DATA";
-          i.text(value, 0, 95);
-        } else {
-          value += dailyDemand(getCellPop(mouseToU(), mouseToV()));
-          i.text(int(float(value)*10.0)/10.0, 0, 95);
-        }
-        //i.text(value, 0, 95);
+      // Output: Delivery Cost
+      value = "";
+      if ((getCellDeliveryCost(mouseToU(), mouseToV()) == -1) ||
+          getCellDeliveryCost(mouseToU(), mouseToV())==Float.POSITIVE_INFINITY) {
+        value = "NO_DATA";
+        i.text(value, 0, 125);
+      } else {
+        value += getCellDeliveryCost(mouseToU(), mouseToV());
+        i.text(int(float(value)*10.0)/10.0, 0, 125);
+      }
 
-//      }
-//      if (showOutputData) {
-
-        // Delivery Cost
-        value = "";
-        if ((getCellDeliveryCost(mouseToU(), mouseToV()) == -1) ||
-            getCellDeliveryCost(mouseToU(), mouseToV())==Float.POSITIVE_INFINITY) {
-          value = "NO_DATA";
-          i.text(value, 0, 125);
-        } else {
-          value += getCellDeliveryCost(mouseToU(), mouseToV());
-          i.text(int(float(value)*10.0)/10.0, 0, 125);
-        }
-       //i.text(value, 0, 125);
-
-        // Total Cost
-        value = "";
-        if (getCellTotalCost(mouseToU(), mouseToV()) == -1) {
-          value = "NO_DATA";
-          i.text(value, 0, 155);
-        } else {
-          value += getCellTotalCost(mouseToU(), mouseToV());
-          i.text(int(float(value)*10.0)/10.0, 0, 155);
-        }
-        //i.text(value, 0, 155);
-
-//      }
+      // Output: Total Cost
+      value = "";
+      if (getCellTotalCost(mouseToU(), mouseToV()) == -1) {
+        value = "NO_DATA";
+        i.text(value, 0, 155);
+      } else {
+        value += getCellTotalCost(mouseToU(), mouseToV());
+        i.text(int(float(value)*10.0)/10.0, 0, 155);
+      }
 
       i.endDraw();
 
