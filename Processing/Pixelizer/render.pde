@@ -598,9 +598,9 @@ void renderBasemap(PGraphics graphic) {
           demandMAX = int(dailyDemand(popMAX));
 
           i.text("Demand Potential", 0, legendPix - 35);
-          i.text("Source: 2010 U.S. Census Data", 0, legendPix - 20);
-          i.text(int(demandMIN) + " deliveries per day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
-          i.text(int(demandMAX) + " deliveries per day", STANDARD_MARGIN + legendP.width, legendPix+10);
+          i.text("Source: 2010 U.S. Census", 0, legendPix - 20);
+          i.text(int(demandMIN) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+          i.text(int(demandMAX) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix+10);
         }
 
         if (showDeliveryData) {
@@ -836,8 +836,9 @@ void renderBasemap(PGraphics graphic) {
 
     PGraphics miniMap;
     PImage miniBaseMap;
-    float mapRatio = 0.3;
-
+    float mapRatio = float(displayV - displayU)/displayV;
+    //float mapRatio = 0.3;
+    
     void loadMiniBaseMap() {
       miniBaseMap = loadImage("data/" + mapColor + "/" + fileName + "_2000.png");
       miniBaseMap.resize(4*displayU, 4*displayV);

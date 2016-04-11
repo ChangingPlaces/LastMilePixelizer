@@ -41,10 +41,10 @@ int randomType = 2;
 
 int projectorWidth = 1920;
 int projectorHeight = 1200;
-int projectorOffset = 1920;
+int projectorOffset = 1842;
 
-int screenWidth = 1920;
-int screenHeight = 1200;
+int screenWidth = 1842;
+int screenHeight = 1026;
 
 boolean hideWallyWorld = true;
 
@@ -181,7 +181,8 @@ void draw() {
 
   // Exports table Graphic to Projector
   projector = get(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
-  margin = get(TABLE_IMAGE_OFFSET - 2*STANDARD_MARGIN - int(mapRatio*TABLE_IMAGE_WIDTH), STANDARD_MARGIN, int(mapRatio*TABLE_IMAGE_WIDTH) + 2*STANDARD_MARGIN, TABLE_IMAGE_HEIGHT);
+  margin = get(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - int(mapRatio*TABLE_IMAGE_HEIGHT), STANDARD_MARGIN, int(mapRatio*TABLE_IMAGE_HEIGHT) + STANDARD_MARGIN, TABLE_IMAGE_HEIGHT);
+  margin.resize(int(mapRatio*TABLE_IMAGE_HEIGHT), margin.height);
   
   // In Lieu of Projection creates the square table on main canvas for testing when on mac
   if (systemOS.equals("Mac") && testProjectorOnMac) {
