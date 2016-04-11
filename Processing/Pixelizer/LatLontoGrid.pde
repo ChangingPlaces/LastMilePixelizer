@@ -27,6 +27,9 @@ float centerLatitude;
 float centerLongitude;
 float azimuth; // 0 = North
 
+// grid unit to randomly offset data within
+float jitter = 3; 
+
 // Filename of TSV file to grab weighted lat-lon points 
 // for example, the fileName for data.tsv would simply be the string "data"; 
 // this script add ".tsv" for you
@@ -105,6 +108,9 @@ void pixelizeData(int gridU, int gridV) {
     }
   }
   
+  int storeJitterU = int(random(-jitter-1, jitter+1));
+  int storeJitterV = int(random(-jitter-1, jitter+1));
+  
   //Dumps weighted lat-lon points into grid[][] buckets
   for(int i=1;i<dataInput.getRowCount();i++) //start 2 rows in because of header
   { 
@@ -129,6 +135,11 @@ void pixelizeData(int gridU, int gridV) {
     
     // Fetch grid location of Customer coordinate
     uv = LatLontoGrid(latitudeC, longitudeC, centerLatitude, centerLongitude, azimuth, gridSize, this.gridV, this.gridU);
+    // Obfuscates Sample Data
+    if (hideWallyWorld) {
+      uv[0] += random(-jitter-1, jitter+1);
+      uv[1] += random(-jitter-1, jitter+1);
+    }
     //Check if the location is inside the grid
     if((uv[0]>0) && (uv[1]>0) && (uv[0]<gridU) && (uv[1]<gridV))
     {
@@ -146,6 +157,12 @@ void pixelizeData(int gridU, int gridV) {
     
     // Fetch grid location of Store coordinate
     uv = LatLontoGrid(latitudeS, longitudeS, centerLatitude, centerLongitude, azimuth, gridSize, this.gridV, this.gridU);
+    // Obfuscates Sample Data
+    // Obfuscates Sample Data
+    if (hideWallyWorld) {
+      uv[0] += storeJitterU;
+      uv[1] += storeJitterV;
+    }
     value = dataInput.getInt(i,0);        //1st column is the store ID
     //Check if the location is inside the grid
     if((uv[0]>0) && (uv[1]>0) && (uv[0]<gridU) && (uv[1]<gridV))

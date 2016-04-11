@@ -441,6 +441,7 @@ void keyPressed() {
 
     case ' ': // Send data to CTL
       enableCTL = !enableCTL;
+      waitingForCTL = false;
       break;
 
   }

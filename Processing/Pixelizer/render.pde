@@ -53,8 +53,10 @@ void renderTable() {
   table.beginDraw();
   table.clear();
   table.background(background);
-  image(wmt_logo, STANDARD_MARGIN ,TABLE_IMAGE_HEIGHT-STANDARD_MARGIN-49, STANDARD_MARGIN+44,STANDARD_MARGIN+49);
-
+  
+  if (!hideWallyWorld) {
+    image(wmt_logo, STANDARD_MARGIN ,TABLE_IMAGE_HEIGHT-STANDARD_MARGIN-49, STANDARD_MARGIN+44,STANDARD_MARGIN+49);
+  }
 
   // Draws a Google Satellite Image
   renderBasemap(table);
@@ -576,7 +578,7 @@ void renderBasemap(PGraphics graphic) {
         i.translate(-scale_0, 0);
         float scalePix = float(TABLE_IMAGE_HEIGHT)/displayV;
         i.translate(0, -4*scalePix);
-        i.stroke(1);
+        i.strokeWeight(1);
         i.line(scale_0, 0, scale_1, 0);
         i.line(scale_0, -4*scalePix, scale_1, -4*scalePix);
         i.line(2*scale_0, 0, 2*scale_0, -scalePix);
@@ -838,7 +840,7 @@ void renderBasemap(PGraphics graphic) {
 
     void loadMiniBaseMap() {
       miniBaseMap = loadImage("data/" + mapColor + "/" + fileName + "_2000.png");
-      miniBaseMap.resize(2*displayU, 2*displayV);
+      miniBaseMap.resize(4*displayU, 4*displayV);
     }
 
     void reRenderMiniMap(PGraphics miniMap) {
