@@ -6,6 +6,17 @@ float sumTotalCost;
 float[] histogram = new float[20];
 float histogramMax;
 
+void updateOutput() { 
+  initHistogram();
+  clearOutputData();
+  
+  calcDeliveryCost();
+  assignDeliveries();
+  
+  aggregate();
+  histogramMax = histogramMax();
+}
+
 void initHistogram() {
   for (int i=0; i<histogram.length; i++) {
     histogram[i] = 0;
@@ -28,17 +39,6 @@ float histogramMax() {
     max = max(max, histogram[i]);
   }
   return max;
-}
-
-void updateOutput() { 
-  initHistogram();
-  clearOutputData();
-  
-  calcDeliveryCost();
-  assignDeliveries();
-  
-  aggregate();
-  histogramMax = histogramMax();
 }
 
 void updateFacilitiesList() {
