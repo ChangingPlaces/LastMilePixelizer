@@ -24,7 +24,7 @@ color walmart_medium_blue = #007dc6;
 color walmart_orange = #f47321;
 color walmart_dark_green = #367c2b;
 
-boolean faux3D = false;
+boolean faux3D = true;
 boolean flagResize = true;
 
 /* Graphics Architecture:
@@ -394,8 +394,8 @@ void renderBasemap(PGraphics graphic) {
               float dV = 0;
               if (faux3D) {
                 // calculates offsets for faux 3D projection mapping
-                dU = 1.5*(TABLE_IMAGE_WIDTH/displayU) * (u - projU) / projH;
-                dV = 1.5*(TABLE_IMAGE_WIDTH/displayU) * (v - projV) / projH;
+                dU = 1.125*(TABLE_IMAGE_WIDTH/displayU) * (u - projU) / projH;
+                dV = 1.125*(TABLE_IMAGE_WIDTH/displayU) * (v - projV) / projH;
               }
               
               input.rect(u*gridWidth + dU, v*gridHeight + dV, gridWidth, gridHeight);
