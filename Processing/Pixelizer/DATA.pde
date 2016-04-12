@@ -13,7 +13,7 @@
     // Demand Parameters
     int WEEKS_IN_YEAR = 52;
     int DAYS_IN_YEAR = 365;
-    float WALMART_MARKET_SHARE = 0.020; // 2.0%
+    float WALMART_MARKET_SHARE = 0.02; // 2.0%
     float HOUSEHOLD_SIZE = 2.54;
     
     float dailyDemand(float pop) {

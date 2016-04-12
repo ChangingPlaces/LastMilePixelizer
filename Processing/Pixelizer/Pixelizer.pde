@@ -52,7 +52,7 @@ boolean hideWallyWorld = true;
 boolean showMainMenu = true;
 boolean showFrameRate = false;
 
-boolean showStores = true;
+boolean showStores = false;
 boolean showDeliveryData = false;
 boolean showPopulationData = true;
 boolean showBasemap = true;
