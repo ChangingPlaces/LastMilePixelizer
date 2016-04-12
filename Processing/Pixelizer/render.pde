@@ -304,7 +304,7 @@ void renderBasemap(PGraphics graphic) {
         try {
         // heatmap value is normalized to a value between 0 and 1;
     //      normalized = ( sqrt(sqrt(pop)) - sqrt(sqrt(popMIN)))/sqrt(sqrt(popMAX-popMIN));
-            normalized = ( sqrt(pop) - sqrt(popMIN))/sqrt(popMAX-popMIN);
+            normalized = ( sqrt(pop) - sqrt(popMIN))/sqrt(0.5*popMAX-popMIN);
     //      normalized = ( pop - popMIN)/(popMAX-popMIN);
         } catch(Exception ex) {
           normalized = (0 - popMIN)/(popMAX-popMIN);
@@ -435,8 +435,8 @@ void renderBasemap(PGraphics graphic) {
       color from, to;
 
       //BEGIN Drawing POPULATION
-      to = color(#FF0000, 75); // Red
-      from = color(#00FF00, 75);   // Green
+      to = color(#FF0000); // Red
+      from = color(#00FF00);   // Green
 
       // Dynamically adjusts grid size to fit within canvas dimensions
       gridWidth = float(table.width)/displayU;
@@ -456,8 +456,9 @@ void renderBasemap(PGraphics graphic) {
 
 //            if ( pop[u][v] > POP_RENDER_MIN ) {
               float value;
-              output.noStroke(); // No lines draw around grid cells
-
+              //output.noStroke(); // No lines draw around grid cells
+              output.strokeWeight(1);
+              output.stroke(background);
               if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
                 value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
                 if (value >= 0 && value != Float.POSITIVE_INFINITY) {
