@@ -13,8 +13,20 @@
     // Demand Parameters
     int WEEKS_IN_YEAR = 52;
     int DAYS_IN_YEAR = 365;
-    float WALMART_MARKET_SHARE = 0.20;
+    float WALMART_MARKET_SHARE = 0.020; // 2.0%
     float HOUSEHOLD_SIZE = 2.54;
+    
+    float dailyDemand(float pop) {
+      if (popMode.equals("POP10")) {
+        return pop/HOUSEHOLD_SIZE*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR;
+      } else if (popMode.equals("HOUSING10")) {
+        return pop*WEEKS_IN_YEAR*WALMART_MARKET_SHARE/DAYS_IN_YEAR;
+      } else {
+        println("no conversion for daily demand for this input");
+        return 0;
+      }
+    }
+
     
     void resetGridParameters() {
       scaler = int(MAX_GRID_SIZE/gridSize);
@@ -95,6 +107,7 @@
     float storesMIN, storesMAX;
     float popMIN, popMAX;
     float huMIN, huMAX;
+    float popTotal;
     
     //JSON array holding totes
     JSONArray array;
@@ -123,6 +136,8 @@
         }
       }
       
+      popTotal = 0;
+      
       // MIN and MAX set to arbitrarily large and small values
       heatmapMIN = Float.POSITIVE_INFINITY;
       heatmapMAX = Float.NEGATIVE_INFINITY;
@@ -148,6 +163,7 @@
       for (int i=0; i<popCSV.getRowCount(); i++) {
         for (int j=0; j<popCSV.getColumnCount(); j++) {
           pop[j][i] = popCSV.getFloat(popCSV.getRowCount()-1-i, j);
+          popTotal += pop[j][i];
         }
       }
         
@@ -207,6 +223,12 @@
     float[][] totalCost, deliveryCost;
     int[][] allocation, vehicle;
     
+    // minMax Values:
+    float totalCostMIN, totalCostMAX;
+    float deliveryCostMIN, deliveryCostMAX;
+    float allocationMIN, allocationMAX;
+    float vehicleMIN, vehicleMAX;
+    
     // Runs once when initializes
     void initOutputData() {
       totalCost = new float[gridU][gridV];
@@ -224,19 +246,19 @@
     }
     
     void fauxOutputData() {
-      fauxFloatData(totalCost, 1);
-      fauxFloatData(deliveryCost, 1);
-      fauxIntData(allocation, 5);
-      fauxIntData(vehicle, 5);
+      fauxFloatData(totalCost, 100);
+      fauxFloatData(deliveryCost, 100);
+      fauxIntData(allocation, 7);
+      fauxIntData(vehicle, 7);
     }
     
     void clearOutputData() {
-      clearFloatData(totalCost, -1);
-      clearFloatData(deliveryCost, -1);
+      clearFloatData(totalCost, 0);
+      clearFloatData(deliveryCost, Float.POSITIVE_INFINITY);
       clearIntData(allocation, 0);
       clearIntData(vehicle, 0);
     }
-
+    
     // Create Faux Data Set for Debugging
     void fauxIntData(int[][] data, int maxInput) {
       for (int i=0; i<data.length; i++) {
