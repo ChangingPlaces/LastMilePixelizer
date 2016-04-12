@@ -439,39 +439,41 @@ void keyPressed() {
       setVehicle();
       break;
 
+    // No Buttons
     case ' ': // Send data to CTL
       enableCTL = !enableCTL;
       waitingForCTL = false;
       break;
-
+    case '-':
+      projH--;
+      saveProjectorLocation();
+      break;
+    case '+':
+      projH++;
+      saveProjectorLocation();
+      break;
   }
 
   //------arrow keys and how to code keys that aren't characters exactly-----
-  if (key == CODED) {
-    if (keyCode == RIGHT) {
-      if(gridPanU+1 <= gridU - displayU) {
-        gridPanU++;
-        loadBasemap();
-      }
-    }
+  if (key == CODED) { 
     if (keyCode == LEFT) {
-      if(gridPanU-1 >= 0) {
-        gridPanU--;
-        loadBasemap();
-      }
-    }
-    if (keyCode == UP) {
-      if(gridPanV-1 >= 0) {
-        gridPanV--;
-        loadBasemap();
-      }
-    }
+      projU--;
+      saveProjectorLocation();
+    }  
+    if (keyCode == RIGHT) {
+      projU++;
+      saveProjectorLocation();
+    }  
     if (keyCode == DOWN) {
-      if(gridPanV+1 <= gridV - displayV) {
-        gridPanV++;
-        loadBasemap();
-      }
+      projV++;
+      saveProjectorLocation();
+    }  
+    if (keyCode == UP) {
+      projV--;
+      saveProjectorLocation();
     }
+    
+    println("Projector Location: " + projU, projV, projH);
   }
 
   reRender();
