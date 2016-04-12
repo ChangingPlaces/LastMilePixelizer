@@ -360,6 +360,8 @@ void renderBasemap(PGraphics graphic) {
           input.stroke(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
           input.strokeWeight(4);
           input.rect(current.u*gridWidth, current.v*gridHeight, gridWidth, gridHeight);
+          input.fill(textColor);
+          input.text(facilitiesList.get(i).ID, current.u*gridWidth, current.v*gridHeight);
         }
       }
 
@@ -534,9 +536,9 @@ void renderBasemap(PGraphics graphic) {
         i.strokeWeight(3);
         i.line(0, -TABLE_IMAGE_HEIGHT/2, 3*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2);
         i.fill(textColor);
-        i.text("Total Daily Demand", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
+        i.text("Total Demand Potential", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
         i.text(int(dailyDemand(popTotal)) + " deliveries", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
-
+        
         // Draw Demand Met
         float ratio = (demandSupplied/dailyDemand(popTotal));
 
@@ -548,14 +550,14 @@ void renderBasemap(PGraphics graphic) {
         i.strokeWeight(3);
         i.line(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN, 3.25*STANDARD_MARGIN, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN);
         i.strokeWeight(1);
-        i.text("Daily Demand Met", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
+        i.text("Daily Demand Supplied", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
         i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
 
         float average = sumTotalCost/demandSupplied;
         i.fill(#FFFF00);
-        i.text("Average Cost: " + average + " per delivery", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
+        i.text("Average Cost: " + int(average*100)/100.0 + " per delivery", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
         i.fill(textColor);
-
+        
         //Histogram
         int histogramHeight = 120;
         int histogramWidth = 8*STANDARD_MARGIN;
@@ -563,7 +565,7 @@ void renderBasemap(PGraphics graphic) {
           i.line(0, 0, histogramWidth, 0);
 
           // Average Indicator
-          float x_position = histogramWidth*average/MAX_DELIVERY_COST_RENDER;
+          float x_position = histogramWidth*(average/MAX_DELIVERY_COST_RENDER);
           i.strokeWeight(1);
           i.stroke(#FFFF00);
           i.line(x_position, -histogramHeight - 10, x_position, 10);

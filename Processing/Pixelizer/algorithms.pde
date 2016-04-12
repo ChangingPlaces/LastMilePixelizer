@@ -62,11 +62,11 @@ void updateFacilitiesList() {
         case 1: // IMN
           facilitiesList.add(new Facility(1, u, v, 2000, 10, 2, true,  false));
           break;
-        case 2: // SMALL STORE
-          facilitiesList.add(new Facility(2, u, v,   40, 10, 2, true,  true));
+        case 2: // LARGE STORE
+          facilitiesList.add(new Facility(2, u, v,   200, 10, 2, true,  true));
           break;
-        case 3: // LARGE STORE
-          facilitiesList.add(new Facility(3, u, v,  200, 10, 2, true,  true));
+        case 3: // SMALL STORE
+          facilitiesList.add(new Facility(3, u, v,   40, 10, 2, true,  true));
           break;
         case 4: // SPOKE
           facilitiesList.add(new Facility(4, u, v,   40,  0, 2, false, true));
@@ -158,7 +158,9 @@ void aggregate() {
   sumTotalCost = 0;
   for (int u=0; u<gridU; u++) {
     for (int v=0; v<gridV; v++) {
-      sumTotalCost += totalCost[u][v];
+      if (totalCost[u][v] >= 0) {
+        sumTotalCost += totalCost[u][v];
+      }
     }
   }
 }
