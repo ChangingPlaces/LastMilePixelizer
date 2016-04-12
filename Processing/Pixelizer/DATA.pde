@@ -222,6 +222,7 @@
     // Output Matrices
     float[][] totalCost, deliveryCost;
     int[][] allocation, vehicle;
+    boolean[][] cellAllocated;
     
     // minMax Values:
     float totalCostMIN, totalCostMAX;
@@ -234,12 +235,14 @@
       totalCost = new float[gridU][gridV];
       deliveryCost = new float[gridU][gridV];
       allocation = new int[gridU][gridV];
+      cellAllocated = new boolean[gridU][gridV];
       vehicle = new int[gridU][gridV];
       for (int u=0; u<gridU; u++) {
         for (int v=0; v<gridV; v++) {
           totalCost[u][v] = 0;
           deliveryCost[u][v] = 0;
           allocation[u][v] = 0;
+          cellAllocated[u][v] = false;
           vehicle[u][v] = 0;
         }
       }
@@ -257,6 +260,7 @@
       clearFloatData(deliveryCost, Float.POSITIVE_INFINITY);
       clearIntData(allocation, 0);
       clearIntData(vehicle, 0);
+      clearBooleanData(cellAllocated, false);
     }
     
     // Create Faux Data Set for Debugging
@@ -286,6 +290,14 @@
     }
     
     void clearFloatData(float[][] data, float clearValue) {
+      for (int i=0; i<data.length; i++) {
+        for (int j=0; j<data[0].length; j++) {
+          data[i][j] = clearValue;
+        }
+      }
+    }
+    
+    void clearBooleanData(boolean[][] data, boolean clearValue) {
       for (int i=0; i<data.length; i++) {
         for (int j=0; j<data[0].length; j++) {
           data[i][j] = clearValue;
