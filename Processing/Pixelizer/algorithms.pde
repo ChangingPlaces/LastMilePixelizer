@@ -1,6 +1,15 @@
+/* TO DO
+ *
+ * Fix Exclusive Veronoi Zones even when store cannot serve
+ * Make Store Order Capacity more "balanced"
+ *
+ */
+
 import java.util.*;
 
 ArrayList<Facility> facilitiesList = new ArrayList<Facility>();
+DeliveryMatrix deliveryMatrix = new DeliveryMatrix();
+
 float demandSupplied;
 float sumTotalCost;
 float[] histogram = new float[20];
@@ -10,6 +19,9 @@ void updateOutput() {
   initHistogram();
   clearOutputData();
   
+  // 1. Calucate All Delivery Costs
+  // 2. Sort All Delivery Costs
+  // 3. Allocate Deliveries until each facility (a) runs out of supply or (b) runs out of demand
   calcDeliveryCost();
   assignDeliveries();
   
@@ -73,12 +85,16 @@ void updateFacilitiesList() {
   }
 }
 
+// Populate a list of all possible deliveries
 void calcDeliveryCost() {
+  
+  // clear list of potential Deliveries
+  deliveryMatrix.clearDeliveries();
   
   // Cycle through each Facility
   for (int i=0; i<facilitiesList.size(); i++) {
     Facility current = facilitiesList.get(i);
-    current.clearDeliveries();
+    current.clearOrders();
     
     // Cycle through each pixel
     for (int u=0; u<gridU; u++) {
@@ -89,61 +105,54 @@ void calcDeliveryCost() {
         float density = dailyDemand(pop[u][v]);
         float currentCost = distance / sqrt(density);
         
-        // Assigns a Facility and a Delivery Cost to a cell
-        if (currentCost < deliveryCost[u][v]) {
-          deliveryCost[u][v] = currentCost;
-          allocation[u][v] = i+1;
-        }
+        deliveryMatrix.addDelivery(u, v, currentCost, i);
+        
       }
     }
-  } 
+  }
+  
+  // Sorts the cells to which one might deliver by cost, lowest to highest
+  deliveryMatrix.greedySort();
 }
 
 void assignDeliveries() {
+  int u, v, facilityIndex;
+  float cost, demand;
+  String[] split;
   
   demandSupplied = 0;
   
-  // Cycle through every grid cell and adds its information to an ArrayList withing the respective Facility object
-  for (int u=0; u<gridU; u++) {
-    for (int v=0; v<gridV; v++) {
-      if (allocation[u][v] > 0 && dailyDemand(pop[u][v]) >= 1) {
-        Facility current = facilitiesList.get(allocation[u][v]-1);
-        current.addDelivery(u,v, deliveryCost[u][v], dailyDemand(pop[u][v]));
-      }
-      // Resets Allocation
-      allocation[u][v] = 0;
-    }
-  }
-  
-  // Cycles through Each Facility
-  for (int i=0; i<facilitiesList.size(); i++) {
-    Facility current = facilitiesList.get(i);
+  // Cycle through every possible delivery in the list
+  for (int i=0; i<deliveryMatrix.size(); i++) {
     
-    // Greedy Algorithm
+    // Assign current values from Info String
+    split = split(deliveryMatrix.get(i), ",");
+    cost = float(split[0]);
+    u = int(split[1]);
+    v = int(split[2]);
+    demand = dailyDemand(pop[u][v]);
+    facilityIndex = int(split[3]);
     
-    // Sorts the cells to which one might delivery by cost, lowest to highest
-    Collections.sort(current.deliveryInfo);
-    
-    // Assigns deliveries in a greedy manner until the store has fulfilled its maximum order capacity
-    float demandMet = 0;
-    for (int j=0; j<current.deliveryInfo.size(); j++) {
-      String[] delivery = split(current.deliveryInfo.get(j), ",");
-      //Local
-      demandMet += int(delivery[1]);
+    // Checks if cell is already Allocated AND if Facility has Capacity
+    if (!cellAllocated[u][v] && !facilitiesList.get(facilityIndex).atCapacity) {
+      deliveryCost[u][v] = cost;
+      totalCost[u][v] = cost*demand;
+      allocation[u][v] = facilityIndex+1;
       
-      if (demandMet <= current.maxOrderSize) {
-        //Global
-        demandSupplied += int(delivery[1]);
-        addToHistogram(float(delivery[0]), float(delivery[1]));
-        //Local
-        totalCost[int(delivery[2])][int(delivery[3])] += float(delivery[0])*int(delivery[1]);
-        allocation[int(delivery[2])][int(delivery[3])] = i+1;
-      } else {
-        break;
-      }
+      demandSupplied += demand;
+      addToHistogram(cost, demand);
+      
+      facilitiesList.get(facilityIndex).addOrders(demand);
+      cellAllocated[u][v] = true;
     }
   }
 }
+
+//void checkCapacity() {
+//  for (int i=0; i<facilitiesList.size(); i++) {
+//    println("#" + i + ", ID = " + facilitiesList.get(i).ID + ", orders = " + facilitiesList.get(i).orders + "/" + facilitiesList.get(i).maxOrderSize + ": " + facilitiesList.get(i).atCapacity);
+//  }
+//}
 
 void aggregate() {
   sumTotalCost = 0;
@@ -167,10 +176,10 @@ class Facility {
   int maxShifts;    // Daily
   boolean delivers;
   boolean pickup;
+  boolean atCapacity;
   int u, v;
-  ArrayList<Integer> deliveryU, deliveryV;
-  ArrayList<Float> deliveryCost, deliveryDemand;
-  ArrayList<String> deliveryInfo;
+  float orders;
+  
   
   Facility(int ID, int u, int v, int maxOrderSize, int maxFleetSize, int maxShifts, boolean delivers, boolean pickup) {
     this.ID = ID;
@@ -181,20 +190,30 @@ class Facility {
     this.maxShifts = maxShifts;
     this.delivers = delivers;
     this.pickup = pickup;
-    
-    deliveryU = new ArrayList<Integer>();
-    deliveryV = new ArrayList<Integer>();
-    deliveryCost = new ArrayList<Float>();
-    deliveryDemand = new ArrayList<Float>();
-    
+    this.atCapacity = false;
+    this.orders = 0;
+  }
+  
+  void addOrders(float orders) {
+    this.orders += orders;
+    if (this.orders >= maxOrderSize) atCapacity = true;
+  }
+  
+  void clearOrders() {
+    this.orders = 0;
+    atCapacity = false;
+  }
+}
+
+class DeliveryMatrix {
+  
+  ArrayList<String> deliveryInfo;
+  
+  DeliveryMatrix() {
     deliveryInfo = new ArrayList<String>();
   }
   
-  void addDelivery(int u, int v, float cost, float demand) {
-    deliveryU.add(u);
-    deliveryV.add(v);
-    deliveryCost.add(cost);
-    deliveryDemand.add(demand);
+  void addDelivery(int u, int v, float cost, int facilityIndex) {
     
     String info = "";
     
@@ -212,16 +231,25 @@ class Facility {
       // Do nothing
     }
     
-    info += cost + "," + demand + "," + u + "," + v;
+    info += cost + "," + u + "," + v + "," + facilityIndex;
     deliveryInfo.add(info);
   }
   
   void clearDeliveries() {
-    deliveryU.clear();
-    deliveryV.clear();
-    deliveryCost.clear();
-    deliveryDemand.clear();
-    
     deliveryInfo.clear();
   }
+  
+  void greedySort() {
+    Collections.sort(deliveryInfo);
+  }
+  
+  int size() {
+    return deliveryInfo.size();
+  }
+  
+  String get(int i) {
+    return deliveryInfo.get(i);
+  }
 }
+  
+  
