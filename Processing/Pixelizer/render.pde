@@ -24,7 +24,7 @@ color walmart_medium_blue = #007dc6;
 color walmart_orange = #f47321;
 color walmart_dark_green = #367c2b;
 
-boolean faux3D = true;
+boolean faux3D = false;
 boolean flagResize = true;
 
 /* Graphics Architecture:
