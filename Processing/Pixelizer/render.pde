@@ -24,7 +24,7 @@ color walmart_medium_blue = #007dc6;
 color walmart_orange = #f47321;
 color walmart_dark_green = #367c2b;
 
-
+boolean faux3D = false;
 boolean flagResize = true;
 
 /* Graphics Architecture:
@@ -338,6 +338,8 @@ void renderBasemap(PGraphics graphic) {
     }
 
     // Rully Renders Every Possible Dynamic Layer we would want to draw on canvas
+    //Projector location (relative to table grid origin)
+    
     void renderDynamicTableLayers(PGraphics input) {
 
       // Dynamically adjusts grid size to fit within canvas dimensions
@@ -387,7 +389,16 @@ void renderBasemap(PGraphics graphic) {
 
             if (showForm) {
               findFormFill(input, form[u+gridPanU][v+gridPanV]);
-              input.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              
+              float dU = 0;
+              float dV = 0;
+              if (faux3D) {
+                // calculates offsets for faux 3D projection mapping
+                dU = 1.5*(TABLE_IMAGE_WIDTH/displayU) * (u - projU) / projH;
+                dV = 1.5*(TABLE_IMAGE_WIDTH/displayU) * (v - projV) / projH;
+              }
+              
+              input.rect(u*gridWidth + dU, v*gridHeight + dV, gridWidth, gridHeight);
             }
 
           }

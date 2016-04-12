@@ -100,7 +100,7 @@ void setup() {
 
       // Initial Projection-Mapping Canvas
       initializeProjection2D();
-
+      
       // Allows application to receive information from Colortizer via UDP
       initUDP();
 

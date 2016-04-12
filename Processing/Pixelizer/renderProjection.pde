@@ -45,7 +45,7 @@ projApplet applet; // applet acts as new set of setup() and draw() functions tha
 // Run Anything Needed to have Projection mapping work
 void initializeProjection2D() {
   println("Projector Info: " + projectorWidth + ", " + projectorHeight + ", " + projectorOffset);
-  //toggleProjection(getButtonIndex(buttonNames[21]));
+  loadProjectorLocation();
 }
 
 public class PFrame extends JFrame {
@@ -182,4 +182,26 @@ void toggle2DProjection() {
   }
 }
 
+// Simulated Projector Position
+
+// These default values are overridden by projector.txt
+float projU;
+float projV;
+float projH;
+Table projectorLocation;
+
+void loadProjectorLocation() {
+  projectorLocation = loadTable("settings/projector.tsv", "header");
+  //Projector location (relative to table grid origin)
+  projU = projectorLocation.getInt(0, "U"); // Projector U Location
+  projV = projectorLocation.getInt(0, "V");  // Projector V Location
+  projH = projectorLocation.getInt(0, "H");  // Projector Height
+}
+
+void saveProjectorLocation() {
+  projectorLocation.setInt(0, "U", (int)projU);  // Projector U Location
+  projectorLocation.setInt(0, "V", (int)projV);  // Projector V Location
+  projectorLocation.setInt(0, "H", (int)projH);  // Projector Height
+  saveTable(projectorLocation, "settings/projector.tsv");
+}
 
