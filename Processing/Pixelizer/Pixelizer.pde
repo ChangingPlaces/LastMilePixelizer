@@ -46,7 +46,7 @@ int projectorOffset = 1842;
 int screenWidth = 1842;
 int screenHeight = 1026;
 
-boolean hideWallyWorld = true;
+boolean hideWallyWorld = false;
 
 // Set this to true to display the main menu upon start
 boolean showMainMenu = true;
@@ -100,7 +100,7 @@ void setup() {
 
       // Initial Projection-Mapping Canvas
       initializeProjection2D();
-      
+
       // Allows application to receive information from Colortizer via UDP
       initUDP();
 
@@ -183,7 +183,7 @@ void draw() {
   projector = get(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
   margin = get(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - int(mapRatio*TABLE_IMAGE_HEIGHT), STANDARD_MARGIN, int(mapRatio*TABLE_IMAGE_HEIGHT) + STANDARD_MARGIN, TABLE_IMAGE_HEIGHT);
   margin.resize(int(mapRatio*TABLE_IMAGE_HEIGHT), margin.height);
-  
+
   // In Lieu of Projection creates the square table on main canvas for testing when on mac
   if (systemOS.equals("Mac") && testProjectorOnMac) {
     background(textColor);
@@ -195,7 +195,7 @@ void draw() {
   text("CTL Optimization = " + enableCTL, 20, 35);
   text("(Press Spacebar to Toggle)", 20, 50);
   fill(textColor);
-  
+
   if (waitingForCTL){
     if(waiting_blink){
       fill(walmart_light_green);

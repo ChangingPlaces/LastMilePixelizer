@@ -18,3 +18,7 @@ Processing/Pixelizer/data/sanjose_source.json
 Processing/Pixelizer/data/sanjose_stores.json
 
 Processing/Pixelizer/data/sanjose_totes.json
+
+*.class
+
+*.java

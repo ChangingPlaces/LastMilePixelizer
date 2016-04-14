@@ -53,7 +53,7 @@ void renderTable() {
   table.beginDraw();
   table.clear();
   table.background(background);
-  
+
   if (!hideWallyWorld) {
     image(wmt_logo, STANDARD_MARGIN ,TABLE_IMAGE_HEIGHT-STANDARD_MARGIN-49, STANDARD_MARGIN+44,STANDARD_MARGIN+49);
   }
@@ -339,7 +339,7 @@ void renderBasemap(PGraphics graphic) {
 
     // Rully Renders Every Possible Dynamic Layer we would want to draw on canvas
     //Projector location (relative to table grid origin)
-    
+
     void renderDynamicTableLayers(PGraphics input) {
 
       // Dynamically adjusts grid size to fit within canvas dimensions
@@ -389,7 +389,7 @@ void renderBasemap(PGraphics graphic) {
 
             if (showForm) {
               findFormFill(input, form[u+gridPanU][v+gridPanV]);
-              
+
               float dU = 0;
               float dV = 0;
               if (faux3D) {
@@ -397,7 +397,7 @@ void renderBasemap(PGraphics graphic) {
                 dU = 1.5*(TABLE_IMAGE_WIDTH/displayU) * (u - projU) / projH;
                 dV = 1.5*(TABLE_IMAGE_WIDTH/displayU) * (v - projV) / projH;
               }
-              
+
               input.rect(u*gridWidth + dU, v*gridHeight + dV, gridWidth, gridHeight);
             }
 
@@ -673,7 +673,7 @@ void renderBasemap(PGraphics graphic) {
       if (showFrameRate) {
         i.text("FrameRate: " + frameRate, 0, 45);
       }
-      
+
       // Grid INFO Summary Values
       i.translate(0, 80);
       i.fill(walmart_dark_green);
@@ -684,10 +684,10 @@ void renderBasemap(PGraphics graphic) {
       i.text("Demand Potential:", 0, 80);
       i.text("Cost Per Delivery:", 0, 110);
       i.text("Total Delivery Cost:", 0, 140);
-        
+
       i.colorMode(RGB);
       i.fill(0,255,255);
-      
+
       // Empirical 2015 Delivery Values
       String value = "";
       value = "";
@@ -697,7 +697,7 @@ void renderBasemap(PGraphics graphic) {
         value += (int)getCellValue(mouseToU(), mouseToV());
       }
       i.text(prefix + value + suffix, 0, 35);
-      
+
       // Population Figures
       value = "";
       if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
@@ -706,7 +706,7 @@ void renderBasemap(PGraphics graphic) {
         value += (int)getCellPop(mouseToU(), mouseToV());
       }
       i.text(value + " " + popMode, 0, 65);
-      
+
       // Daily Demand Estimate based on population
       value = "";
       if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
@@ -849,7 +849,7 @@ void renderBasemap(PGraphics graphic) {
     PImage miniBaseMap;
     float mapRatio = float(displayV - displayU)/displayV;
     //float mapRatio = 0.3;
-    
+
     void loadMiniBaseMap() {
       miniBaseMap = loadImage("data/" + mapColor + "/" + fileName + "_2000.png");
       miniBaseMap.resize(4*displayU, 4*displayV);
