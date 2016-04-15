@@ -12,7 +12,8 @@ DeliveryMatrix deliveryMatrix = new DeliveryMatrix();
 
 float demandSupplied;
 float sumTotalCost;
-float[] histogram = new float[20];
+int HISTOGRAM_DIVISIONS = 30;
+float[] histogram = new float[HISTOGRAM_DIVISIONS];
 float histogramMax;
 
 void updateOutput() { 
@@ -63,9 +64,11 @@ void updateFacilitiesList() {
           facilitiesList.add(new Facility(1, u, v, 2000, 10, 2, true,  false));
           break;
         case 2: // LARGE STORE
-          facilitiesList.add(new Facility(2, u, v,   200, 10, 2, true,  true));
+          //facilitiesList.add(new Facility(2, u, v,   200, 10, 2, true,  true));
+          facilitiesList.add(new Facility(2, u, v,   800, 10, 2, true,  true));
           break;
         case 3: // SMALL STORE
+          //facilitiesList.add(new Facility(3, u, v,   200, 10, 2, true,  true));
           facilitiesList.add(new Facility(3, u, v,   40, 10, 2, true,  true));
           break;
         case 4: // SPOKE

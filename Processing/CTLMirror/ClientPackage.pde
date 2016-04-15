@@ -104,11 +104,16 @@ class ClientPackage {
   }
   
   void sendPackage() {
-    if (viaUDP) {
-      udp.send( packageString, clientAddress, clientPort );
-      //println("Package sent from CTLMirror to Pixelizer");
-      //println(packageString);
-      clearPackage();
+    switch(dataProtocol) {
+      case 0:
+        udp.send( packageString, clientAddress, clientPort );
+        //println("Package sent from CTLMirror to Pixelizer");
+        //println(packageString);
+        clearPackage();
+        break;
+      case 1:
+        
+        break;
     }
   }
 }
