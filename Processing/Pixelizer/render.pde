@@ -644,7 +644,7 @@ void renderBasemap(PGraphics graphic) {
 
           i.text("Demand Potential", 0, legendPix - 35);
           i.text("Source: 2010 U.S. Census", 0, legendPix - 20);
-          i.text(int(demandMIN) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+          i.text(int(POP_RENDER_MIN) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
           i.text(int(demandMAX) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix+10);
         }
 
