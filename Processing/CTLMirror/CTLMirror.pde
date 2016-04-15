@@ -1,6 +1,9 @@
 // This is a simple script that mimics the UDP behavior of CTL's Math Model
 // It receives a UDP String and Returns an output String
 
+JSONArray CTL_OUTPUT = loadJSONArray("/Users/irawinder/Gits/LastMilePixelizer/Processing/CTLMirror/list_of_strings_880.json");
+//JSONArray CTL_OUTPUT = loadJSONArray("/Users/eblanc5/code/GitHub/LastMilePixelizer/Processing/CTLMirror/list_of_strings_880.json");
+
 int dataProtocol = 1;
 // 0 - UDP
 // 1 - TCP
