@@ -12,7 +12,8 @@ DeliveryMatrix deliveryMatrix = new DeliveryMatrix();
 
 float demandSupplied;
 float sumTotalCost;
-float[] histogram = new float[20];
+int HISTOGRAM_DIVISIONS = 30;
+float[] histogram = new float[HISTOGRAM_DIVISIONS];
 float histogramMax;
 
 void updateOutput() { 

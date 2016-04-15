@@ -1,4 +1,6 @@
-float MAX_DELIVERY_COST_RENDER = 30.0;
+// Used for Delivery Cost Map and Histogram
+float MAX_DELIVERY_COST_RENDER = 50.0;
+
 float MAX_TOTAL_COST_RENDER = 90.0;
 float POP_RENDER_MIN = 10.0; // per 1 SQ KM
 
@@ -60,7 +62,7 @@ void renderTable() {
 
   // Draws a Google Satellite Image
   renderBasemap(table);
-
+  
   if (showPopulationData){
     table.image(p, 0, 0);
   }
@@ -454,43 +456,65 @@ void renderBasemap(PGraphics graphic) {
           // Only loads data within bounds of dataset
           if (u+gridPanU>=0 && u+gridPanU<gridU && v+gridPanV>=0 && v+gridPanV<gridV) {
 
-//            if ( pop[u][v] > POP_RENDER_MIN ) {
-              float value;
-              //output.noStroke(); // No lines draw around grid cells
-              output.strokeWeight(1);
-              output.stroke(background);
-              if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
-                value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
-                if (value >= 0 && value != Float.POSITIVE_INFINITY) {
-                  output.fill(lerpColor(from, to, value));
-                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
-                }
-              }
 
-              if (showTotalCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
-                value = totalCost[u+gridPanU][v+gridPanV]/MAX_TOTAL_COST_RENDER;
-                if (value > 0  && value != Float.POSITIVE_INFINITY) {
-                  output.fill(lerpColor(from, to, value));
-                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
-                }
+            float value;
+            output.noStroke(); // No lines draw around grid cells
+            //output.strokeWeight(1);
+            //output.stroke(background);
+            if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
+              value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
+              if (value >= 0 && value != Float.POSITIVE_INFINITY) {
+                output.fill(lerpColor(from, to, value));
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
+            }
 
-              if (showAllocation && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
-                value = allocation[u+gridPanU][v+gridPanV];
-                if (value != 0) {
+            if (showTotalCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
+              value = totalCost[u+gridPanU][v+gridPanV]/MAX_TOTAL_COST_RENDER;
+              if (value > 0  && value != Float.POSITIVE_INFINITY) {
+                output.fill(lerpColor(from, to, value));
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
+            }
+
+            //if (showAllocation && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
+            if (pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
+              value = allocation[u+gridPanU][v+gridPanV];
+              if (value != 0) {
+                if (showAllocation) {
                   output.fill(value/facilitiesList.size()*255, 255, 255, 175); // Temp Color Gradient
                   output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
                 }
-              }
 
-              if (showVehicle) {
-                value = vehicle[u+gridPanU][v+gridPanV];
-                if (value != 0) {
-                  output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
-                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+                int offset = 1;
+                int inset = 1;
+                output.strokeWeight(2*offset);
+                output.strokeCap(ROUND);
+                output.stroke(value/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+                
+                if (u+gridPanU > 0 && value != allocation[u+gridPanU-1][v+gridPanV]) {
+                  output.line(u*gridWidth+offset, v*gridHeight+inset, u*gridWidth+offset, (v+1)*gridHeight-inset);
+                }
+                if (u+gridPanU < gridU-1 && value != allocation[u+gridPanU+1][v+gridPanV]) {
+                  output.line((u+1)*gridWidth-offset, v*gridHeight+inset, (u+1)*gridWidth-offset, (v+1)*gridHeight-inset);
+                }
+                if (v+gridPanV > 0 && value != allocation[u+gridPanU][v+gridPanV-1]) {
+                  output.line(u*gridWidth+inset, v*gridHeight+offset, (u+1)*gridWidth-inset, v*gridHeight+offset);
+                }
+                if (v+gridPanV < gridV-1 && value != allocation[u+gridPanU][v+gridPanV+1]) {
+                  output.line(u*gridWidth+inset, (v+1)*gridHeight-offset, (u+1)*gridWidth-inset, (v+1)*gridHeight-offset);
                 }
               }
-//            }
+            }
+
+            if (showVehicle) {
+              value = vehicle[u+gridPanU][v+gridPanV];
+              if (value != 0) {
+                output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
+            }
+            
           }
         }
       }
