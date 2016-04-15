@@ -11,14 +11,11 @@ UDP udp;  // define the UDP object
 
 boolean busyImporting = false;
 boolean importReady = false;
-boolean viaUDP = true;
 
 void initUDP() {
-  if (viaUDP) {
-    udp = new UDP( this, LOCAL_PORT );
-    //udp.log( true );     // <-- printout the connection activity
-    udp.listen( true );
-  }
+  udp = new UDP( this, LOCAL_PORT );
+  //udp.log( true );     // <-- printout the connection activity
+  udp.listen( true );
 }
 
 void ImportData(String data[]) {
@@ -53,10 +50,8 @@ void receive( byte[] data, String ip, int port ) {  // <-- extended handler
 }
 
 void sendCommand(String command, int port) {
-  if (viaUDP) {
-    String dataToSend = "";
-    dataToSend += command;
-    udp.send( dataToSend, CLIENT_IP, CLIENT_PORT );
-  }
+  String dataToSend = "";
+  dataToSend += command;
+  udp.send( dataToSend, CLIENT_IP, CLIENT_PORT );
 }
 

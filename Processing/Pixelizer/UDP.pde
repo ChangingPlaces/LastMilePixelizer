@@ -9,16 +9,13 @@ import hypermedia.net.*;
 UDP udp;  // define the UDP object
 
 boolean busyImporting = false;
-boolean viaUDP = true;
 boolean changeDetected = false;
 boolean outputReady = false;
 
 void initUDP() {
-  if (viaUDP) {
-    udp = new UDP( this, portIN );
-    //udp.log( true );     // <-- printout the connection activity
-    udp.listen( true );
-  }
+  udp = new UDP( this, portIN );
+  //udp.log( true );     // <-- printout the connection activity
+  udp.listen( true );
 }
 
 void ImportData(String inputStr[]) {
@@ -28,8 +25,8 @@ void ImportData(String inputStr[]) {
     parseLastMileSimStrings(inputStr);
   } else if (inputStr[0].equals("CTL") && enableCTL) {
     //saveStrings("CTLdata.txt", inputStr);
-    parseCTLStrings(inputStr);
     if (waitingForCTL) clearOutputData();
+    parseCTLStrings(inputStr);
     waitingForCTL = false;
   } else {
     if (!enableCTL) {
@@ -47,7 +44,7 @@ void parseLastMileSimStrings(String data[]) {
 void parseCTLStrings(String data[]) {
 
   println("CTL Strings Recieved by " + LOCAL_FRIENDLY_NAME);
-
+  
   String dataType = "";
 
   for (int i=0 ; i<data.length;i++) {
@@ -82,7 +79,7 @@ void parseCTLStrings(String data[]) {
         // Converts u/v coordinates to local grid.  Results in data being "lost"
         u_local = int( (CTL_SCALE/gridSize)*u_local );
         v_local = gridV - int( (CTL_SCALE/gridSize)*v_local ) - 1;
-
+        
         //println("Choose data Type");
         if (u_local < gridU && v_local < gridV) {
           if (dataType.equals(CTL_COST_TOTAL)) {
@@ -166,9 +163,7 @@ void receive( byte[] data, String ip, int port ) {  // <-- extended handler
 }
 
 void sendCommand(String command, int port) {
-  if (viaUDP) {
-    String dataToSend = "";
-    dataToSend += command;
-    udp.send( dataToSend, "localhost", port );
-  }
+  String dataToSend = "";
+  dataToSend += command;
+  udp.send( dataToSend, "localhost", port );
 }
