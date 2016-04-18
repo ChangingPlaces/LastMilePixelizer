@@ -4,7 +4,7 @@ float MAX_DELIVERY_COST_RENDER = 50.0;
 float MAX_TOTAL_COST_RENDER = 90.0;
 float POP_RENDER_MIN = 10.0; // per 1 SQ KM
 
-    // How big your table is, in pixels
+// How big your table is, in pixels
 int tableWidth = 800;
 int tableHeight = int(tableWidth * float(displayV)/displayU);
 
