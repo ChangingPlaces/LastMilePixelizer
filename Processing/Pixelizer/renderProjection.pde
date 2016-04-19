@@ -103,8 +103,8 @@ public class projApplet extends PApplet {
     offscreen = createGraphics(TABLE_IMAGE_HEIGHT, TABLE_IMAGE_HEIGHT);
 
     try{
-      ks.load(sketchPath("settings/keystone.xml"));
-      println("Keystone config loaded -> "+sketchPath("settings/keystone.xml"));
+      ks.load(sketchPath("keystone.xml"));
+      println("Keystone config loaded -> "+sketchPath("keystone.xml"));
     } catch(RuntimeException e){
       println("No Keystone.xml.  Save one first if you want to load one.");
     }
@@ -146,14 +146,14 @@ public class projApplet extends PApplet {
 
       case 'l':
         // loads the saved layout
-        ks.load(sketchPath("settings/keystone.xml"));
-        println("Keystone config loaded -> "+sketchPath("settings/keystone.xml"));
+        ks.load(sketchPath("keystone.xml"));
+        println("Keystone config loaded -> "+sketchPath("keystone.xml"));
         break;
 
       case 's':
         // saves the layout
-        ks.save(sketchPath("settings/keystone.xml"));
-        println("Keystone config saved -> "+sketchPath("settings/keystone.xml"));
+        ks.save(sketchPath("keystone.xml"));
+        println("Keystone config saved -> "+sketchPath("keystone.xml"));
         break;
 
       case '`':

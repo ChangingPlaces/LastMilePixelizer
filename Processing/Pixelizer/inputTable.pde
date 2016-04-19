@@ -363,6 +363,8 @@ void fauxPieces(int code, int[][][] pieces, int maxID) {
 
 //Global settings that change between testing & deployment
 void loadGlobalSettings(){
+
+  println("keystone.xml path->"+sketchPath(""));
   Table settings_table;
 
   settings_table = loadTable("settings/global_settings.csv","header");
