@@ -52,7 +52,7 @@ boolean hideWallyWorld = false;
 boolean showMainMenu = true;
 boolean showFrameRate = false;
 
-boolean showStores = true;
+boolean showStores = false;
 boolean showDeliveryData = false;
 boolean showPopulationData = true;
 boolean showBasemap = true;
@@ -64,9 +64,9 @@ boolean showObstacles = false;
 boolean showForm = true;
 
 boolean showOutputData = true;
-boolean showDeliveryCost = false;
+boolean showDeliveryCost = true;
 boolean showTotalCost = false;
-boolean showAllocation = true;
+boolean showAllocation = false;
 boolean showVehicle = false;
 
 //Walmart Logo
@@ -136,7 +136,7 @@ void setup() {
 
       //Load Walmart "Spark" Logo
       wmt_logo = loadImage("Walmart_Spark.png");
-
+       
       systemOS = System.getProperty("os.name").substring(0,3);
       println(systemOS);
 }

@@ -335,123 +335,165 @@ void mouseClicked() {
 }
 
 void keyPressed() {
+  
+  boolean switched = false;
+  boolean projectorMoved = false;
+  
   switch(key) {
     case 'h': // "Hide Main Menu (h)"     // 0
       toggleMainMenu();
+      switched = true;
       break;
 
     case 'n': // "Next City (n)"          // 0
       nextModeIndex();
+      switched = true;
       break;
     case 'p': // "Print Screenshot (p)"   // 1
       printScreen();
+      switched = true;
       break;
 
     case 'd': // "Delivery Counts (d)",   // 2
       setDeliveries(getButtonIndex(buttonNames[2]));
+      switched = true;
       break;
     case 't': // "Tote Counts (t)",       // 3
       setTotes(getButtonIndex(buttonNames[3]));
+      switched = true;
       break;
     case 'o': // "Store Source (o)",      // 4
       setSource(getButtonIndex(buttonNames[4]));
+      switched = true;
       break;
     case 'a': // "Avg Doorstep Time (a)"  // 5
       setDoorstep(getButtonIndex(buttonNames[5]));
+      switched = true;
       break;
 
     case 's': // "Store Locations (s)"    // 6
       setStores(getButtonIndex(buttonNames[6]));
+      switched = true;
       break;
 
     case 'l': // "Align Left (l)",        // 7
       alignLeft();
+      switched = true;
       break;
     case 'r': // "Align Right (r)"        // 8
       alignRight();
+      switched = true;
       break;
 //    case 'c': // "Align Center (c)"       // 9
 //      alignCenter();
 //      break;
     case 'i': // "Invert Colors (i)"      // 10
       invertColors();
+      switched = true;
       break;
 
     case '3': // "2km per pixel",         // 11
       setGridSize(2.0, getButtonIndex(buttonNames[11]));
+      switched = true;
       break;
     case '2': // "1km per pixel",         // 12
       setGridSize(1.0, getButtonIndex(buttonNames[12]));
+      switched = true;
       break;
     case '1': // "500m per pixel",        // 13
       setGridSize(0.5, getButtonIndex(buttonNames[13]));
+      switched = true;
       break;
 
     case 'm': // "Show Map (m)",          // 14
       toggleBaseMap(getButtonIndex(buttonNames[14]));
+      switched = true;
       break;
     case 'f': // "Show Framerate" (f)",   // 15
       toggleFramerate(getButtonIndex(buttonNames[15]));
+      switched = true;
       break;
     case 'D': // "Show Delivery Data (D)",  // 16
       toggleDeliveryData(getButtonIndex(buttonNames[16]));
       break;
     case 'P': // "Show Population Data (P)",  // 17
       togglePopulationData(getButtonIndex(buttonNames[17]));
+      switched = true;
       break;
     case 'u': // "Population Counts (u)",   // 18
       setPop(getButtonIndex(buttonNames[18]));
+      switched = true;
       break;
     case 'e': // "Household Counts (e)",    // 19
       setHousing(getButtonIndex(buttonNames[19]));
+      switched = true;
       break;
     case 'R': //  "Recenter Grid (R)",      // 20
       resetGridParameters();
+      switched = true;
       break;
     case '`': //  "Enable Projection (`)"   // 21
       toggleProjection(getButtonIndex(buttonNames[21]));
+      switched = true;
       break;
     case 'z': //  "Randomize Pieces (z)"    // 22
       toggleRandomPieces();
+      switched = true;
       break;
     case 'I': //  "Show Input Data (I)",    // 23
       toggleInputData(getButtonIndex(buttonNames[23]));
+      switched = true;
       break;
     case 'F': //  "Piece Forms (F)",        // 24
       setPieceForm();
+      switched = true;
       break;
     case 'A': //  "Piece Data (A)"          // 25
       setPieceData();
+      switched = true;
       break;
     case 'O': //  "Show Output Data (O)"    // 26
       toggleOutputData(getButtonIndex(buttonNames[26]));
+      switched = true;
       break;
     case 'C': //  "Delivery Cost (C)",          // 27
       setDeliveryCost();
+      switched = true;
       break;
     case 'T': //  "Total Cost (T)"              // 28
       setTotalCost();
+      switched = true;
       break;
     case 'L': //  "Facility Allocation (L)",    // 29
       setAllocation();
+      switched = true;
       break;
     case 'v': //  "Vehicle Allocation (v)"      // 30
       setVehicle();
+      switched = true;
       break;
 
     // No Buttons
     case ' ': // Send data to CTL
       enableCTL = !enableCTL;
       waitingForCTL = false;
+      switched = true;
       break;
     case '-':
       projH--;
       saveProjectorLocation();
+      projectorMoved = true;
       break;
     case '+':
       projH++;
       saveProjectorLocation();
+      projectorMoved = true;
       break;
+  }
+  
+  if (switched) {
+    reRender();
+    switched = false;
   }
 
   //------arrow keys and how to code keys that aren't characters exactly-----
@@ -459,24 +501,32 @@ void keyPressed() {
     if (keyCode == LEFT) {
       projU--;
       saveProjectorLocation();
+      projectorMoved = true;
     }  
     if (keyCode == RIGHT) {
       projU++;
       saveProjectorLocation();
+      projectorMoved = true;
     }  
     if (keyCode == DOWN) {
       projV++;
       saveProjectorLocation();
+      projectorMoved = true;
     }  
     if (keyCode == UP) {
       projV--;
       saveProjectorLocation();
+      projectorMoved = true;
     }
-    
     println("Projector Location: " + projU, projV, projH);
   }
-
-  reRender();
+  
+  if (projectorMoved) {
+    renderDynamicTableLayers(input);
+    projectorMoved = false;
+  }
+  
+  // reRender();
 }
 
 // variables for Scroll Bar

@@ -1,8 +1,10 @@
-float MAX_DELIVERY_COST_RENDER = 30.0;
+// Used for Delivery Cost Map and Histogram
+float MAX_DELIVERY_COST_RENDER = 50.0;
+
 float MAX_TOTAL_COST_RENDER = 90.0;
 float POP_RENDER_MIN = 10.0; // per 1 SQ KM
 
-    // How big your table is, in pixels
+// How big your table is, in pixels
 int tableWidth = 800;
 int tableHeight = int(tableWidth * float(displayV)/displayU);
 
@@ -24,7 +26,7 @@ color walmart_medium_blue = #007dc6;
 color walmart_orange = #f47321;
 color walmart_dark_green = #367c2b;
 
-boolean faux3D = false;
+boolean faux3D = true;
 boolean flagResize = true;
 
 /* Graphics Architecture:
@@ -60,7 +62,7 @@ void renderTable() {
 
   // Draws a Google Satellite Image
   renderBasemap(table);
-
+  
   if (showPopulationData){
     table.image(p, 0, 0);
   }
@@ -225,8 +227,13 @@ void renderBasemap(PGraphics graphic) {
             if (pop[u+gridPanU][v+gridPanV] > 10.0*sq(gridSize)) {
               normalized = findPopFill(p, pop[u+gridPanU][v+gridPanV]);
               // Doesn't draw a rectangle for values of 0
-              p.noStroke(); // No lines draw around grid cells
-              p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              //p.noStroke(); // No lines draw around grid cells
+              //p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              
+              for (int i=0; i<normalized*100; i++) {
+                //p.stroke(textColor);
+                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 2, 2);
+              }
             }
 
             //STORES
@@ -304,7 +311,7 @@ void renderBasemap(PGraphics graphic) {
         try {
         // heatmap value is normalized to a value between 0 and 1;
     //      normalized = ( sqrt(sqrt(pop)) - sqrt(sqrt(popMIN)))/sqrt(sqrt(popMAX-popMIN));
-            normalized = ( sqrt(pop) - sqrt(popMIN))/sqrt(popMAX-popMIN);
+            normalized = ( sqrt(pop) - sqrt(popMIN))/sqrt(0.5*popMAX-popMIN);
     //      normalized = ( pop - popMIN)/(popMAX-popMIN);
         } catch(Exception ex) {
           normalized = (0 - popMIN)/(popMAX-popMIN);
@@ -360,6 +367,8 @@ void renderBasemap(PGraphics graphic) {
           input.stroke(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
           input.strokeWeight(4);
           input.rect(current.u*gridWidth, current.v*gridHeight, gridWidth, gridHeight);
+          input.fill(textColor);
+          input.text(facilitiesList.get(i).ID, current.u*gridWidth, current.v*gridHeight);
         }
       }
 
@@ -394,8 +403,8 @@ void renderBasemap(PGraphics graphic) {
               float dV = 0;
               if (faux3D) {
                 // calculates offsets for faux 3D projection mapping
-                dU = 1.5*(TABLE_IMAGE_WIDTH/displayU) * (u - projU) / projH;
-                dV = 1.5*(TABLE_IMAGE_WIDTH/displayU) * (v - projV) / projH;
+                dU = 1.125*(TABLE_IMAGE_WIDTH/displayU) * (u - projU) / projH;
+                dV = 1.125*(TABLE_IMAGE_WIDTH/displayU) * (v - projV) / projH;
               }
 
               input.rect(u*gridWidth + dU, v*gridHeight + dV, gridWidth, gridHeight);
@@ -433,8 +442,8 @@ void renderBasemap(PGraphics graphic) {
       color from, to;
 
       //BEGIN Drawing POPULATION
-      to = color(#FF0000, 75); // Red
-      from = color(#00FF00, 75);   // Green
+      to = color(#FF0000); // Red
+      from = color(#00FF00);   // Green
 
       // Dynamically adjusts grid size to fit within canvas dimensions
       gridWidth = float(table.width)/displayU;
@@ -452,42 +461,65 @@ void renderBasemap(PGraphics graphic) {
           // Only loads data within bounds of dataset
           if (u+gridPanU>=0 && u+gridPanU<gridU && v+gridPanV>=0 && v+gridPanV<gridV) {
 
-//            if ( pop[u][v] > POP_RENDER_MIN ) {
-              float value;
-              output.noStroke(); // No lines draw around grid cells
 
-              if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
-                value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
-                if (value >= 0 && value != Float.POSITIVE_INFINITY) {
-                  output.fill(lerpColor(from, to, value));
-                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
-                }
+            float value;
+            output.noStroke(); // No lines draw around grid cells
+            //output.strokeWeight(1);
+            //output.stroke(background);
+            if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
+              value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
+              if (value >= 0 && value != Float.POSITIVE_INFINITY) {
+                output.fill(lerpColor(from, to, value));
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
+            }
 
-              if (showTotalCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
-                value = totalCost[u+gridPanU][v+gridPanV]/MAX_TOTAL_COST_RENDER;
-                if (value > 0  && value != Float.POSITIVE_INFINITY) {
-                  output.fill(lerpColor(from, to, value));
-                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
-                }
+            if (showTotalCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
+              value = totalCost[u+gridPanU][v+gridPanV]/MAX_TOTAL_COST_RENDER;
+              if (value > 0  && value != Float.POSITIVE_INFINITY) {
+                output.fill(lerpColor(from, to, value));
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
+            }
 
-              if (showAllocation && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
-                value = allocation[u+gridPanU][v+gridPanV];
-                if (value != 0) {
+            //if (showAllocation && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
+            if (pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
+              value = allocation[u+gridPanU][v+gridPanV];
+              if (value != 0) {
+                if (showAllocation) {
                   output.fill(value/facilitiesList.size()*255, 255, 255, 175); // Temp Color Gradient
                   output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
                 }
-              }
 
-              if (showVehicle) {
-                value = vehicle[u+gridPanU][v+gridPanV];
-                if (value != 0) {
-                  output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
-                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+                int offset = 1;
+                int inset = 1;
+                output.strokeWeight(2*offset);
+                output.strokeCap(ROUND);
+                output.stroke(value/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+                
+                if (u+gridPanU > 0 && value != allocation[u+gridPanU-1][v+gridPanV]) {
+                  output.line(u*gridWidth+offset, v*gridHeight+inset, u*gridWidth+offset, (v+1)*gridHeight-inset);
+                }
+                if (u+gridPanU < gridU-1 && value != allocation[u+gridPanU+1][v+gridPanV]) {
+                  output.line((u+1)*gridWidth-offset, v*gridHeight+inset, (u+1)*gridWidth-offset, (v+1)*gridHeight-inset);
+                }
+                if (v+gridPanV > 0 && value != allocation[u+gridPanU][v+gridPanV-1]) {
+                  output.line(u*gridWidth+inset, v*gridHeight+offset, (u+1)*gridWidth-inset, v*gridHeight+offset);
+                }
+                if (v+gridPanV < gridV-1 && value != allocation[u+gridPanU][v+gridPanV+1]) {
+                  output.line(u*gridWidth+inset, (v+1)*gridHeight-offset, (u+1)*gridWidth-inset, (v+1)*gridHeight-offset);
                 }
               }
-//            }
+            }
+
+            if (showVehicle) {
+              value = vehicle[u+gridPanU][v+gridPanV];
+              if (value != 0) {
+                output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
+            }
+            
           }
         }
       }
@@ -534,9 +566,9 @@ void renderBasemap(PGraphics graphic) {
         i.strokeWeight(3);
         i.line(0, -TABLE_IMAGE_HEIGHT/2, 3*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2);
         i.fill(textColor);
-        i.text("Total Daily Demand", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
+        i.text("Total Demand Potential", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
         i.text(int(dailyDemand(popTotal)) + " deliveries", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
-
+        
         // Draw Demand Met
         float ratio = (demandSupplied/dailyDemand(popTotal));
 
@@ -548,14 +580,16 @@ void renderBasemap(PGraphics graphic) {
         i.strokeWeight(3);
         i.line(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN, 3.25*STANDARD_MARGIN, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN);
         i.strokeWeight(1);
-        i.text("Daily Demand Met", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
-        i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
-
+        if (ratio < 0.98) {
+          i.text("Daily Demand Supplied", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
+          i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
+        }
+        
         float average = sumTotalCost/demandSupplied;
         i.fill(#FFFF00);
-        i.text("Average Cost: " + average + " per delivery", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
+        i.text("Average Cost: " + int(average*100)/100.0 + " per delivery", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
         i.fill(textColor);
-
+        
         //Histogram
         int histogramHeight = 120;
         int histogramWidth = 8*STANDARD_MARGIN;
@@ -563,7 +597,7 @@ void renderBasemap(PGraphics graphic) {
           i.line(0, 0, histogramWidth, 0);
 
           // Average Indicator
-          float x_position = histogramWidth*average/MAX_DELIVERY_COST_RENDER;
+          float x_position = histogramWidth*(average/MAX_DELIVERY_COST_RENDER);
           i.strokeWeight(1);
           i.stroke(#FFFF00);
           i.line(x_position, -histogramHeight - 10, x_position, 10);
@@ -610,7 +644,7 @@ void renderBasemap(PGraphics graphic) {
 
           i.text("Demand Potential", 0, legendPix - 35);
           i.text("Source: 2010 U.S. Census", 0, legendPix - 20);
-          i.text(int(demandMIN) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+          i.text(int(POP_RENDER_MIN) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
           i.text(int(demandMAX) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix+10);
         }
 

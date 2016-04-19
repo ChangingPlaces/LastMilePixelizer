@@ -1,3 +1,7 @@
+int dataProtocol = 1;
+// 0 - UDP
+// 1 - TCP
+
 // CTL Web Address
 String CTL_ADDRESS = "localhost";
 int CTL_PORT = 6252;
@@ -113,10 +117,16 @@ class ClientPackage {
   }
   
   void sendPackage() {
-    if (viaUDP) {
-      udp.send( packageString, clientAddress, clientPort );
-      //println(packageString);
-      clearPackage();
+    switch(dataProtocol) {
+      case 0:
+        udp.send( packageString, clientAddress, clientPort );
+        //println(packageString);
+        clearPackage();
+        break;
+      case 1:
+        clientSocket = new SocketClient( packageString, clientAddress, clientPort );
+        clearPackage();
+        break;
     }
   }
 }
