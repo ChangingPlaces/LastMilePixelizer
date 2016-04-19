@@ -44,7 +44,7 @@ void parseLastMileSimStrings(String data[]) {
 void parseCTLStrings(String data[]) {
 
   println("CTL Strings Recieved by " + LOCAL_FRIENDLY_NAME);
-  
+
   String dataType = "";
 
   for (int i=0 ; i<data.length;i++) {
@@ -79,7 +79,7 @@ void parseCTLStrings(String data[]) {
         // Converts u/v coordinates to local grid.  Results in data being "lost"
         u_local = int( (CTL_SCALE/gridSize)*u_local );
         v_local = gridV - int( (CTL_SCALE/gridSize)*v_local ) - 1;
-        
+
         //println("Choose data Type");
         if (u_local < gridU && v_local < gridV) {
           if (dataType.equals(CTL_COST_TOTAL)) {
@@ -160,10 +160,4 @@ void receive( byte[] data, String ip, int port ) {  // <-- extended handler
     busyImporting = true;
     ImportData(split);
   }
-}
-
-void sendCommand(String command, int port) {
-  String dataToSend = "";
-  dataToSend += command;
-  udp.send( dataToSend, "localhost", port );
 }
