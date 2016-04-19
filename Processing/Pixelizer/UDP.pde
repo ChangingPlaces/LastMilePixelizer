@@ -78,7 +78,7 @@ void parseCTLStrings(String data[]) {
 
         // Converts u/v coordinates to local grid.  Results in data being "lost"
         u_local = int( (CTL_SCALE/gridSize)*u_local );
-        v_local = gridV - int( (CTL_SCALE/gridSize)*v_local ) - 1;
+        v_local = int( (CTL_SCALE/gridSize)*v_local ) - 1;
 
         //println("Choose data Type");
         if (u_local < gridU && v_local < gridV) {

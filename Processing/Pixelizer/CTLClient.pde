@@ -31,36 +31,36 @@ boolean enableCTL = false;
 void sendCTLData() {
   if (!waitingForCTL) {
     waitingForCTL = true;
-    println("sending data to stl ...");
+    println("sending data to CTL optimizer ...");
     dataForCTL.addToPackage("facilities", facilities, gridSize);
     dataForCTL.addToPackage("market", market, gridSize);
     dataForCTL.addToPackage("obstacles", obstacles, gridSize);
     dataForCTL.sendPackage();
-    println("data sent to CTL");
+    println("data sent to CTL optimizer");
   }
 }
 
 // A Class that handles and sends a matrix of data formatted for the scale of the reciever
 class ClientPackage {
-  
+
   String packageString;
   int VOID_VALUE = 0;
-  
+
   String clientAddress;
   int clientPort;
   float clientScale;
-  
+
   ClientPackage(String address, int port, float scale) {
     packageString = "";
     // Define Package Name
     packageString += LOCAL_FRIENDLY_NAME;
     packageString += "\n";
-    
+
     clientAddress = address;
     clientPort = port;
     clientScale = scale;
   }
-  
+
   // addToPackage() appends a TSV-style matrix to the packageString:
   //  PIXELIZER
   //  gridU  72
@@ -79,25 +79,25 @@ class ClientPackage {
   //  6  9  1
   //  6  137  1
   //  26  101  1
-  //  ... 
-  
+  //  ...
+
   void addToPackage( String packageName, int[][] input, float localScale) {
-    
+
     // Define Package Name
     packageString += packageName;
     packageString += "\n";
-    
+
     int uDisaggregated, vDisaggregated;
-    
+
     // Define Package Data
     for (int u=0; u<input.length; u++) {
       for (int v=0; v<input[0].length; v++) {
         if (input[u][v] != VOID_VALUE) {
-          
+
           // Converts local u,v values to client coordinate system
           uDisaggregated = int(u*localScale/clientScale) + 2;
           vDisaggregated = int(v*localScale/clientScale) + 1;
-          
+
           packageString += uDisaggregated;
           packageString += ",";
           packageString += vDisaggregated;
@@ -108,14 +108,14 @@ class ClientPackage {
       }
     }
   }
-  
+
   void clearPackage() {
     // Define Package Name
     packageString = "";
     packageString += LOCAL_FRIENDLY_NAME;
     packageString += "\n";
   }
-  
+
   void sendPackage() {
     switch(dataProtocol) {
       case 0:
@@ -133,21 +133,21 @@ class ClientPackage {
 
 // A Class that receives and handles a matrix of data from an external client
 class OutputPackage {
-  
+
   String packageString;
   int VOID_VALUE = 0;
-  
+
   float clientScale;
-  
+
   OutputPackage(float scale) {
     packageString = "";
     clientScale = scale;
   }
-  
+
   void readPackage( String output, float localScale) {
     this.packageString = output;
   }
-  
+
   void clearPackage() {
     packageString = "";
   }
