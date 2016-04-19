@@ -76,6 +76,10 @@ PImage wmt_logo;
 Menu mainMenu, hideMenu;
 
 void setup() {
+
+  // Load Global Settings
+  loadGlobalSettings();
+
   size(screenWidth, screenHeight, P3D);
 
   // Frame Options
@@ -113,9 +117,6 @@ void setup() {
 
       // Initializes Facility Configurations
       updateFacilitiesList();
-
-      // Load Global Settings
-      loadGlobalSettings();
 
   // Functions called during setup, but also called again at other points
 

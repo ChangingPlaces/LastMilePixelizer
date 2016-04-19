@@ -3,12 +3,12 @@ screenWidth,1920
 screenHeight,1080
 projectorWidth,1920
 projectorHeight,1200
-projectorOffset,1842
+projectorOffset,1920
 hideWallyWorld,false
 portIN,6152
 dataProtocol,UDP
 CTL_ADDRESS,localhost
 CTL_PORT,6252
-POP_RENDER_MIN,10.0
+POP_RENDER_MIN,1.0
 MAX_TOTAL_COST_RENDER,90.0
 MAX_DELIVERY_COST_RENDER,70.0

@@ -374,15 +374,15 @@ void loadGlobalSettings(){
     String setting_id = row.getString("global_variable");
     //Turn on/off logo
     if (setting_id.equals("hideWallyWorld")){
-      if(row.getString("g_value")=="false"){ hideWallyWorld = false;}
+      if(row.getString("g_value").equals("false")){ hideWallyWorld = false;}
       else {hideWallyWorld = true;}
       println("Global setting loaded -> " + setting_id +"=" +hideWallyWorld);
     }
     //Data Protocol
     else if(setting_id.equals("dataProtocol")){
-      if(row.getString("g_value")=="UDP"){ dataProtocol = 0;}
+      if(row.getString("g_value").equals("UDP")){ dataProtocol = 0;}
       else {dataProtocol = 1;}
-      println("Global setting loaded -> " + setting_id +"=" +dataProtocol);
+      println("Global setting loaded -> " + setting_id +"=" +dataProtocol +"<-"+row.getString("g_value"));
     }
     //CTL UPD Port IN
     else if(setting_id.equals("portIN")){
