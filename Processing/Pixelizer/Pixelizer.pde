@@ -114,6 +114,9 @@ void setup() {
       // Initializes Facility Configurations
       updateFacilitiesList();
 
+      // Load Global Settings
+      loadGlobalSettings();
+
   // Functions called during setup, but also called again at other points
 
       // Resets the scale, resolution and extents of analysis area
@@ -136,7 +139,7 @@ void setup() {
 
       //Load Walmart "Spark" Logo
       wmt_logo = loadImage("Walmart_Spark.png");
-       
+
       systemOS = System.getProperty("os.name").substring(0,3);
       println(systemOS);
 }

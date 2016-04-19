@@ -1,0 +1,14 @@
+global_variable,g_value
+screenWidth,1842
+screenHeight,1026
+projectorWidth,1920
+projectorHeight,1200
+projectorOffset,1842
+hideWallyWorld,false
+portIN,6152
+dataProtocol,UDP
+CTL_ADDRESS,localhost
+CTL_PORT,6252
+POP_RENDER_MIN,10.0
+MAX_TOTAL_COST_RENDER,90.0
+MAX_DELIVERY_COST_RENDER,70.0
