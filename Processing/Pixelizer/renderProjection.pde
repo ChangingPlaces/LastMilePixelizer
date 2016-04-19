@@ -1,5 +1,5 @@
 //
-// This is a script that allows one to open a new canvas for the purpose 
+// This is a script that allows one to open a new canvas for the purpose
 // of simple 2D projection mapping, such as on a flat table surface
 //
 // Right now, only appears to work in windows...
@@ -7,18 +7,18 @@
 // To use this example in the real world, you need a projector
 // and a surface you want to project your Processing sketch onto.
 //
-// Simply press the 'c' key and drag the corners of the 
+// Simply press the 'c' key and drag the corners of the
 // CornerPinSurface so that they
 // match the physical surface's corners. The result will be an
-// undistorted projection, regardless of projector position or 
+// undistorted projection, regardless of projector position or
 // orientation.
 //
 // You can also create more than one Surface object, and project
 // onto multiple flat surfaces using a single projector.
 //
-// This extra flexbility can comes at the sacrifice of more or 
+// This extra flexbility can comes at the sacrifice of more or
 // less pixel resolution, depending on your projector and how
-// many surfaces you want to map. 
+// many surfaces you want to map.
 //
 
 import javax.swing.JFrame;
@@ -54,7 +54,7 @@ public class PFrame extends JFrame {
     setLocation(projectorOffset, 0);
     applet = new projApplet();
     setResizable(false);
-    setUndecorated(true); 
+    setUndecorated(true);
     setAlwaysOnTop(true);
     add(applet);
     applet.init();
@@ -89,43 +89,44 @@ public void resetProjection2D() {
 
 public class projApplet extends PApplet {
   public void setup() {
-    // Keystone will only work with P3D or OPENGL renderers, 
+    // Keystone will only work with P3D or OPENGL renderers,
     // since it relies on texture mapping to deform
     size(projectorWidth, projectorHeight, P2D);
-    
+
     ks = new Keystone(this);;
-    
+
     reset();
   }
-  
+
   public void reset() {
     surface = ks.createCornerPinSurface(TABLE_IMAGE_HEIGHT, TABLE_IMAGE_HEIGHT, 20);
     offscreen = createGraphics(TABLE_IMAGE_HEIGHT, TABLE_IMAGE_HEIGHT);
-    
+
     try{
-      ks.load();
+      ks.load("settings/keystone.xml");
+      println("Keystone config loaded -> settings/keystone.xml");
     } catch(RuntimeException e){
       println("No Keystone.xml.  Save one first if you want to load one.");
     }
   }
-  
+
   public void draw() {
-    
+
     // Convert the mouse coordinate into surface coordinates
-    // this will allow you to use mouse events inside the 
-    // surface from your screen. 
+    // this will allow you to use mouse events inside the
+    // surface from your screen.
     PVector surfaceMouse = surface.getTransformedMouse();
-    
+
     // most likely, you'll want a black background to minimize
     // bleeding around your projection area
     background(0);
-    
+
     // Draw the scene, offscreen
     renderCanvas(offscreen);
     surface.render(offscreen);
-  
+
   }
-  
+
   void renderCanvas(PGraphics p) {
     // Draw the scene, offscreen
     p.beginDraw();
@@ -134,26 +135,28 @@ public class projApplet extends PApplet {
     p.image(projector, margin.width, 0);
     p.endDraw();
   }
-  
+
   void keyPressed() {
     switch(key) {
       case 'c':
-        // enter/leave calibration mode, where surfaces can be warped 
+        // enter/leave calibration mode, where surfaces can be warped
         // and moved
         ks.toggleCalibration();
         break;
-  
+
       case 'l':
         // loads the saved layout
-        ks.load();
+        ks.load("settings/keystone.xml");
+        println("Keystone config loaded -> settings/keystone.xml");
         break;
-  
+
       case 's':
         // saves the layout
-        ks.save();
+        ks.save("settings/keystone.xml");
+        println("Keystone config saved -> settings/keystone.xml");
         break;
-      
-      case '`': 
+
+      case '`':
         if (displayProjection2D) {
           displayProjection2D = false;
           closeProjection2D();
@@ -204,4 +207,3 @@ void saveProjectorLocation() {
   projectorLocation.setInt(0, "H", (int)projH);  // Projector Height
   saveTable(projectorLocation, "settings/projector.tsv");
 }
-
