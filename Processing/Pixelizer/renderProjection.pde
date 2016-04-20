@@ -28,8 +28,6 @@ import deadpixel.keystone.*;
 boolean displayProjection2D = false;
 //int projectorOffset = screenWidth;
 
-boolean testProjectorOnMac = false;
-
 // defines Keystone settings from xml file in parent folder
 Keystone ks;
 

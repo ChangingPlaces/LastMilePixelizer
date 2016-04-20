@@ -3,40 +3,42 @@
 // May include "VOID" if you which to leave a gap between menu buttons
 String[] menuOrder =
 {
+  "VOID",
   "Next City (n)",
-  "Randomize Pieces (z)",
+  "VOID",
   "VOID",
   "2km per pixel (3)",
   "1km per pixel (2)",
   "500m per pixel (1)",
   "Recenter Grid (R)",
   "VOID",
-  "Show Input Data (I)",
-  "Piece Forms (F)",
-  "Piece Data (A)",
+  "Show Demand Data (u)",
   "VOID",
   "Show Output Data (O)",
   "Delivery Cost (C)",
-  "Total Cost (T)",
   "Facility Allocation (L)",
   "Vehicle Allocation (v)",
   "VOID",
   "2015 Store Locations (s)",
   "2015 Delivery Data (D)",
-  "Delivery Counts (d)",
-  "Tote Counts (t)",
+  "Deliveries (d)",
+  "Totes (t)",
   "Store Source (o)",
-  "Avg Doorstep Time (a)",
   "VOID",
-  "Show Population Data (P)",
-  "Population Counts (u)",
-  "Household Counts (e)",
   "VOID",
-  "Show Basemap (m)",
-  "Invert Colors (i)",
-  "Show Framerate (f)",
+  "VOID",
+  "VOID",
+  "VOID",
+  "VOID",
+  "VOID",
+  "VOID",
+  "VOID",
+  "Show Piece Forms (F)",
+  "Randomize Pieces (z)",
   "Enable Projection (`)",
-  "Print Screenshot (p)"
+  "VOID",
+  "VOID",
+  "VOID"
 };
 
 // Define how many button of which type in this array
@@ -45,8 +47,8 @@ String[] buttonNames =
 {
   "Next City (n)",           // 0
   "Print Screenshot (p)",    // 1
-  "Delivery Counts (d)",     // 2
-  "Tote Counts (t)",         // 3
+  "Deliveries (d)",          // 2
+  "Totes (t)",               // 3
   "Store Source (o)",        // 4
   "Avg Doorstep Time (a)",   // 5
   "2015 Store Locations (s)",// 6
@@ -61,7 +63,7 @@ String[] buttonNames =
   "Show Framerate (f)",      // 15
   "2015 Delivery Data (D)",  // 16
   "Show Population Data (P)",// 17
-  "Population Counts (u)",   // 18
+  "Show Demand Data (u)",    // 18
   "Household Counts (e)",    // 19
   "Recenter Grid (R)",       // 20
   "Enable Projection (`)",   // 21
@@ -74,7 +76,6 @@ String[] buttonNames =
   "Total Cost (T)",          // 28
   "Facility Allocation (L)", // 29
   "Vehicle Allocation (v)"   // 30
-
 };
 
 int getButtonIndex(String name) {
@@ -98,8 +99,6 @@ void loadMenu(int screenWidth, int screenHeight) {
   mainMenu = new Menu(screenWidth, screenHeight, 170, 20, 2, menuOrder, align);
   // Selects one of the mutually exclusive heatmps
   depressHeatmapButtons();
-  // Selects one of the mutually exclusive population maps
-  depressPopulationButtons();
   // Selects one of the mutually exclusive pixel scales
   depressZoomButtons(gridSize);
   // Selects one of the mutually exclusive Input Data Types
@@ -111,18 +110,17 @@ void loadMenu(int screenWidth, int screenHeight) {
   pressButton(showBasemap, getButtonIndex(buttonNames[14]));
   pressButton(showFrameRate, getButtonIndex(buttonNames[15]));
   pressButton(showDeliveryData, getButtonIndex(buttonNames[16]));
-  pressButton(showPopulationData, getButtonIndex(buttonNames[17]));
   pressButton(displayProjection2D, getButtonIndex(buttonNames[21]));
 
-  if (!showPopulationData) {
-    for (int i=18; i<=19; i++) {
-      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
-    }
-  } else {
-    for (int i=18; i<=19; i++) {
-      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
-    }
-  }
+  // if (!showPopulationData) {
+  //   for (int i=18; i<=19; i++) {
+  //     mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
+  //   }
+  // } else {
+  //   for (int i=18; i<=19; i++) {
+  //     mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
+  //   }
+  // }
 
   if (!showDeliveryData) {
     for (int i=2; i<=5; i++) {
@@ -157,6 +155,7 @@ void loadMenu(int screenWidth, int screenHeight) {
   mainMenu.buttons[getButtonIndex(buttonNames[0])].isPressed = true;
   mainMenu.buttons[getButtonIndex(buttonNames[1])].isPressed = true;
   mainMenu.buttons[getButtonIndex(buttonNames[10])].isPressed = true;
+  mainMenu.buttons[getButtonIndex(buttonNames[18])].isPressed = true;
   mainMenu.buttons[getButtonIndex(buttonNames[20])].isPressed = true;
   mainMenu.buttons[getButtonIndex(buttonNames[22])].isPressed = true;
 }
@@ -268,6 +267,7 @@ void mouseClicked() {
 
   //function18
   if(mainMenu.buttons[getButtonIndex(buttonNames[18])].over()){
+    togglePopulationDataOneButton(getButtonIndex(buttonNames[18]));
     setPop(getButtonIndex(buttonNames[18]));
   }
 
@@ -335,10 +335,10 @@ void mouseClicked() {
 }
 
 void keyPressed() {
-  
+
   boolean switched = false;
   boolean projectorMoved = false;
-  
+
   switch(key) {
     case 'h': // "Hide Main Menu (h)"     // 0
       toggleMainMenu();
@@ -490,29 +490,29 @@ void keyPressed() {
       projectorMoved = true;
       break;
   }
-  
+
   if (switched) {
     reRender();
     switched = false;
   }
 
   //------arrow keys and how to code keys that aren't characters exactly-----
-  if (key == CODED) { 
+  if (key == CODED) {
     if (keyCode == LEFT) {
       projU--;
       saveProjectorLocation();
       projectorMoved = true;
-    }  
+    }
     if (keyCode == RIGHT) {
       projU++;
       saveProjectorLocation();
       projectorMoved = true;
-    }  
+    }
     if (keyCode == DOWN) {
       projV++;
       saveProjectorLocation();
       projectorMoved = true;
-    }  
+    }
     if (keyCode == UP) {
       projV--;
       saveProjectorLocation();
@@ -520,12 +520,12 @@ void keyPressed() {
     }
     println("Projector Location: " + projU, projV, projH);
   }
-  
+
   if (projectorMoved) {
     renderDynamicTableLayers(input);
     projectorMoved = false;
   }
-  
+
   // reRender();
 }
 
@@ -595,11 +595,12 @@ void mouseReleased() {
     }
     dragging  = false;
     loadBasemap();
+
+    scroll_x_0 = scroll_x;
+    scroll_y_0 = scroll_y;
+    changeDetected = true;
+    reRender();
   }
-  scroll_x_0 = scroll_x;
-  scroll_y_0 = scroll_y;
-  changeDetected = true;
-  reRender();
 }
 
 // Show or Hide Main Menu Items
@@ -703,6 +704,7 @@ void setPieceData() {
 }
 
 void setDeliveryCost() {
+  outputMode="cost per order";
   showAllocation = false;
   showVehicle = false;
   showDeliveryCost = true;
@@ -713,6 +715,7 @@ void setDeliveryCost() {
 }
 
 void setTotalCost() {
+  outputMode="total grid cost";
   showAllocation = false;
   showVehicle = false;
   showDeliveryCost = false;
@@ -723,6 +726,7 @@ void setTotalCost() {
 }
 
 void setAllocation() {
+  outputMode="allocation";
   showAllocation = true;
   showVehicle = false;
   showDeliveryCost = false;
@@ -733,6 +737,7 @@ void setAllocation() {
 }
 
 void setVehicle() {
+  outputMode="vehicle";
   showAllocation = false;
   showVehicle = true;
   showDeliveryCost = false;
@@ -795,6 +800,13 @@ void toggleDeliveryData(int button) {
       mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
     }
   }
+}
+
+//One Button version of original togglePopulationData
+void togglePopulationDataOneButton(int button) {
+  showPopulationData = toggle(showPopulationData);
+  reRenderMiniMap(miniMap);
+  pressButton(showPopulationData, button);
 }
 
 void togglePopulationData(int button) {
@@ -889,7 +901,7 @@ void depressHeatmapButtons() {
 void depressPopulationButtons() {
 
   int min = getButtonIndex(buttonNames[18]);
-  int max = getButtonIndex(buttonNames[19]);
+  int max = getButtonIndex(buttonNames[18]);
 
   int button = min;
   if (popMode.equals("POP10")) {

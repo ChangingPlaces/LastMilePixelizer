@@ -48,6 +48,9 @@ int screenHeight = 1026;
 
 boolean hideWallyWorld = false;
 
+//Flag to test projector on Mac
+boolean testProjectorOnMac = true;
+
 // Set this to true to display the main menu upon start
 boolean showMainMenu = true;
 boolean showFrameRate = false;
@@ -79,6 +82,7 @@ void setup() {
 
   // Load Global Settings
   loadGlobalSettings();
+  initDashboard();
 
   size(screenWidth, screenHeight, P3D);
 

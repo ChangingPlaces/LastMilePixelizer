@@ -380,6 +380,12 @@ void loadGlobalSettings(){
       else {hideWallyWorld = true;}
       println("Global setting loaded -> " + setting_id +"=" +hideWallyWorld);
     }
+    //Test projector on Mac
+    else if (setting_id.equals("testProjectorOnMac")){
+      if(row.getString("g_value").equals("false")){ testProjectorOnMac = false;}
+      else {testProjectorOnMac = true;}
+      println("Global setting loaded -> " + setting_id +"=" +testProjectorOnMac);
+    }
     //Data Protocol
     else if(setting_id.equals("dataProtocol")){
       if(row.getString("g_value").equals("UDP")){ dataProtocol = 0;}

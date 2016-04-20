@@ -62,7 +62,7 @@ void renderTable() {
 
   // Draws a Google Satellite Image
   renderBasemap(table);
-  
+
   if (showPopulationData){
     table.image(p, 0, 0);
   }
@@ -96,7 +96,7 @@ void renderTable() {
 void renderScreen() {
   screen.beginDraw();
   screen.clear();
-  renderInfo(i, 2*TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH, STANDARD_MARGIN, mapRatio*TABLE_IMAGE_WIDTH, mapRatio*TABLE_IMAGE_HEIGHT);
+  renderInfo(i, mapRatio*TABLE_IMAGE_WIDTH, mapRatio*TABLE_IMAGE_HEIGHT);
   screen.image(i, 0, 0);
 
   // Draws Menu
@@ -129,7 +129,7 @@ void reRender() {
   renderLegends();
 
   // Renders Text
-  renderInfo(i, 2*TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH, STANDARD_MARGIN, mapRatio*TABLE_IMAGE_WIDTH, mapRatio*TABLE_IMAGE_HEIGHT);
+  renderInfo(i, mapRatio*TABLE_IMAGE_WIDTH, mapRatio*TABLE_IMAGE_HEIGHT);
 }
 
 // Graphics Objects for Data Layers
@@ -229,7 +229,7 @@ void renderBasemap(PGraphics graphic) {
               // Doesn't draw a rectangle for values of 0
               //p.noStroke(); // No lines draw around grid cells
               //p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
-              
+
               for (int i=0; i<normalized*100; i++) {
                 //p.stroke(textColor);
                 p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 2, 2);
@@ -496,7 +496,7 @@ void renderBasemap(PGraphics graphic) {
                 output.strokeWeight(2*offset);
                 output.strokeCap(ROUND);
                 output.stroke(value/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
-                
+
                 if (u+gridPanU > 0 && value != allocation[u+gridPanU-1][v+gridPanV]) {
                   output.line(u*gridWidth+offset, v*gridHeight+inset, u*gridWidth+offset, (v+1)*gridHeight-inset);
                 }
@@ -519,7 +519,7 @@ void renderBasemap(PGraphics graphic) {
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
-            
+
           }
         }
       }
@@ -545,19 +545,31 @@ void renderBasemap(PGraphics graphic) {
 
 // Methods for drawing text information on Screen
 
-    void renderInfo(PGraphics i, int x_0, int y_0, float w, float h) {
-      i.beginDraw();
-      i.clear();
+    void renderInfo(PGraphics i, float w, float h) {
+        i.beginDraw();
+        i.clear();
 
-      // Draw Rectangle around main canvas
-      i.noFill();
-      i.stroke(textColor);
-      i.strokeWeight(1);
-      i.rect(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
+        // Draw Rectangle around main canvas
+        i.noFill();
+        i.stroke(textColor);
+        i.strokeWeight(1);
+        i.rect(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
 
-      i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
+        // Main Info (Under MiniMap)
+        i.fill(walmart_yellow);
+        i.text(fileName.toUpperCase(), TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, 2*STANDARD_MARGIN + h);
+        i.fill(textColor);
+        i.text("Last Mile Network Design", TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, 2*STANDARD_MARGIN + h +15);
 
-        // Draw Total Demand Potential
+
+        //////////////// Draw Total Demand Potential
+
+        //Translate to Right Pane, Bottom Left corner
+        //i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
+
+        //Translate to Left Pane, Bottom Left corner
+        i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
+
         i.fill(#666666);
         i.noStroke();
         i.rect(0, -TABLE_IMAGE_HEIGHT/2, 2*STANDARD_MARGIN, TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN);
@@ -568,7 +580,7 @@ void renderBasemap(PGraphics graphic) {
         i.fill(textColor);
         i.text("Total Demand Potential", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
         i.text(int(dailyDemand(popTotal)) + " deliveries", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
-        
+
         // Draw Demand Met
         float ratio = (demandSupplied/dailyDemand(popTotal));
 
@@ -584,43 +596,51 @@ void renderBasemap(PGraphics graphic) {
           i.text("Daily Demand Supplied", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
           i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
         }
-        
-        float average = sumTotalCost/demandSupplied;
-        i.fill(#FFFF00);
-        i.text("Average Cost: " + int(average*100)/100.0 + " per delivery", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
-        i.fill(textColor);
-        
+
         //Histogram
-        int histogramHeight = 120;
-        int histogramWidth = 8*STANDARD_MARGIN;
-        i.translate(0, -2.0/3*TABLE_IMAGE_HEIGHT - 30);
-          i.line(0, 0, histogramWidth, 0);
+        //Translate 2/3 up the Image Height (bottom of histogram)
+        i.translate(0, -2.0/3*TABLE_IMAGE_HEIGHT);
 
-          // Average Indicator
-          float x_position = histogramWidth*(average/MAX_DELIVERY_COST_RENDER);
-          i.strokeWeight(1);
-          i.stroke(#FFFF00);
-          i.line(x_position, -histogramHeight - 10, x_position, 10);
-          i.stroke(textColor);
+        int histogramHeight = int(1.0/3.0*TABLE_IMAGE_HEIGHT - h - 2*STANDARD_MARGIN); //Used to be 120
+        int histogramWidth = int(w); //Used to be 8*STANDARD_MARGIN
 
-          for (int j=0; j<histogram.length; j++) {
-            i.rect(j*float(histogramWidth)/histogram.length,
-              -histogram[j]/histogramMax*histogramHeight,
-              float(histogramWidth)/histogram.length,
-              histogram[j]/histogramMax*histogramHeight);
-          }
-        i.translate(0, +2.0/3*TABLE_IMAGE_HEIGHT + 30);
+        //Average Cost per Delivery Text
+        float average = sumTotalCost/demandSupplied;
+        i.fill(walmart_yellow);
+        i.text("Avg. Cost: " + int(average*100)/100.0 + " per delivery", 0, 15);
+        i.fill(textColor);
+        //Histogram bottom line
+        i.line(0, 0, histogramWidth, 0);
+        // Average Indicator vertical line
+        float x_position = histogramWidth*(average/MAX_DELIVERY_COST_RENDER);
+        i.strokeWeight(1);
+        i.stroke(walmart_yellow);
+        i.line(x_position, -histogramHeight - 10, x_position, 10);
+        i.stroke(textColor);
+        //histogram bars
+        for (int j=0; j<histogram.length; j++) {
+          i.rect(j*float(histogramWidth)/histogram.length,
+            -histogram[j]/histogramMax*histogramHeight,
+            float(histogramWidth)/histogram.length,
+            histogram[j]/histogramMax*histogramHeight);
+        }
+        //Undo Histogram Translate
+        i.translate(0, +2.0/3*TABLE_IMAGE_HEIGHT);
 
-      i.translate(-(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
+        //Undo Demand Potential Translate
+        i.translate(-(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
+
+        //////////////// End Draw Total Demand Potential
 
 
-      i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
+        ////////////////  Draw Scales
+        // Translate to left pane, bottom left corner
+        i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
 
-        // Draw Scale
-
+        // Draw Zoom Scale
         int scale_0 = 10;
         int scale_1 = int(w + STANDARD_MARGIN);
-        i.translate(-scale_0, 0);
+        i.translate(-scale_0, 0); //Translate
         float scalePix = float(TABLE_IMAGE_HEIGHT)/displayV;
         i.translate(0, -4*scalePix);
         i.strokeWeight(1);
@@ -629,8 +649,9 @@ void renderBasemap(PGraphics graphic) {
         i.line(2*scale_0, 0, 2*scale_0, -scalePix);
         i.line(2*scale_0, -3*scalePix, 2*scale_0, -4*scalePix);
         i.text(4*gridSize + " km", 0, -1.5*scalePix);
-        i.translate(scale_0, 0);
+        i.translate(scale_0, 0); //Undo translate
 
+        // Draw Demand Scale
         if (showPopulationData) {
           float legendPix = -STANDARD_MARGIN-4*scalePix-legendP.height;
           // Draw Legends
@@ -642,19 +663,59 @@ void renderBasemap(PGraphics graphic) {
           demandMIN = int(dailyDemand(popMIN+1));
           demandMAX = int(dailyDemand(popMAX));
 
-          i.text("Demand Potential", 0, legendPix - 35);
-          i.text("Source: 2010 U.S. Census", 0, legendPix - 20);
+          i.text("Demand Potential", 0, legendPix - 20);
           i.text(int(POP_RENDER_MIN) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
           i.text(int(demandMAX) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix+10);
         }
 
-        if (showDeliveryData) {
-          float legendPix = -3*STANDARD_MARGIN-4*scalePix-2*legendH.height-20;
+        //Undo Left Pane Translate
+        i.translate(-(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
+
+        // Translate to right pane, bottom left corner
+        i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
+
+        //Show either Output or Delivery Data Scales
+        if (showOutputData){
+          float legendPix = -STANDARD_MARGIN-4*scalePix-legendP.height;
+          if (outputMode.equals("allocation")) {
+            float normalized;
+            int column = -1;
+            i.text("Optimal Facility Allocations", 0, legendPix - 35);
+            for (int j=0; j<storeID.size(); j++) {
+              if (j % 8 == 0) {
+                column++;
+              }
+              normalized = findHeatmapFill(i, (float)storeID.get(j));
+              for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
+            }
+          }
+          else if (outputMode.equals("vehicle")) {
+            float normalized;
+            int column = -1;
+            i.text("Optimal Vehicle Assignment", 0, legendPix - 35);
+            for (int j=0; j<storeID.size(); j++) {
+              if (j % 8 == 0) {
+                column++;
+              }
+              normalized = findHeatmapFill(i, (float)storeID.get(j));
+              for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
+            }
+          }
+          else{
+            // Draw Legends
+            i.image(legendH, 0, legendPix);
+            i.text("Optimal Cost", 0, legendPix - 20);
+            i.text(int(heatmapMIN+1) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+            i.text(int(heatmapMAX) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix+10);
+          }
+        }
+        else if (showDeliveryData) {
+          //float legendPix = -3*STANDARD_MARGIN-4*scalePix-2*legendH.height-20;
+          float legendPix = -STANDARD_MARGIN-4*scalePix-legendP.height;
           if (valueMode.equals("source")) {
             float normalized;
             int column = -1;
-            i.text("Delivery Facility Allocations", 0, legendPix - 35);
-            i.text("Source: Walmart 2015", 0, legendPix - 20);
+            i.text("2015 Delivery Facility Allocations", 0, legendPix - 20);
             for (int j=0; j<storeID.size(); j++) {
               if (j % 8 == 0) {
                 column++;
@@ -665,26 +726,36 @@ void renderBasemap(PGraphics graphic) {
           } else {
             // Draw Legends
             i.image(legendH, 0, legendPix);
-            i.text("Delivery Data", 0, legendPix - 35);
-            i.text("Source: Walmart 2015", 0, legendPix - 20);
+            i.text("2015 Delivery Data", 0, legendPix - 20);
             i.text(int(heatmapMIN+1) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
             i.text(int(heatmapMAX) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix+10);
           }
         }
 
-      i.translate(0, +4*scalePix);
+      //i.translate(0, +4*scalePix);
 
-      i.translate(-(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
+      // Undo right pane translate
+      i.translate(-(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
 
+      ////////////////  END Draw Scales
+
+      //////////////// BEGIN Credits
       i.fill(textColor);
       i.textAlign(RIGHT);
-      i.text("Pixelizer v1.0", screen.width - 10, screen.height - STANDARD_MARGIN - 15);
-      i.text("Ira Winder, jiw@mit.edu", screen.width - 10, screen.height - STANDARD_MARGIN);
+      i.text("Pixelizer v2.0", screen.width - 10, screen.height - STANDARD_MARGIN - 30);
+      i.text("Ira Winder, jiw@mit.edu", screen.width - 10, screen.height - STANDARD_MARGIN-15);
+      i.text("Walmart Last Mile Team", screen.width - 10, screen.height - STANDARD_MARGIN);
       i.fill(textColor);
+      //////////////// END Credits
 
 
 
+      //////////////// Grid INFO Summary Values
 
+      // Translate to Right Pane, Top Right corner under "miniMap"
+      i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, 2*STANDARD_MARGIN + h);
+
+      // Define correct suffix/prefix for heatmap
       i.textAlign(LEFT);
       String suffix = "";
       String prefix = "";
@@ -696,21 +767,13 @@ void renderBasemap(PGraphics graphic) {
         suffix = " seconds";
       }
 
-      i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, 2*STANDARD_MARGIN + h + 10);
-
-      // Main Info
-      i.fill(walmart_yellow);
-      i.text(fileName.toUpperCase(), 0, 0);
-      i.fill(textColor);
-      i.text("Last Mile Network Design", 0, 15);
-
       if (showFrameRate) {
-        i.text("FrameRate: " + frameRate, 0, 45);
+        i.text("FrameRate: " + frameRate, 0, STANDARD_MARGIN);
       }
 
-      // Grid INFO Summary Values
-      i.translate(0, 80);
-      i.fill(walmart_dark_green);
+      //Translate to print grid information
+      i.translate(0, 2*STANDARD_MARGIN);
+      i.fill(walmart_yellow);
       i.text("GRID INFO", 0, 0);
       i.fill(textColor);
       i.text("2015 Delivery Data:", 0, 20);
@@ -777,7 +840,8 @@ void renderBasemap(PGraphics graphic) {
 
       // Draw MiniMap
       i.beginDraw();
-      i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, y_0);
+      // Translate to Left Pane, Top Right corner
+      i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, STANDARD_MARGIN);
       i.image(miniMap, 0, 0, w, h);
       i.noFill();
       i.stroke(textColor);
