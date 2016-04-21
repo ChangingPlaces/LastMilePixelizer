@@ -67,7 +67,7 @@ void renderTable() {
     table.image(p, 0, 0);
   }
 
-  if (showDeliveryData) {
+  if (showHistoricDeliveryData) {
     table.image(h, 0, 0);
   }
 
@@ -769,7 +769,7 @@ void renderBasemap(PGraphics graphic) {
         //Show either Output or Delivery Data Scales
         if (showOutputData){
           float legendPix = -STANDARD_MARGIN-4*scalePix-legendP.height;
-          if (outputMode.equals("allocation")) {
+          if (showAllocation) {
             float normalized;
             int column = -1;
             i.text("Optimal Facility Allocations", 0, legendPix - 35);
@@ -781,7 +781,7 @@ void renderBasemap(PGraphics graphic) {
               for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
             }
           }
-          else if (outputMode.equals("vehicle")) {
+          else if (showVehicle) {
             float normalized;
             int column = -1;
             i.text("Optimal Vehicle Assignment", 0, legendPix - 35);
@@ -797,14 +797,14 @@ void renderBasemap(PGraphics graphic) {
             // Draw Legends
             i.image(legendH, 0, legendPix);
             i.text("Optimal Cost", 0, legendPix - 20);
-            i.text(int(heatmapMIN+1) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
-            i.text(int(heatmapMAX) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix+10);
+            i.text(int(heatmapMIN+1) + " " + outputMode, STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+            i.text(int(heatmapMAX) + " " + outputMode, STANDARD_MARGIN + legendP.width, legendPix+10);
           }
         }
-        else if (showDeliveryData) {
+        else if (showHistoricDeliveryData) {
           //float legendPix = -3*STANDARD_MARGIN-4*scalePix-2*legendH.height-20;
           float legendPix = -STANDARD_MARGIN-4*scalePix-legendP.height;
-          if (valueMode.equals("source")) {
+          if (showHistoricCatchments) {
             float normalized;
             int column = -1;
             i.text("2015 Delivery Facility Allocations", 0, legendPix - 20);
@@ -1078,7 +1078,7 @@ void renderBasemap(PGraphics graphic) {
               miniMap.rect(u*pixel_per_U,v*pixel_per_V, pixel_per_U, pixel_per_V);
             }
           }
-          if (showDeliveryData) {
+          if (showHistoricDeliveryData) {
             if (heatmap[u][v] > 0) {
               // HEATMAP
               normalized = findHeatmapFill(miniMap, heatmap[u][v]);

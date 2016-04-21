@@ -55,8 +55,7 @@ boolean testProjectorOnMac = true;
 boolean showMainMenu = true;
 boolean showFrameRate = false;
 
-boolean showStores = false;
-boolean showDeliveryData = false;
+boolean showStores = true;
 boolean showPopulationData = true;
 boolean showBasemap = true;
 
@@ -66,11 +65,16 @@ boolean showMarket = false;
 boolean showObstacles = false;
 boolean showForm = true;
 
-boolean showOutputData = true;
-boolean showDeliveryCost = true;
+boolean showOutputData = false;
+boolean showDeliveryCost = false;
 boolean showTotalCost = false;
 boolean showAllocation = false;
 boolean showVehicle = false;
+
+boolean showHistoricDeliveryData = true;
+boolean showHistoricDeliveries = false;
+boolean showHistoricCatchments = false;
+
 
 //Walmart Logo
 PImage wmt_logo;

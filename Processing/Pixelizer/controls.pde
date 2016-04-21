@@ -4,6 +4,8 @@
 String[] menuOrder =
 {
   "VOID",
+  "VOID",
+  "VOID",
   "Next City (n)",
   "VOID",
   "VOID",
@@ -12,18 +14,18 @@ String[] menuOrder =
   "500m per pixel (1)",
   "Recenter Grid (R)",
   "VOID",
-  "Show Demand Data (u)",
-  "VOID",
-  "Show Output Data (O)",
-  "Delivery Cost (C)",
-  "Facility Allocation (L)",
-  "Vehicle Allocation (v)",
   "VOID",
   "2015 Store Locations (s)",
-  "2015 Delivery Data (D)",
-  "Deliveries (d)",
-  "Totes (t)",
-  "Store Source (o)",
+  "VOID",
+  "2015 Store Catchments (o)",
+  "2015 Deliveries (d)",
+  "VOID",
+  "VOID",
+  "Demand Potential (u)",
+  "VOID",
+  "Predicted Cost (C)",
+  "Predicted Catchments (L)",
+  "Predicted Vehicles (v)",
   "VOID",
   "VOID",
   "VOID",
@@ -32,11 +34,9 @@ String[] menuOrder =
   "VOID",
   "VOID",
   "VOID",
-  "VOID",
-  "Show Piece Forms (F)",
   "Randomize Pieces (z)",
   "Enable Projection (`)",
-  "VOID",
+  "Advanced Optimization (P)",
   "VOID",
   "VOID"
 };
@@ -47,9 +47,9 @@ String[] buttonNames =
 {
   "Next City (n)",           // 0
   "Print Screenshot (p)",    // 1
-  "Deliveries (d)",          // 2
-  "Totes (t)",               // 3
-  "Store Source (o)",        // 4
+  "2015 Deliveries (d)",     // 2
+  "2015 Totes (t)",          // 3
+  "2015 Store Catchments (o)", // 4
   "Avg Doorstep Time (a)",   // 5
   "2015 Store Locations (s)",// 6
   "Align Left (l)",          // 7
@@ -62,8 +62,8 @@ String[] buttonNames =
   "Show Basemap (m)",        // 14
   "Show Framerate (f)",      // 15
   "2015 Delivery Data (D)",  // 16
-  "Show Population Data (P)",// 17
-  "Show Demand Data (u)",    // 18
+  "Advanced Optimization (P)",// 17
+  "Demand Potential (u)",    // 18
   "Household Counts (e)",    // 19
   "Recenter Grid (R)",       // 20
   "Enable Projection (`)",   // 21
@@ -72,10 +72,10 @@ String[] buttonNames =
   "Piece Forms (F)",         // 24
   "Piece Data (A)",          // 25
   "Show Output Data (O)",    // 26
-  "Delivery Cost (C)",       // 27
+  "Predicted Cost (C)",       // 27
   "Total Cost (T)",          // 28
-  "Facility Allocation (L)", // 29
-  "Vehicle Allocation (v)"   // 30
+  "Predicted Catchment (L)", // 29
+  "Predicted Vehicles (v)"   // 30
 };
 
 int getButtonIndex(String name) {
@@ -97,67 +97,12 @@ void loadMenu(int screenWidth, int screenHeight) {
   // number of buttons to offset downward, String[] names of buttons)
   hideMenu = new Menu(screenWidth, screenHeight, 170, 20, 0, hide, align);
   mainMenu = new Menu(screenWidth, screenHeight, 170, 20, 2, menuOrder, align);
-  // Selects one of the mutually exclusive heatmps
-  depressHeatmapButtons();
   // Selects one of the mutually exclusive pixel scales
-  depressZoomButtons(gridSize);
-  // Selects one of the mutually exclusive Input Data Types
-  depressInputButtons();
-  // Selects one of the mutually exclusive Output Data Types
-  depressOutputButtons();
-  // Checks whether these true/false button should be pressed
-  pressButton(showStores, getButtonIndex(buttonNames[6]));
-  pressButton(showBasemap, getButtonIndex(buttonNames[14]));
-  pressButton(showFrameRate, getButtonIndex(buttonNames[15]));
-  pressButton(showDeliveryData, getButtonIndex(buttonNames[16]));
-  pressButton(displayProjection2D, getButtonIndex(buttonNames[21]));
-
-  // if (!showPopulationData) {
-  //   for (int i=18; i<=19; i++) {
-  //     mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
-  //   }
-  // } else {
-  //   for (int i=18; i<=19; i++) {
-  //     mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
-  //   }
-  // }
-
-  if (!showDeliveryData) {
-    for (int i=2; i<=5; i++) {
-      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
-    }
-  } else {
-    for (int i=2; i<=5; i++) {
-      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
-    }
-  }
-
-  if (!showInputData) {
-    for (int i=24; i<=25; i++) {
-      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
-    }
-  } else {
-    for (int i=24; i<=25; i++) {
-      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
-    }
-  }
-
-  if (!showOutputData) {
-    for (int i=27; i<=30; i++) {
-      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
-    }
-  } else {
-    for (int i=27; i<=30; i++) {
-      mainMenu.buttons[getButtonIndex(buttonNames[i])].show = true;
-    }
-  }
-
-  mainMenu.buttons[getButtonIndex(buttonNames[0])].isPressed = true;
-  mainMenu.buttons[getButtonIndex(buttonNames[1])].isPressed = true;
-  mainMenu.buttons[getButtonIndex(buttonNames[10])].isPressed = true;
-  mainMenu.buttons[getButtonIndex(buttonNames[18])].isPressed = true;
-  mainMenu.buttons[getButtonIndex(buttonNames[20])].isPressed = true;
-  mainMenu.buttons[getButtonIndex(buttonNames[22])].isPressed = true;
+  pressZoomButtons(gridSize);
+  // Press store button
+  pressStoresButton(getButtonIndex(buttonNames[6]));
+  // Press demand forecast button
+  pressDemandForecastButton(getButtonIndex(buttonNames[18]));
 }
 
 // The result of each button click is defined here
@@ -187,7 +132,7 @@ void mouseClicked() {
 
   //function2
   if(mainMenu.buttons[getButtonIndex(buttonNames[2])].over()){
-    setDeliveries(getButtonIndex(buttonNames[2]));
+    toggleDeliveries(getButtonIndex(buttonNames[2]));
   }
 
   //function3
@@ -197,7 +142,7 @@ void mouseClicked() {
 
   //function4
   if(mainMenu.buttons[getButtonIndex(buttonNames[4])].over()){
-    setSource(getButtonIndex(buttonNames[4]));
+    toggleSource(getButtonIndex(buttonNames[4]));
   }
 
   //function5
@@ -207,7 +152,7 @@ void mouseClicked() {
 
   //function6
   if(mainMenu.buttons[getButtonIndex(buttonNames[6])].over()){
-    setStores(getButtonIndex(buttonNames[6]));
+    pressStoresButton(getButtonIndex(buttonNames[6]));
   }
 
 //    //function7
@@ -267,8 +212,8 @@ void mouseClicked() {
 
   //function18
   if(mainMenu.buttons[getButtonIndex(buttonNames[18])].over()){
-    togglePopulationDataOneButton(getButtonIndex(buttonNames[18]));
-    setPop(getButtonIndex(buttonNames[18]));
+    //setPop(getButtonIndex(buttonNames[18]));
+    pressDemandForecastButton(getButtonIndex(buttonNames[18]));
   }
 
   //function19
@@ -313,7 +258,7 @@ void mouseClicked() {
 
   //function27
   if(mainMenu.buttons[getButtonIndex(buttonNames[27])].over()){
-    setDeliveryCost();
+    toggleDeliveryCost();
   }
 
   //function28
@@ -323,12 +268,12 @@ void mouseClicked() {
 
   //function29
   if(mainMenu.buttons[getButtonIndex(buttonNames[29])].over()){
-    setAllocation();
+    toggleAllocation();
   }
 
   //function30
   if(mainMenu.buttons[getButtonIndex(buttonNames[30])].over()){
-    setVehicle();
+    toggleVehicle();
   }
 
   reRender();
@@ -355,7 +300,7 @@ void keyPressed() {
       break;
 
     case 'd': // "Delivery Counts (d)",   // 2
-      setDeliveries(getButtonIndex(buttonNames[2]));
+      toggleDeliveries(getButtonIndex(buttonNames[2]));
       switched = true;
       break;
     case 't': // "Tote Counts (t)",       // 3
@@ -370,23 +315,10 @@ void keyPressed() {
       setDoorstep(getButtonIndex(buttonNames[5]));
       switched = true;
       break;
-
     case 's': // "Store Locations (s)"    // 6
-      setStores(getButtonIndex(buttonNames[6]));
+      pressStoresButton(getButtonIndex(buttonNames[6]));
       switched = true;
       break;
-
-    case 'l': // "Align Left (l)",        // 7
-      alignLeft();
-      switched = true;
-      break;
-    case 'r': // "Align Right (r)"        // 8
-      alignRight();
-      switched = true;
-      break;
-//    case 'c': // "Align Center (c)"       // 9
-//      alignCenter();
-//      break;
     case 'i': // "Invert Colors (i)"      // 10
       invertColors();
       switched = true;
@@ -421,7 +353,8 @@ void keyPressed() {
       switched = true;
       break;
     case 'u': // "Population Counts (u)",   // 18
-      setPop(getButtonIndex(buttonNames[18]));
+      //setPop(getButtonIndex(buttonNames[18]));
+      pressDemandForecastButton(getButtonIndex(buttonNames[18]));
       switched = true;
       break;
     case 'e': // "Household Counts (e)",    // 19
@@ -457,7 +390,7 @@ void keyPressed() {
       switched = true;
       break;
     case 'C': //  "Delivery Cost (C)",          // 27
-      setDeliveryCost();
+      toggleDeliveryCost();
       switched = true;
       break;
     case 'T': //  "Total Cost (T)"              // 28
@@ -465,11 +398,11 @@ void keyPressed() {
       switched = true;
       break;
     case 'L': //  "Facility Allocation (L)",    // 29
-      setAllocation();
+      toggleAllocation();
       switched = true;
       break;
     case 'v': //  "Vehicle Allocation (v)"      // 30
-      setVehicle();
+      toggleVehicle();
       switched = true;
       break;
 
@@ -632,7 +565,16 @@ void printScreen() {
 
 void setDeliveries(int button) {
   valueMode = "deliveries";
-  depressHeatmapButtons();
+  depressDeliveryDataButtons();
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
+  println("valueMode: " + valueMode);
+}
+
+void toggleDeliveries(int button) {
+  showHistoricDeliveries = toggle(showHistoricDeliveries);
+  valueMode = "deliveries";
+  depressDeliveryDataButtons();
   reloadData(gridU, gridV, modeIndex);
   reRenderMiniMap(miniMap);
   println("valueMode: " + valueMode);
@@ -640,7 +582,7 @@ void setDeliveries(int button) {
 
 void setTotes(int button) {
   valueMode = "totes";
-  depressHeatmapButtons();
+  depressDeliveryDataButtons();
   reloadData(gridU, gridV, modeIndex);
   reRenderMiniMap(miniMap);
   println("valueMode: " + valueMode);
@@ -648,7 +590,16 @@ void setTotes(int button) {
 
 void setSource(int button) {
   valueMode = "source";
-  depressHeatmapButtons();
+  depressDeliveryDataButtons();
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
+  println("valueMode: " + valueMode);
+}
+
+void toggleSource(int button) {
+  showHistoricCatchments = toggle(showHistoricCatchments);
+  valueMode = "source";
+  depressDeliveryDataButtons();
   reloadData(gridU, gridV, modeIndex);
   reRenderMiniMap(miniMap);
   println("valueMode: " + valueMode);
@@ -656,17 +607,26 @@ void setSource(int button) {
 
 void setDoorstep(int button) {
   valueMode = "doorstep";
-  depressHeatmapButtons();
+  depressDeliveryDataButtons();
   reloadData(gridU, gridV, modeIndex);
   reRenderMiniMap(miniMap);
   println("valueMode: " + valueMode);
 }
 
-void setStores(int button) {
+void pressStoresButton(int button) {
   showStores = toggle(showStores);
-  pressButton(showStores, button);
+  synchButton(showStores, button);
   reRenderMiniMap(miniMap);
   println("showStores: " + showStores);
+}
+
+void pressDemandForecastButton(int button) {
+  popMode = "POP10";
+  showPopulationData = toggle(showPopulationData);
+  synchButton(showPopulationData,button);
+  reloadData(gridU, gridV, modeIndex);
+  reRenderMiniMap(miniMap);
+  println("popMode: " + popMode);
 }
 
 void setPop(int button) {
@@ -704,7 +664,7 @@ void setPieceData() {
 }
 
 void setDeliveryCost() {
-  outputMode="cost per order";
+  outputMode="cost/order";
   showAllocation = false;
   showVehicle = false;
   showDeliveryCost = true;
@@ -714,8 +674,16 @@ void setDeliveryCost() {
   reRenderMiniMap(miniMap);
 }
 
+void toggleDeliveryCost() {
+  outputMode="cost/order";
+  showDeliveryCost = toggle(showDeliveryCost);
+  renderOutputTableLayers(input);
+  depressOutputButtons();
+  reRenderMiniMap(miniMap);
+}
+
 void setTotalCost() {
-  outputMode="total grid cost";
+  outputMode="total cost";
   showAllocation = false;
   showVehicle = false;
   showDeliveryCost = false;
@@ -736,6 +704,14 @@ void setAllocation() {
   reRenderMiniMap(miniMap);
 }
 
+void toggleAllocation() {
+  outputMode="allocation";
+  showAllocation = toggle(showAllocation);
+  renderOutputTableLayers(input);
+  depressOutputButtons();
+  reRenderMiniMap(miniMap);
+}
+
 void setVehicle() {
   outputMode="vehicle";
   showAllocation = false;
@@ -747,10 +723,18 @@ void setVehicle() {
   reRenderMiniMap(miniMap);
 }
 
+void toggleVehicle() {
+  outputMode="allocation";
+  showVehicle = toggle(showVehicle);
+  renderOutputTableLayers(input);
+  depressOutputButtons();
+  reRenderMiniMap(miniMap);
+}
+
 void setGridSize(float size, int button) {
   gridSize = size;
   resetGridParameters();
-  depressZoomButtons(size);
+  pressZoomButtons(size);
   reloadData(gridU, gridV, modeIndex);
   reRenderMiniMap(miniMap);
   fauxPieces(randomType, tablePieceInput, IDMax);
@@ -760,19 +744,19 @@ void setGridSize(float size, int button) {
 void toggleBaseMap(int button) {
   showBasemap = toggle(showBasemap);
   reRenderMiniMap(miniMap);
-  pressButton(showBasemap, button);
+  synchButton(showBasemap, button);
   println("showBasemap = " + showBasemap);
 }
 
 void toggleFramerate(int button) {
   showFrameRate = toggle(showFrameRate);
-  pressButton(showFrameRate, button);
+  synchButton(showFrameRate, button);
   println("showFrameRate = " + showFrameRate);
 }
 
 void toggleProjection(int button) {
   toggle2DProjection();
-  pressButton(displayProjection2D, button);
+  synchButton(displayProjection2D, button);
   println("displayProjection2D = " + displayProjection2D);
 }
 
@@ -786,12 +770,12 @@ void toggleRandomPieces() {
 }
 
 void toggleDeliveryData(int button) {
-  showDeliveryData = toggle(showDeliveryData);
+  showHistoricDeliveryData = toggle(showHistoricDeliveryData);
   reRenderMiniMap(miniMap);
-  pressButton(showDeliveryData, button);
-  println("showDeliveryData = " + showDeliveryData);
+  synchButton(showHistoricDeliveryData, button);
+  println("showHistoricDeliveryData = " + showHistoricDeliveryData);
 
-  if (!showDeliveryData) {
+  if (!showHistoricDeliveryData) {
     for (int i=2; i<=5; i++) {
       mainMenu.buttons[getButtonIndex(buttonNames[i])].show = false;
     }
@@ -802,17 +786,10 @@ void toggleDeliveryData(int button) {
   }
 }
 
-//One Button version of original togglePopulationData
-void togglePopulationDataOneButton(int button) {
-  showPopulationData = toggle(showPopulationData);
-  reRenderMiniMap(miniMap);
-  pressButton(showPopulationData, button);
-}
-
 void togglePopulationData(int button) {
   showPopulationData = toggle(showPopulationData);
   reRenderMiniMap(miniMap);
-  pressButton(showPopulationData, button);
+  synchButton(showPopulationData, button);
   println("showPopulationData = " + showPopulationData);
 
   if (!showPopulationData) {
@@ -830,7 +807,7 @@ void toggleInputData(int button) {
   showInputData = toggle(showInputData);
   reRenderMiniMap(miniMap);
   renderDynamicTableLayers(input);
-  pressButton(showInputData, button);
+  synchButton(showInputData, button);
   println("showInputData = " + showInputData);
 
   if (!showInputData) {
@@ -848,7 +825,7 @@ void toggleOutputData(int button) {
   showOutputData = toggle(showOutputData);
   reRenderMiniMap(miniMap);
   renderOutputTableLayers(input);
-  pressButton(showOutputData, button);
+  synchButton(showOutputData, button);
   println("showOutputData = " + showOutputData);
 
   if (!showOutputData) {
@@ -870,30 +847,49 @@ void pressButton(boolean bool, int button) {
   }
 }
 
+void synchButton(boolean bool, int button) {
+  if (!bool) {
+    mainMenu.buttons[button].isPressed = false;
+  } else {
+    mainMenu.buttons[button].isPressed = true;
+  }
+}
+
+void toggleButton(int button){
+  mainMenu.buttons[button].isPressed = toggle(mainMenu.buttons[button].isPressed);
+}
+
 // Presses all buttons in a set of mutually exclusive buttons except for the index specified
 // min-max specifies a range of button indices; valueMode specifies the currently selected button
-void depressHeatmapButtons() {
+void depressDeliveryDataButtons() {
 
   int min = getButtonIndex(buttonNames[2]);
   int max = getButtonIndex(buttonNames[5]);
 
   int button = min;
+  showHistoricDeliveryData = false;
   if (valueMode.equals("deliveries")) {
     button += 0;
+    showHistoricDeliveryData = true;
   } else if (valueMode.equals("totes")) {
     button += 1;
+    showHistoricDeliveryData = true;
   } else if (valueMode.equals("source")) {
     button += 2;
+    showHistoricDeliveryData = true;
   } else if (valueMode.equals("doorstep")) {
     button += 3;
+    showHistoricDeliveryData = true;
   }
 
   // Turns all buttons off
   for(int i=min; i<=max; i++) { //heatmap buttons min-max are mutually exclusive
-    mainMenu.buttons[i].isPressed = true;
+    mainMenu.buttons[i].isPressed = false;
   }
   // highlighted the heatmap button that is activated only
-  mainMenu.buttons[button].isPressed = false;
+  if(showHistoricDeliveryData){
+    mainMenu.buttons[button].isPressed = true;
+  }
 }
 
 // Presses all buttons in a set of mutually exclusive buttons except for the index specified
@@ -934,10 +930,10 @@ void depressInputButtons() {
 
   // Turns all buttons off
   for(int i=min; i<=max; i++) { //heatmap buttons min-max are mutually exclusive
-    mainMenu.buttons[i].isPressed = true;
+    mainMenu.buttons[i].isPressed = false;
   }
-  // highlighted the heatmap button that is activated only
-  mainMenu.buttons[button].isPressed = false;
+  // highlighted the button that is activated only
+  mainMenu.buttons[button].isPressed = true;
 }
 
 // Presses all buttons in a set of mutually exclusive buttons except for the index specified
@@ -947,28 +943,33 @@ void depressOutputButtons() {
   int min = getButtonIndex(buttonNames[27]);
   int max = getButtonIndex(buttonNames[30]);
 
-  int button = min;
+  int button = min-1;
   if (showDeliveryCost) {
-    button += 0;
-  } else if (showTotalCost) {
     button += 1;
-  } else if (showAllocation) {
+  } else if (showTotalCost) {
     button += 2;
-  } else {
+  } else if (showAllocation) {
     button += 3;
+  } else if (showVehicle){
+    button += 4;
   }
 
   // Turns all buttons off
   for(int i=min; i<=max; i++) { //heatmap buttons min-max are mutually exclusive
-    mainMenu.buttons[i].isPressed = true;
+    mainMenu.buttons[i].isPressed = false;
   }
   // highlighted the heatmap button that is activated only
-  mainMenu.buttons[button].isPressed = false;
+  if(button>=min){
+    mainMenu.buttons[button].isPressed = true;
+  }
+
+  //Show output data
+  showOutputData = showDeliveryCost || showTotalCost || showAllocation || showVehicle;
 }
 
 // Presses all buttons withinin a set of mutually exclusive buttons except for the index specified
 // min-max specifies a range of button indices; size specifies the currently selected button
-void depressZoomButtons(float size) {
+void pressZoomButtons(float size) {
 
   int min = getButtonIndex(buttonNames[11]);
   int max = getButtonIndex(buttonNames[13]);
@@ -984,10 +985,10 @@ void depressZoomButtons(float size) {
 
   // Turns all buttons off
   for(int i=min; i<=max; i++) { //heatmap buttons min-max are mutually exclusive
-    mainMenu.buttons[i].isPressed = true;
+    mainMenu.buttons[i].isPressed = false;
   }
   // highlighted the heatmap button that is activated only
-  mainMenu.buttons[button].isPressed = false;
+  mainMenu.buttons[button].isPressed = true;
 }
 
 // Aligns Menue to Left
@@ -1079,16 +1080,17 @@ class Button{
     if (!isVoid) {
       graphic.smooth();
       graphic.noStroke();
+      float textButtonColor = textColor;
       if( over() ) {  // Darkens button if hovering mouse over it
-        graphic.fill(textColor, hover);
+        graphic.fill(walmart_yellow, hover);
         buttonHovering = true;
       } else if (isPressed){
-        graphic.fill(walmart_dark_blue, pressed);
+        graphic.fill(walmart_yellow, pressed);
       } else {
         graphic.fill(walmart_dark_blue, active);
       }
       graphic.rect(x, y, w, h, 5);
-      graphic.fill(walmart_yellow);
+      graphic.fill(textButtonColor);
       graphic.text(label, x + (w/2-textWidth(label)/2), y + 0.6*h); //text(str, x1, y1, x2, y2) text(label, x + 5, y + 15)
     }
   }
