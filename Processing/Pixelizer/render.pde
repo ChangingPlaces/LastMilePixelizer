@@ -564,65 +564,157 @@ void renderBasemap(PGraphics graphic) {
 
         //////////////// Draw Total Demand Potential
 
-        //Translate to Right Pane, Bottom Left corner
-        //i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
-
         //Translate to Left Pane, Bottom Left corner
         i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
 
-        i.fill(#666666);
-        i.noStroke();
-        i.rect(0, -TABLE_IMAGE_HEIGHT/2, 2*STANDARD_MARGIN, TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN);
+        if (false){
+          // Draw Potential Demand as a bar
+          // DISABLED
+          i.fill(#666666);
+          i.noStroke();
+          i.rect(0, -TABLE_IMAGE_HEIGHT/2, 2*STANDARD_MARGIN, TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN);
 
-        i.stroke(textColor);
-        i.strokeWeight(3);
-        i.line(0, -TABLE_IMAGE_HEIGHT/2, 3*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2);
-        i.fill(textColor);
-        i.text("Total Demand Potential", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
-        i.text(int(dailyDemand(popTotal)) + " deliveries", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
+          i.stroke(textColor);
+          i.strokeWeight(3);
+          i.line(0, -TABLE_IMAGE_HEIGHT/2, 3*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2);
+          i.fill(textColor);
+          i.text("Total Demand Potential", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
+          i.text(int(dailyDemand(popTotal)) + " deliveries", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
 
-        // Draw Demand Met
-        float ratio = (demandSupplied/dailyDemand(popTotal));
+          // Draw Demand Met
+          float ratio = (demandSupplied/dailyDemand(popTotal));
 
-        i.fill(#00FF00);
-        i.noStroke();
-        i.rect(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN, 2*STANDARD_MARGIN, ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN));
-        i.fill(textColor);
-        i.stroke(textColor);
-        i.strokeWeight(3);
-        i.line(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN, 3.25*STANDARD_MARGIN, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN);
-        i.strokeWeight(1);
-        if (ratio < 0.98) {
-          i.text("Daily Demand Supplied", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
-          i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
+          i.fill(#00FF00);
+          i.noStroke();
+          i.rect(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN, 2*STANDARD_MARGIN, ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN));
+          i.fill(textColor);
+          i.stroke(textColor);
+          i.strokeWeight(3);
+          i.line(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN, 3.25*STANDARD_MARGIN, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN);
+          i.strokeWeight(1);
+          if (ratio < 0.98) {
+            i.text("Daily Demand Supplied", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
+            i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
+          }
+        }
+        else{
+          //Draw dashboard
+
+          // Draw a Rectangle for the Dashboard
+          i.noFill();
+          i.stroke(textColor,80);
+          i.strokeWeight(1);
+
+          int rowStep = 18;
+          int rowStepLarge = 26;
+          int currRow = int(-2.0/3*TABLE_IMAGE_HEIGHT+3*STANDARD_MARGIN)+3*rowStep;
+          //i.rect(-1, currRow-rowStepLarge, w+1, 14*rowStep);
+          i.stroke(textColor);
+
+          i.textSize(18);
+          i.fill(walmart_yellow);
+          i.text("Dashboard",0,currRow);
+
+          //Dashboard Metric: Total Demand
+          currRow+=rowStep+rowStep/2;
+          i.textSize(12);
+          i.fill(textColor,200);
+          i.text("Demand Potential (orders)",0, currRow);
+          currRow+=rowStep;
+          i.textSize(18);
+          i.fill(textColor);
+          i.text(int(performanceDashboard[0] + performanceDashboard[1]),0,currRow);
+
+
+          //Dashboard Metric: Captured Demand
+          currRow+=rowStepLarge;
+          i.textSize(12);
+          i.fill(textColor,200);
+          i.text("Fulfilled Demand",0, currRow);
+          currRow+=rowStep;
+          i.textSize(18);
+          i.fill(textColor);
+          if ((performanceDashboard[0] + performanceDashboard[1])>0){
+            i.text(nf(100.0*(performanceDashboard[4] + performanceDashboard[5])/(performanceDashboard[0] + performanceDashboard[1]),1,1)+" %",0,currRow);
+          }
+          else {
+            i.text("-",0,currRow);
+          }
+
+          //Dashboard Metric: Total Revenue
+          currRow+=rowStepLarge;
+          i.textSize(12);
+          i.fill(textColor,200);
+          i.text("Revenue",0, currRow);
+          currRow+=rowStep;
+          i.textSize(18);
+          i.fill(textColor);
+          i.text("$ " + int(performanceDashboard[6] + performanceDashboard[7]),0,currRow);
+
+          //Dashboard Metric: Logistics Cost as % of Revenue
+          currRow+=rowStepLarge ;
+          i.textSize(12);
+          i.fill(textColor,200);
+          i.text("% Logistics Cost",0, currRow);
+          currRow+=rowStep;
+          i.textSize(18);
+          i.fill(textColor);
+          if ((performanceDashboard[6] + performanceDashboard[7])>0){
+            i.text(nf(100.0*(performanceDashboard[8] + performanceDashboard[9]+ performanceDashboard[10])/(performanceDashboard[6] + performanceDashboard[7]),1,1)+" %",0,currRow);
+          }
+          else {
+            i.text("-",0,currRow);
+          }
+
+          //Dashboard Metric: Cost per Order
+          currRow+=rowStepLarge;
+          i.textSize(12);
+          i.fill(textColor,200);
+          i.text("Cost Per Order",0, currRow);
+          currRow+=rowStep;
+          i.textSize(18);
+          i.fill(textColor);
+          if ((performanceDashboard[4] + performanceDashboard[5])>0){
+            i.text("$ " + nf((performanceDashboard[8] + performanceDashboard[9]+ performanceDashboard[10])/(performanceDashboard[4] + performanceDashboard[5]),1,1),0,currRow);
+          }
+          else {
+            i.text("-",0,currRow);
+          }
+          i.textSize(12);
         }
 
         //Histogram
         //Translate 2/3 up the Image Height (bottom of histogram)
-        i.translate(0, -2.0/3*TABLE_IMAGE_HEIGHT);
+        i.translate(0, -2.0/3*TABLE_IMAGE_HEIGHT+STANDARD_MARGIN);
 
         int histogramHeight = int(1.0/3.0*TABLE_IMAGE_HEIGHT - h - 2*STANDARD_MARGIN); //Used to be 120
         int histogramWidth = int(w); //Used to be 8*STANDARD_MARGIN
 
-        //Average Cost per Delivery Text
-        float average = sumTotalCost/demandSupplied;
-        i.fill(walmart_yellow);
-        i.text("Avg. Cost: " + int(average*100)/100.0 + " per delivery", 0, 15);
-        i.fill(textColor);
-        //Histogram bottom line
-        i.line(0, 0, histogramWidth, 0);
-        // Average Indicator vertical line
-        float x_position = histogramWidth*(average/MAX_DELIVERY_COST_RENDER);
-        i.strokeWeight(1);
-        i.stroke(walmart_yellow);
-        i.line(x_position, -histogramHeight - 10, x_position, 10);
-        i.stroke(textColor);
-        //histogram bars
-        for (int j=0; j<histogram.length; j++) {
-          i.rect(j*float(histogramWidth)/histogram.length,
-            -histogram[j]/histogramMax*histogramHeight,
-            float(histogramWidth)/histogram.length,
-            histogram[j]/histogramMax*histogramHeight);
+
+        if(demandSupplied>0){
+
+          //Average Cost per Delivery Text
+          float average = sumTotalCost/demandSupplied;
+          i.fill(walmart_yellow);
+          i.text("Average: $ " + nf(average,1,1) + " per order", 0, 20);
+          i.fill(textColor);
+          //Histogram bottom line
+          i.line(0, 0, histogramWidth, 0);
+
+          //histogram bars
+          for (int j=0; j<histogram.length; j++) {
+            i.rect(j*float(histogramWidth)/histogram.length,
+              -histogram[j]/histogramMax*histogramHeight,
+              float(histogramWidth)/histogram.length,
+              histogram[j]/histogramMax*histogramHeight);
+          }
+
+          // Average Indicator vertical line
+          float x_position = histogramWidth*(average/MAX_DELIVERY_COST_RENDER);
+          i.strokeWeight(1);
+          i.stroke(walmart_yellow);
+          i.line(x_position, -histogramHeight - 5, x_position, 5);
+          i.stroke(textColor);
         }
         //Undo Histogram Translate
         i.translate(0, +2.0/3*TABLE_IMAGE_HEIGHT);
@@ -642,7 +734,7 @@ void renderBasemap(PGraphics graphic) {
         int scale_1 = int(w + STANDARD_MARGIN);
         i.translate(-scale_0, 0); //Translate
         float scalePix = float(TABLE_IMAGE_HEIGHT)/displayV;
-        i.translate(0, -4*scalePix);
+        i.translate(0, -2*scalePix);
         i.strokeWeight(1);
         i.line(scale_0, 0, scale_1, 0);
         i.line(scale_0, -4*scalePix, scale_1, -4*scalePix);
@@ -653,7 +745,7 @@ void renderBasemap(PGraphics graphic) {
 
         // Draw Demand Scale
         if (showPopulationData) {
-          float legendPix = -STANDARD_MARGIN-4*scalePix-legendP.height;
+          float legendPix = -STANDARD_MARGIN-6*scalePix-legendP.height;
           // Draw Legends
           i.image(legendP, 0, legendPix);
 
@@ -664,8 +756,8 @@ void renderBasemap(PGraphics graphic) {
           demandMAX = int(dailyDemand(popMAX));
 
           i.text("Demand Potential", 0, legendPix - 20);
-          i.text(int(POP_RENDER_MIN) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
-          i.text(int(demandMAX) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix+10);
+          i.text(int(POP_RENDER_MIN) + " orders/day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+          i.text(int(demandMAX) + " orders/day", STANDARD_MARGIN + legendP.width, legendPix+10);
         }
 
         //Undo Left Pane Translate
@@ -779,7 +871,7 @@ void renderBasemap(PGraphics graphic) {
       i.text("2015 Delivery Data:", 0, 20);
       i.text("Population Value:", 0, 50);
       i.text("Demand Potential:", 0, 80);
-      i.text("Cost Per Delivery:", 0, 110);
+      i.text("Cost Per Order:", 0, 110);
       i.text("Total Delivery Cost:", 0, 140);
 
       i.colorMode(RGB);

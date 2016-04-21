@@ -81,8 +81,9 @@ Menu mainMenu, hideMenu;
 void setup() {
 
   // Load Global Settings
+  textSize(12);
   loadGlobalSettings();
-  initDashboard();
+
 
   size(screenWidth, screenHeight, P3D);
 
@@ -147,6 +148,9 @@ void setup() {
 
       systemOS = System.getProperty("os.name").substring(0,3);
       println(systemOS);
+
+      //Initialize the Dashboard
+      initDashboard();
 }
 
 void draw() {

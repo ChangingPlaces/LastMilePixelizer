@@ -21,6 +21,7 @@ String[] performanceDashboardLabels = new String[21]; //Tracks up to twenty metr
 void updateOutput() {
   initHistogram();
   clearOutputData();
+  clearPerformanceDashboard();
 
   // 1. Calculate All Delivery Costs. Currently distance.
   // 2. Sort All Delivery Costs
@@ -36,14 +37,14 @@ void updateOutput() {
 //Initialize the dashboard
 void initDashboard(){
 
-  performanceDashboardLabels[0]= "Market Demand - Delivery"; //Delivery demand
-  performanceDashboardLabels[1]= "Market Demand - Pickup"; //Delivery demand
-  performanceDashboardLabels[2]= "Market $ Demand - Delivery"; //Delivery demand
-  performanceDashboardLabels[3]= "Market $ Demand - Pickup"; //Delivery demand
-  performanceDashboardLabels[4]= "Satisfied Demand - Delivery"; //satisfied demand
-  performanceDashboardLabels[5]= "Satisfied Demand - Pickup"; //satisfied demand
-  performanceDashboardLabels[6]= "Revenue $ - Delivery"; //satisfied demand
-  performanceDashboardLabels[7]= "Revenue $ - Pickup"; //satisfied demand
+  performanceDashboardLabels[0]= "Demand - Delivery"; //Delivery demand
+  performanceDashboardLabels[1]= "Demand - Pickup"; //Delivery demand
+  performanceDashboardLabels[2]= "$ Demand - Delivery"; //Delivery demand
+  performanceDashboardLabels[3]= "$ Demand - Pickup"; //Delivery demand
+  performanceDashboardLabels[4]= "Deliveries"; //satisfied demand
+  performanceDashboardLabels[5]= "Pickups"; //satisfied demand
+  performanceDashboardLabels[6]= "Delivery $"; //satisfied demand
+  performanceDashboardLabels[7]= "Pickup $"; //satisfied demand
   performanceDashboardLabels[8]= "Variable Cost - Delivery"; // Total Variable Cost per order delivery
   performanceDashboardLabels[9]= "Variable Cost - Pickup"; // Total Variable Cost per order pickup
   performanceDashboardLabels[10]= "Total Fixed Cost($)"; // Total Fixed Cost
@@ -63,13 +64,14 @@ void initDashboard(){
   performanceDashboard[1] =0.0;
   performanceDashboard[2] =0.0;
   performanceDashboard[3] =0.0;
+  popMode.equals("POP10");
   for (int u=0; u<gridU; u++) {
     for (int v=0; v<gridV; v++) {
       //TODO: Add real computations later
-      performanceDashboardLabels[0] += dailyDemand(pop[u][v]);
-      performanceDashboardLabels[1] += 0.0; //Update later
-      performanceDashboardLabels[2] += 130.0*dailyDemand(pop[u][v]); //Update later
-      performanceDashboardLabels[3] += 0.0; //Update later
+      performanceDashboard[0] += dailyDemand(pop[u][v]);
+      performanceDashboard[1] += 0.0; //Update later
+      performanceDashboard[2] += 130.0*dailyDemand(pop[u][v]); //Update later
+      performanceDashboard[3] += 0.0; //Update later
 
     }
   }
@@ -226,14 +228,14 @@ void updateDashboard(int u, int v)
 {
 
   performanceDashboard[4]+= dailyDemand(pop[u][v]);//satisfied delivery demand
-  performanceDashboardLabels[5]+= 0.0; //satisfied pickup demand
-  performanceDashboardLabels[6]+= 130.0* dailyDemand(pop[u][v]); //satisfied delivery $ demand
-  performanceDashboardLabels[7]+= 0.0; //satisfied pickup $ demand
-  performanceDashboardLabels[8]+= totalCost[u][v]; // Total Variable Cost per order delivery
-  performanceDashboardLabels[9]+= 0.5; // Total Variable Cost per order pickup
+  performanceDashboard[5]+= 0.0; //satisfied pickup demand
+  performanceDashboard[6]+= 130.0* dailyDemand(pop[u][v]); //satisfied delivery $ demand
+  performanceDashboard[7]+= 0.0; //satisfied pickup $ demand
+  performanceDashboard[8]+= totalCost[u][v]; // Total Variable Cost per order delivery
+  performanceDashboard[9]+= 0.5; // Total Variable Cost per order pickup
 
   Facility currFacility = facilitiesList.get(allocation[u][v] -1);
-  performanceDashboardLabels[10]+=currFacility.fixedCost;
+  performanceDashboard[10]+=currFacility.fixedCost;
 
   switch (currFacility.ID){
     // Facility(int ID, int u, int v, int maxOrderSize, int maxFleetSize, int maxShifts, boolean delivers, boolean pickup)
@@ -271,7 +273,7 @@ float[] computeDeliveryCost(int u, int v, int facilityIndex)
 
   //TODO: Change these calculations. Simple test
   resultArray[0] = distance * 0.5 + 10;
-  resultArray[1] = 0;
+  resultArray[1] = 1;
 
   return resultArray;
 }
