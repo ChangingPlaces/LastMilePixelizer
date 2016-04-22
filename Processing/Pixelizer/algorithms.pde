@@ -210,7 +210,7 @@ void assignDeliveries() {
     // Checks if cell is already Allocated AND if Facility has Capacity
     if (!cellAllocated[u][v] && !facilitiesList.get(facilityIndex).atCapacity) {
 
-      resultArray = computeDeliveryCost(u,v,facilityIndex);
+      resultArray = computeFinalDeliveryCost(u,v,facilityIndex);
       totalCost[u][v] = resultArray[0];
       deliveryCost[u][v] = resultArray[0]/demand;
       vehicle[u][v] = int(resultArray[1]);
@@ -270,7 +270,7 @@ void updateDashboard(int u, int v)
 
 //Compute the delivery of assigning all the demand from pixel(u,v) to facility facilityIndex
 //Returns an array with the cost and the vehicle selected
-float[] computeDeliveryCost(int u, int v, int facilityIndex)
+float[] computeFinalDeliveryCost(int u, int v, int facilityIndex)
 {
   float[] resultArray = new float[2];
   float distance = gridSize*sqrt(sq(u - facilitiesList.get(facilityIndex).u) + sq(v - facilitiesList.get(facilityIndex).v)); //  Straight distance in KM
@@ -278,7 +278,7 @@ float[] computeDeliveryCost(int u, int v, int facilityIndex)
   //TODO: Change these calculations. Simple test
   float interStopDistance = gridSize/5.0;
   float vehicleCapacity = 18.0;
-  resultArray[0] = 5.0*( distance + dailyDemand(pop[u][v])*interStopDistance)*max(0.1,dailyDemand(pop[u][v])/vehicleCapacity);
+  resultArray[0] = 25.0*( distance + dailyDemand(pop[u][v])*interStopDistance)*max(0.1,dailyDemand(pop[u][v])/vehicleCapacity);
   resultArray[1] = 1;
 
   return resultArray;
