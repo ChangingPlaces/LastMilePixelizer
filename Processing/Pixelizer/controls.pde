@@ -1072,17 +1072,20 @@ class Button{
     if (!isVoid) {
       graphic.smooth();
       graphic.noStroke();
-      float textButtonColor = textColor;
-      if( over() ) {  // Darkens button if hovering mouse over it
-        graphic.fill(walmart_yellow, hover);
+      color textButtonColor = textColor;
+      if( over() ) {  // Changes textButtonColor when hovering
+        //graphic.fill(walmart_yellow, hover);
+        textButtonColor = walmart_light_green;
         buttonHovering = true;
-      } else if (isPressed){
+      }
+
+      if (isPressed){
         graphic.fill(walmart_yellow, pressed);
       } else {
         graphic.fill(walmart_dark_blue, active);
       }
       graphic.rect(x, y, w, h, 5);
-      graphic.fill(textButtonColor);
+      graphic.fill(textButtonColor,active);
       graphic.text(label, x + (w/2-textWidth(label)/2), y + 0.6*h); //text(str, x1, y1, x2, y2) text(label, x + 5, y + 15)
     }
   }

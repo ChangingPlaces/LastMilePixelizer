@@ -1,9 +1,4 @@
 global_variable,g_value
-screenWidth,1920
-screenHeight,1080
-projectorWidth,1920
-projectorHeight,1200
-projectorOffset,1920
 hideWallyWorld,false
 portIN,6152
 dataProtocol,UDP
@@ -13,5 +8,17 @@ POP_RENDER_MIN,1.0
 MAX_TOTAL_COST_RENDER,90.0
 MAX_DELIVERY_COST_RENDER,70.0
 testProjectorOnMac,false
-STANDARD_MARGIN, 5
-TABLE_IMAGE_OFFSET,250
+STANDARD_MARGIN, 25
+TABLE_IMAGE_OFFSET,550
+screenWidth,1920
+screenHeight,1080
+projectorWidth,1920
+projectorHeight,1080
+projectorOffset,1920
+screenWidth_mac,1280
+screenHeight_mac,720
+projectorWidth_mac,1280
+projectorHeight_mac,720
+projectorOffset_mac,1280
+STANDARD_MARGIN_mac, 5
+TABLE_IMAGE_OFFSET_mac,150
