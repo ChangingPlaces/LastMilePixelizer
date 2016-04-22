@@ -169,10 +169,11 @@ void draw() {
   // Decode pieces only if there is a change in Colortizer input
   if (changeDetected) {
     decodePieces();
+    clearPerformanceDashboard();
+    updateFacilitiesList();
     if (!enableAdvancedOptimization) {
-      updateFacilitiesList();
       updateOutput();
-      renderOutputTableLayers(output);
+      outputReady = true;
     } else {
       sendCTLData();
     }
@@ -206,8 +207,6 @@ void draw() {
     image(margin, 0, 0);
     image(projector, margin.width, 0);
   }
-
-  
 
   if (waitingForAdvancedOptimization){
     if(waiting_blink){

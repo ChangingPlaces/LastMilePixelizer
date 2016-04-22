@@ -21,7 +21,6 @@ String[] performanceDashboardLabels = new String[21]; //Tracks up to twenty metr
 void updateOutput() {
   initHistogram();
   clearOutputData();
-  clearPerformanceDashboard();
 
   // 1. Calculate All Delivery Costs. Currently distance.
   // 2. Sort All Delivery Costs
@@ -169,11 +168,16 @@ void calcDeliveryCost() {
 
         //Add the cost to serve from that facility
         float distance = gridSize*sqrt(sq(u - current.u) + sq(v - current.v)); //  Straight distance in KM
-        // float density = dailyDemand(pop[u][v]);
-        float currentCost = distance;
-
+        float gridDemand = dailyDemand(pop[u][v]);
+        float demandDensity = gridDemand/gridSize;
+        float currentCost;
+        if (gridDemand>0.01){
+          currentCost = distance/gridDemand;
+        }
+        else{
+          currentCost = 1000000.0;
+        }
         deliveryMatrix.addDelivery(u, v, currentCost, i);
-
       }
     }
   }
@@ -272,7 +276,9 @@ float[] computeDeliveryCost(int u, int v, int facilityIndex)
   float distance = gridSize*sqrt(sq(u - facilitiesList.get(facilityIndex).u) + sq(v - facilitiesList.get(facilityIndex).v)); //  Straight distance in KM
 
   //TODO: Change these calculations. Simple test
-  resultArray[0] = distance * 0.5 + 10;
+  float interStopDistance = gridSize/5.0;
+  float vehicleCapacity = 18.0;
+  resultArray[0] = 5.0*( distance + dailyDemand(pop[u][v])*interStopDistance)*max(0.1,dailyDemand(pop[u][v])/vehicleCapacity);
   resultArray[1] = 1;
 
   return resultArray;

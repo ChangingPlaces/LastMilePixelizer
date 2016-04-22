@@ -512,10 +512,10 @@ void renderBasemap(PGraphics graphic) {
               }
             }
 
-            if (showVehicle) {
+            if (showVehicle && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN) {
               value = vehicle[u+gridPanU][v+gridPanV];
               if (value != 0) {
-                output.fill(value/5.0*255, 255, 255, 100); // Temp Color Gradient
+                output.fill(value/50.0*255, 255, 255, 100); // Temp Color Gradient
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
@@ -706,7 +706,9 @@ void renderBasemap(PGraphics graphic) {
         if(demandSupplied>0){
 
           //Average Cost per Delivery Text
-          float average = sumTotalCost/demandSupplied;
+          //TODO: Why are these not giving the same value?
+          //float average = sumTotalCost/demandSupplied;
+          float average = (performanceDashboard[8] + performanceDashboard[9]+ performanceDashboard[10])/(performanceDashboard[4] + performanceDashboard[5]);
           i.fill(walmart_yellow);
           i.text("Average: $ " + nf(average,1,1) + " per order", 0, 20);
           i.fill(textColor);
@@ -790,19 +792,19 @@ void renderBasemap(PGraphics graphic) {
                 column++;
               }
               normalized = findHeatmapFill(i, (float)storeID.get(j));
-              for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
+              for (int k=0; k<4; k++) i.text("FacilityID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
             }
           }
           else if (showVehicle) {
             float normalized;
             int column = -1;
             i.text("Optimal Vehicle Assignment", 0, legendPix - 35);
-            for (int j=0; j<storeID.size(); j++) {
+            for (int j=0; j<2; j++) {
               if (j % 8 == 0) {
                 column++;
               }
-              normalized = findHeatmapFill(i, (float)storeID.get(j));
-              for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
+              i.fill(j/50.0*255, 255, 255, 100);
+              for (int k=0; k<4; k++) i.text("VehicleID: " + j, STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
             }
           }
           else if (showDeliveryCost || showTotalCost){
@@ -881,10 +883,9 @@ void renderBasemap(PGraphics graphic) {
       i.text("GRID INFO", 0, 0);
       i.fill(textColor);
       i.text("2015 Delivery Data:", 0, 20);
-      i.text("Population Value:", 0, 50);
-      i.text("Demand Forecast:", 0, 80);
-      i.text("Cost Per Order:", 0, 110);
-      i.text("Total Delivery Cost:", 0, 140);
+      i.text("Demand Forecast:", 0, 50);
+      i.text("Cost Per Order:", 0, 80);
+      i.text("Total Delivery Cost:", 0, 110);
 
       i.colorMode(RGB);
       i.fill(0,255,255);
@@ -899,23 +900,14 @@ void renderBasemap(PGraphics graphic) {
       }
       i.text(prefix + value + suffix, 0, 35);
 
-      // Population Figures
+      // Daily Demand Froecast
       value = "";
       if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
         value = "NO_DATA";
-      } else {
-        value += (int)getCellPop(mouseToU(), mouseToV());
-      }
-      i.text(value + " " + popMode, 0, 65);
-
-      // Daily Demand Estimate based on population
-      value = "";
-      if ((int)getCellPop(mouseToU(), mouseToV()) == -1) {
-        value = "NO_DATA";
-        i.text(value, 0, 95);
+        i.text(value, 0, 65);
       } else {
         value += dailyDemand(getCellPop(mouseToU(), mouseToV()));
-        i.text(int(float(value)*10.0)/10.0, 0, 95);
+        i.text(int(float(value)*10.0)/10.0, 0, 65);
       }
 
       // Output: Delivery Cost
@@ -923,21 +915,35 @@ void renderBasemap(PGraphics graphic) {
       if ((getCellDeliveryCost(mouseToU(), mouseToV()) == -1) ||
           getCellDeliveryCost(mouseToU(), mouseToV())==Float.POSITIVE_INFINITY) {
         value = "NO_DATA";
-        i.text(value, 0, 125);
+        i.text(value, 0, 95);
       } else {
         value += getCellDeliveryCost(mouseToU(), mouseToV());
-        i.text(int(float(value)*10.0)/10.0, 0, 125);
+        i.text(int(float(value)*10.0)/10.0, 0, 95);
       }
 
       // Output: Total Cost
       value = "";
       if (getCellTotalCost(mouseToU(), mouseToV()) == -1) {
         value = "NO_DATA";
-        i.text(value, 0, 155);
+        i.text(value, 0, 125);
       } else {
         value += getCellTotalCost(mouseToU(), mouseToV());
-        i.text(int(float(value)*10.0)/10.0, 0, 155);
+        i.text(int(float(value)*10.0)/10.0, 0, 125);
       }
+
+      //////////////// Dashboard Detail Values
+
+      int metricNum = 0;
+      i.fill(walmart_yellow);
+      i.text("DETAILED DASHBOARD (DAILY)", 0, 180);
+      int currMetricRow = 180;
+      for (metricNum=0; metricNum<performanceDashboard.length; metricNum++){
+        i.fill(textColor);
+        i.text(performanceDashboardLabels[metricNum]+":", 0, currMetricRow+=15);
+        i.fill(0,255,255);
+        i.text(int(performanceDashboard[metricNum]),150,currMetricRow);
+      }
+      i.fill(textColor);
 
       i.endDraw();
 
