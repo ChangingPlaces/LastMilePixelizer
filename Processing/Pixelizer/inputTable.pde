@@ -447,6 +447,14 @@ void loadGlobalSettings(){
       MAX_DELIVERY_COST_RENDER=row.getFloat("g_value");
       println("Global setting loaded -> " + setting_id +"=" +MAX_DELIVERY_COST_RENDER);
     }
+    else if(setting_id.equals("STANDARD_MARGIN")){
+      STANDARD_MARGIN = row.getInt("g_value");
+      println("Global setting loaded -> " + setting_id +"=" +STANDARD_MARGIN);
+    }
+    else if(setting_id.equals("TABLE_IMAGE_OFFSET")){
+      TABLE_IMAGE_OFFSET = row.getInt("g_value");
+      println("Global setting loaded -> " + setting_id +"=" +TABLE_IMAGE_OFFSET);
+    }
     else {
       println("Invalid global setting -> "+ setting_id+ "="+row.getString("g_value"));
     }

@@ -549,6 +549,18 @@ void renderBasemap(PGraphics graphic) {
         i.beginDraw();
         i.clear();
 
+        //Message indicating status of advanced Optimization
+        if (enableAdvancedOptimization){
+          fill(textColor, 160);
+          text("Advanced Optimization -> ON ", 20, 35);
+        }
+        else{
+          fill(textColor, 80);
+          text("Advanced Optimization -> OFF ", 20, 35);
+        }
+        text("(Press Spacebar to Toggle)", 20, 50);
+        fill(textColor);
+
         // Draw Rectangle around main canvas
         i.noFill();
         i.stroke(textColor);
@@ -562,7 +574,7 @@ void renderBasemap(PGraphics graphic) {
         i.text("Last Mile Network Design", TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, 2*STANDARD_MARGIN + h +15);
 
 
-        //////////////// Draw Total Demand Potential
+        //////////////// Draw Total Demand Forecast
 
         //Translate to Left Pane, Bottom Left corner
         i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
@@ -578,7 +590,7 @@ void renderBasemap(PGraphics graphic) {
           i.strokeWeight(3);
           i.line(0, -TABLE_IMAGE_HEIGHT/2, 3*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2);
           i.fill(textColor);
-          i.text("Total Demand Potential", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
+          i.text("Total Demand Forecast", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
           i.text(int(dailyDemand(popTotal)) + " deliveries", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
 
           // Draw Demand Met
@@ -619,7 +631,7 @@ void renderBasemap(PGraphics graphic) {
           currRow+=rowStep+rowStep/2;
           i.textSize(12);
           i.fill(textColor,200);
-          i.text("Demand Potential (orders)",0, currRow);
+          i.text("Demand Forecast (orders)",0, currRow);
           currRow+=rowStep;
           i.textSize(18);
           i.fill(textColor);
@@ -719,10 +731,10 @@ void renderBasemap(PGraphics graphic) {
         //Undo Histogram Translate
         i.translate(0, +2.0/3*TABLE_IMAGE_HEIGHT);
 
-        //Undo Demand Potential Translate
+        //Undo Demand Forecast Translate
         i.translate(-(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w), -(STANDARD_MARGIN + TABLE_IMAGE_HEIGHT));
 
-        //////////////// End Draw Total Demand Potential
+        //////////////// End Draw Total Demand Forecast
 
 
         ////////////////  Draw Scales
@@ -755,7 +767,7 @@ void renderBasemap(PGraphics graphic) {
           demandMIN = int(dailyDemand(popMIN+1));
           demandMAX = int(dailyDemand(popMAX));
 
-          i.text("Demand Potential", 0, legendPix - 20);
+          i.text("Demand Forecast", 0, legendPix - 20);
           i.text(int(POP_RENDER_MIN) + " orders/day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
           i.text(int(demandMAX) + " orders/day", STANDARD_MARGIN + legendP.width, legendPix+10);
         }
@@ -793,7 +805,7 @@ void renderBasemap(PGraphics graphic) {
               for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
             }
           }
-          else{
+          else if (showDeliveryCost || showTotalCost){
             // Draw Legends
             i.image(legendH, 0, legendPix);
             i.text("Optimal Cost", 0, legendPix - 20);
@@ -815,7 +827,7 @@ void renderBasemap(PGraphics graphic) {
               normalized = findHeatmapFill(i, (float)storeID.get(j));
               for (int k=0; k<4; k++) i.text("StoreID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
             }
-          } else {
+          } else if (showHistoricDeliveryData){
             // Draw Legends
             i.image(legendH, 0, legendPix);
             i.text("2015 Delivery Data", 0, legendPix - 20);
@@ -870,7 +882,7 @@ void renderBasemap(PGraphics graphic) {
       i.fill(textColor);
       i.text("2015 Delivery Data:", 0, 20);
       i.text("Population Value:", 0, 50);
-      i.text("Demand Potential:", 0, 80);
+      i.text("Demand Forecast:", 0, 80);
       i.text("Cost Per Order:", 0, 110);
       i.text("Total Delivery Cost:", 0, 140);
 

@@ -25,12 +25,12 @@ String CTL_ALLOCATION_VEHICLES = "allocation_vehicles";
 ClientPackage dataForCTL;
 OutputPackage dataFromCTL;
 
-boolean waitingForCTL = false;
-boolean enableCTL = false;
+boolean waitingForAdvancedOptimization = false;
+boolean enableAdvancedOptimization = false;
 
 void sendCTLData() {
-  if (!waitingForCTL) {
-    waitingForCTL = true;
+  if (!waitingForAdvancedOptimization) {
+    waitingForAdvancedOptimization = true;
     println("sending data to CTL optimizer ...");
     dataForCTL.addToPackage("facilities", facilities, gridSize);
     dataForCTL.addToPackage("market", market, gridSize);

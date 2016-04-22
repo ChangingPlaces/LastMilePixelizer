@@ -71,7 +71,7 @@ boolean showTotalCost = false;
 boolean showAllocation = false;
 boolean showVehicle = false;
 
-boolean showHistoricDeliveryData = true;
+boolean showHistoricDeliveryData = false;
 boolean showHistoricDeliveries = false;
 boolean showHistoricCatchments = false;
 
@@ -169,7 +169,7 @@ void draw() {
   // Decode pieces only if there is a change in Colortizer input
   if (changeDetected) {
     decodePieces();
-    if (!enableCTL) {
+    if (!enableAdvancedOptimization) {
       updateFacilitiesList();
       updateOutput();
       renderOutputTableLayers(output);
@@ -207,12 +207,9 @@ void draw() {
     image(projector, margin.width, 0);
   }
 
-  fill(textColor, 80);
-  text("CTL Optimization = " + enableCTL, 20, 35);
-  text("(Press Spacebar to Toggle)", 20, 50);
-  fill(textColor);
+  
 
-  if (waitingForCTL){
+  if (waitingForAdvancedOptimization){
     if(waiting_blink){
       fill(walmart_light_green);
       text("** OPTIMIZING **", 20, 65);

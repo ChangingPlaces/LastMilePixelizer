@@ -11,21 +11,21 @@ SocketClient clientSocket;
 boolean server = false;
 
 public class SocketClient {
-  
+
   SocketClient( String packageString, String host, int port ) {
 
     StringBuffer instr = new StringBuffer();
     String TimeStamp;
     System.out.println("SocketClient initialized");
     server = true;
-    
+
     try {
       /** Obtain an address object of the server */
       InetAddress address = InetAddress.getByName(host);
       /** Establish a socket connetion */
       Socket connection = new Socket(address, port);
       /** Instantiate a BufferedOutputStream object */
-      
+
       BufferedOutputStream bos = new BufferedOutputStream(connection.
           getOutputStream());
 
@@ -33,7 +33,7 @@ public class SocketClient {
        * encoding.
        */
       OutputStreamWriter osw = new OutputStreamWriter(bos, "US-ASCII");
-      
+
       TimeStamp = new java.util.Date().toString();
       String process = packageString +  (char) 13;
 //      String process = "Calling the Socket Server on "+ host + " port " + port +
@@ -42,7 +42,7 @@ public class SocketClient {
       /** Write across the socket connection and flush the buffer */
       osw.write(process);
       osw.flush();
-      
+
       /** Instantiate a BufferedInputStream object for reading
       /** Instantiate a BufferedInputStream object for reading
        * incoming socket streams.
@@ -55,12 +55,12 @@ public class SocketClient {
        */
 
       InputStreamReader isr = new InputStreamReader(bis, "US-ASCII");
-      
+
       /**Read the socket's InputStream and append to a StringBuffer */
       int c;
       while ( (c = isr.read()) != 13)
         instr.append( (char) c);
-        
+
       /** Close the socket connection. */
       connection.close();
       ImportData(split( instr.toString(), "\n") );

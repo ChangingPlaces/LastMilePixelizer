@@ -23,13 +23,13 @@ void ImportData(String inputStr[]) {
     parseColortizerStrings(inputStr);
   } else if (inputStr[0].equals("LAST_MILE_SIM")) {
     parseLastMileSimStrings(inputStr);
-  } else if (inputStr[0].equals("CTL") && enableCTL) {
+  } else if (inputStr[0].equals("CTL") && enableAdvancedOptimization) {
     //saveStrings("CTLdata.txt", inputStr);
-    if (waitingForCTL) clearOutputData();
+    if (waitingForAdvancedOptimization) clearOutputData();
     parseCTLStrings(inputStr);
-    waitingForCTL = false;
+    waitingForAdvancedOptimization = false;
   } else {
-    if (!enableCTL) {
+    if (!enableAdvancedOptimization) {
       println("Data received from CTL, but this feature has been disabled.");
     }
   }
