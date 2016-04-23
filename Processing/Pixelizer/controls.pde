@@ -628,10 +628,8 @@ void pressAdvancedOptimizationButton(int button){
   enableAdvancedOptimization = !enableAdvancedOptimization;
   synchButton(enableAdvancedOptimization,button);
   reloadData(gridU, gridV, modeIndex);
-  waitingForAdvancedOptimization = false;
-  if (enableAdvancedOptimization){
-    sendCTLData();
-  }
+  //Reload the colortizer to trigger an optimization run
+  changeDetected = true;
 }
 
 void setPop(int button) {

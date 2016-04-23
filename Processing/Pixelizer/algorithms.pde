@@ -118,7 +118,7 @@ void updateFacilitiesList() {
         //TODO: This needs to be read from a settings file, including costs!
         // Facility(int ID, int u, int v, int maxOrderSize, int maxFleetSize, int maxShifts, boolean delivers, boolean pickup)
         case 1: // IMN
-          facilitiesList.add(new Facility(1, u, v, 600, 10, 2, true,  false));
+          facilitiesList.add(new Facility(1, u, v, 1000, 10, 2, true,  false));
           performanceDashboard[13]+=1; //Tally IMN
           break;
         case 2: // LARGE HUB STORE
@@ -237,7 +237,7 @@ void updateDashboard(int u, int v)
   performanceDashboard[6]+= 130.0* dailyDemand(pop[u][v]); //satisfied delivery $ demand
   performanceDashboard[7]+= 0.0; //satisfied pickup $ demand
   performanceDashboard[8]+= totalCost[u][v]; // Total Variable Cost per order delivery
-  performanceDashboard[9]+= 0.5; // Total Variable Cost per order pickup
+  performanceDashboard[9]+= 0.0; // Total Variable Cost per order pickup
 
   Facility currFacility = facilitiesList.get(allocation[u][v] -1);
   performanceDashboard[10]+=currFacility.fixedCost;

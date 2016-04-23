@@ -174,7 +174,7 @@ void draw() {
     if (!enableAdvancedOptimization) {
       updateOutput();
       outputReady = true;
-    } else {
+    } else if (facilitiesList.size()>0){
       sendCTLData();
     }
     renderDynamicTableLayers(input);
