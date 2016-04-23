@@ -115,35 +115,36 @@ void updateFacilitiesList() {
   for (int u=0; u<gridU; u++) {
     for (int v=0; v<gridV; v++) {
       switch (facilities[u][v] ){
+        //TODO: This needs to be read from a settings file, including costs!
         // Facility(int ID, int u, int v, int maxOrderSize, int maxFleetSize, int maxShifts, boolean delivers, boolean pickup)
         case 1: // IMN
-          facilitiesList.add(new Facility(1, u, v, 2000, 10, 2, true,  false));
+          facilitiesList.add(new Facility(1, u, v, 600, 10, 2, true,  false));
           performanceDashboard[13]+=1; //Tally IMN
           break;
         case 2: // LARGE HUB STORE
           //facilitiesList.add(new Facility(2, u, v,   200, 10, 2, true,  true));
-          facilitiesList.add(new Facility(2, u, v,   800, 10, 2, true,  true));
+          facilitiesList.add(new Facility(2, u, v,   200, 10, 2, true,  true));
           performanceDashboard[11]+=1; //Tally  store
           break;
         case 3: // SMALL HUB STORE
           //facilitiesList.add(new Facility(3, u, v,   200, 10, 2, true,  true));
-          facilitiesList.add(new Facility(3, u, v,   40, 10, 2, true,  true));
+          facilitiesList.add(new Facility(3, u, v,   100, 10, 2, true,  true));
           performanceDashboard[11]+=1; //Tally store
           break;
         case 4: // SPOKE
-          facilitiesList.add(new Facility(4, u, v,   40,  0, 2, false, true));
+          facilitiesList.add(new Facility(4, u, v,   100,  0, 2, false, true));
           performanceDashboard[12]+=1; //Tally spoke
           break;
         case 5: // SMALL LOCKER
-          facilitiesList.add(new Facility(5, u, v,   10,  0, 3, false, true));
+          facilitiesList.add(new Facility(5, u, v,   15,  0, 3, false, true));
           performanceDashboard[14]+=1; //Tally lockers
           break;
         case 6: // LARGE LOCKER
-          facilitiesList.add(new Facility(6, u, v,   20,  0, 3, false, true));
+          facilitiesList.add(new Facility(6, u, v,   30,  0, 3, false, true));
           performanceDashboard[14]+=1; //Tally lockers
           break;
         case 7: // REMOTE
-          facilitiesList.add(new Facility(7, u, v,  120,  0, 3, false, true));
+          facilitiesList.add(new Facility(7, u, v,  20,  0, 3, false, true));
           performanceDashboard[15]+=1; //Tally lockers
           break;
       }
