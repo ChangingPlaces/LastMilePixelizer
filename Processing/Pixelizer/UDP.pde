@@ -45,6 +45,7 @@ void parseCTLStrings(String data[]) {
 
   println("CTL Strings Recieved by " + LOCAL_FRIENDLY_NAME);
 
+
   String dataType = "";
 
   for (int i=0 ; i<data.length;i++) {
@@ -95,6 +96,8 @@ void parseCTLStrings(String data[]) {
             int value = int(split[2]);
             vehicle[u_local][v_local] = value;
           }
+          //Update performanceDashboard
+          updateDashboard(u_local, v_local);
         }
       }
     }

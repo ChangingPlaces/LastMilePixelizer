@@ -1,7 +1,7 @@
 // Used for Delivery Cost Map and Histogram
-float MAX_DELIVERY_COST_RENDER = 50.0;
+float MAX_DELIVERY_COST_RENDER = 150.0;
 
-float MAX_TOTAL_COST_RENDER = 90.0;
+float MAX_TOTAL_COST_RENDER = 1000.0;
 float POP_RENDER_MIN = 10.0; // per 1 SQ KM
 
 // How big your table is, in pixels
@@ -29,18 +29,43 @@ color walmart_dark_green = #367c2b;
 boolean faux3D = true;
 boolean flagResize = true;
 
+// //Potential Color scales for lerpColor from ColorBrewer, 9 scale
+// //1 - cost, 2 - total cost, 3 - allocation, 4 - vehicles
+// sequential
+color from_1 = #f7f4f9;
+color to_1 = #67001f;
+// color from_2 = #fcfbfd;
+// color to_2= #3f007d;
+// color from_3 = #fff7f3;
+// color to_3 = #49006a;
+// color from_4 = #ffffe5;
+// color to_4 = #004529;
+// color from_5 =#f7fcfd;
+// color to_5 =#4d004b;
+//Diverging
+//color from_1 = #d73027;
+//color to_1 = #4575b4;
+color from_2 = #c51b7d;
+color to_2 = #4d9221;
+color from_3 = #b35806;
+color to_3 = #542788;
+color from_4 = #d73027;
+color to_4 = #1a9850;
+color from_5 = #8c510a;
+color to_5 = #01665e;
+
 /* Graphics Architecture:
  *
  * projector  <-  main  <-  table  <-  (p)opulation, (h)eatmap, (s)tores(s), (l)ines, (c)ursor
  *                 ^
  *                 |
- *               screen <-  (i)nfo <-  minimap, legendH, legendP
+ *               screen <-  (i)nfo <-  minimap, legendCPO, legendP
  */
 
 PGraphics screen, table;
 PGraphics h, s, l, i, c, p, input, output, pieces;
 float gridWidth, gridHeight;
-PGraphics legendH, legendP, legendI, legendO;
+PGraphics legendH, legendCPO, legendTC, legendP, legendI, legendO;
 
 // Standard Minimum Margin Width
 int STANDARD_MARGIN = 25;
@@ -152,8 +177,10 @@ void initDataGraphics() {
 
   int legendWidth = 40;
   int legendHeight = 100;
+  legendCPO = createGraphics(legendWidth, legendHeight);
   legendH = createGraphics(legendWidth, legendHeight);
   legendP = createGraphics(legendWidth, legendHeight);
+  legendTC = createGraphics(legendWidth, legendHeight);
 
 
   legendI = createGraphics(legendWidth, legendHeight);
@@ -469,7 +496,7 @@ void renderBasemap(PGraphics graphic) {
             if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
               value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
               if (value >= 0 && value != Float.POSITIVE_INFINITY) {
-                output.fill(lerpColor(from, to, value));
+                output.fill(lerpColor(from_1, to_1, value));
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
@@ -477,7 +504,15 @@ void renderBasemap(PGraphics graphic) {
             if (showTotalCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
               value = totalCost[u+gridPanU][v+gridPanV]/MAX_TOTAL_COST_RENDER;
               if (value > 0  && value != Float.POSITIVE_INFINITY) {
-                output.fill(lerpColor(from, to, value));
+                output.fill(lerpColor(from_2, to_2, value));
+                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              }
+            }
+
+            if (showVehicle && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN) {
+              value = vehicle[u+gridPanU][v+gridPanV];
+              if (value != 0) {
+                output.fill(lerpColor(from_3, to_3, (value+1)/5.0)); //Assumes no more than five vehicle types!!!!
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
@@ -487,7 +522,7 @@ void renderBasemap(PGraphics graphic) {
               value = allocation[u+gridPanU][v+gridPanV];
               if (value != 0) {
                 if (showAllocation) {
-                  output.fill(value/facilitiesList.size()*255, 255, 255, 175); // Temp Color Gradient
+                  output.fill(lerpColor(from_4, to_4, min(1.0,value/facilitiesList.size())));
                   output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
                 }
 
@@ -495,7 +530,7 @@ void renderBasemap(PGraphics graphic) {
                 int inset = 1;
                 output.strokeWeight(2*offset);
                 output.strokeCap(ROUND);
-                output.stroke(value/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+                output.stroke(lerpColor(from_4, to_4, min(1.0,value/facilitiesList.size()))); // Temp Color Gradient
 
                 if (u+gridPanU > 0 && value != allocation[u+gridPanU-1][v+gridPanV]) {
                   output.line(u*gridWidth+offset, v*gridHeight+inset, u*gridWidth+offset, (v+1)*gridHeight-inset);
@@ -512,13 +547,7 @@ void renderBasemap(PGraphics graphic) {
               }
             }
 
-            if (showVehicle && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN) {
-              value = vehicle[u+gridPanU][v+gridPanV];
-              if (value != 0) {
-                output.fill(value/50.0*255, 255, 255, 100); // Temp Color Gradient
-                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
-              }
-            }
+
 
           }
         }
@@ -724,7 +753,7 @@ void renderBasemap(PGraphics graphic) {
           }
 
           // Average Indicator vertical line
-          float x_position = histogramWidth*(average/MAX_DELIVERY_COST_RENDER);
+          float x_position = histogramWidth*min(1.0,average/MAX_DELIVERY_COST_RENDER);
           i.strokeWeight(1);
           i.stroke(walmart_yellow);
           i.line(x_position, -histogramHeight - 5, x_position, 5);
@@ -770,8 +799,8 @@ void renderBasemap(PGraphics graphic) {
           demandMAX = int(dailyDemand(popMAX));
 
           i.text("Demand Forecast", 0, legendPix - 20);
-          i.text(int(POP_RENDER_MIN) + " orders/day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
-          i.text(int(demandMAX) + " orders/day", STANDARD_MARGIN + legendP.width, legendPix+10);
+          i.text(int(POP_RENDER_MIN) + " orders/day", 1.5*STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+          i.text(int(demandMAX) + " orders/day", 1.5*STANDARD_MARGIN + legendP.width, legendPix+10);
         }
 
         //Undo Left Pane Translate
@@ -787,36 +816,44 @@ void renderBasemap(PGraphics graphic) {
             float normalized;
             int column = -1;
             i.text("Optimal Facility Allocations", 0, legendPix - 35);
-            for (int j=0; j<storeID.size(); j++) {
+            for (int j=0; j<facilitiesList.size(); j++) {
+              int fID = facilitiesList.get(j).ID;
               if (j % 8 == 0) {
                 column++;
               }
-              normalized = findHeatmapFill(i, (float)storeID.get(j));
-              for (int k=0; k<4; k++) i.text("FacilityID: " + storeID.get(j), STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
+              i.fill(lerpColor(from_4, to_4, min(1.0,float(j)/float(facilitiesList.size()))));
+              i.text("Facility: " + j + " - "+facilityTypeName(fID), STANDARD_MARGIN*(column*20+1), legendPix+10+(j-column*20)*15);
             }
           }
           else if (showVehicle) {
             float normalized;
             int column = -1;
             i.text("Optimal Vehicle Assignment", 0, legendPix - 35);
-            for (int j=0; j<2; j++) {
+            for (int j=0; j<5; j++) {
               if (j % 8 == 0) {
                 column++;
               }
-              i.fill(j/50.0*255, 255, 255, 100);
-              for (int k=0; k<4; k++) i.text("VehicleID: " + j, STANDARD_MARGIN*(column*5+1), legendPix+10+(j-column*8)*15);
+              i.fill(lerpColor(from_3, to_3, float(j+1)/5.0));
+              i.text("VehicleID: " + vehicleTypeName(j+1), STANDARD_MARGIN*(column*20+1), legendPix+10+(j-column*20)*15);
             }
           }
-          else if (showDeliveryCost || showTotalCost){
+          else if (showDeliveryCost){
             // Draw Legends
-            i.image(legendH, 0, legendPix);
-            i.text("Optimal Cost", 0, legendPix - 20);
-            i.text(int(heatmapMIN+1) + " " + outputMode, STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
-            i.text(int(heatmapMAX) + " " + outputMode, STANDARD_MARGIN + legendP.width, legendPix+10);
+            i.image(legendCPO, STANDARD_MARGIN/2, legendPix);
+            i.text("Optimal Cost", 0, legendPix - 35);
+            i.text(int(1.0) + " " + outputMode, 2*STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+            i.text(int(MAX_DELIVERY_COST_RENDER) + " " + outputMode, STANDARD_MARGIN + legendP.width, legendPix+10);
+          }
+          else if (showTotalCost){
+            // Draw Legends
+            i.image(legendTC, STANDARD_MARGIN/2, legendPix);
+            i.text("Optimal Total Cost", 0, legendPix - 35);
+            i.text(int(1.0) + " " + outputMode, 2*STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+            i.text(int(MAX_TOTAL_COST_RENDER) + " " + outputMode, 2*STANDARD_MARGIN + legendP.width, legendPix+10);
           }
         }
         else if (showHistoricDeliveryData) {
-          //float legendPix = -3*STANDARD_MARGIN-4*scalePix-2*legendH.height-20;
+          //float legendPix = -3*STANDARD_MARGIN-4*scalePix-2*legendCPO.height-20;
           float legendPix = -STANDARD_MARGIN-4*scalePix-legendP.height;
           if (showHistoricCatchments) {
             float normalized;
@@ -831,10 +868,10 @@ void renderBasemap(PGraphics graphic) {
             }
           } else if (showHistoricDeliveryData){
             // Draw Legends
-            i.image(legendH, 0, legendPix);
+            i.image(legendH, STANDARD_MARGIN/2, legendPix);
             i.text("2015 Delivery Data", 0, legendPix - 20);
-            i.text(int(heatmapMIN+1) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
-            i.text(int(heatmapMAX) + " " + valueMode, STANDARD_MARGIN + legendP.width, legendPix+10);
+            i.text(int(heatmapMIN+1) + " " + valueMode, 2*STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+            i.text(int(heatmapMAX) + " " + valueMode, 2*STANDARD_MARGIN + legendP.width, legendPix+10);
           }
         }
 
@@ -878,7 +915,7 @@ void renderBasemap(PGraphics graphic) {
       }
 
       //Translate to print grid information
-      i.translate(0, 2*STANDARD_MARGIN);
+      i.translate(STANDARD_MARGIN, 2*STANDARD_MARGIN);
       i.fill(walmart_yellow);
       i.text("GRID INFO", 0, 0);
       i.fill(textColor);
@@ -1033,7 +1070,7 @@ void renderBasemap(PGraphics graphic) {
       int intervals = 10;
       int h = legendP.height/intervals;
 
-
+      //Draws the bars of the population heatmap
       legendP.beginDraw();
       legendP.clear();
       for (int i=0; i<intervals; i++) {
@@ -1042,13 +1079,32 @@ void renderBasemap(PGraphics graphic) {
       }
       legendP.endDraw();
 
+      //Draws the bars of the cost per order heatmap
+      legendCPO.beginDraw();
+      legendCPO.clear();
+      for (int i=0; i<intervals; i++) {
+         legendCPO.fill(lerpColor(to_1, from_1, float(i)/float(intervals)));
+         legendCPO.rect(0, i*h, legendCPO.width, h);
+      }
+      legendCPO.endDraw();
+
+      //Draws the bars of the cost per order heatmap
       legendH.beginDraw();
       legendH.clear();
       for (int i=0; i<intervals; i++) {
-         normalized = findHeatmapFill(legendH, (intervals-i-1)*heatmapMAX/intervals);
-         legendH.rect(0, i*h, legendH.width, h);
+        normalized = findHeatmapFill(legendH, (intervals-i-1)*heatmapMAX/intervals);
+        legendH.rect(0, i*h, legendH.width, h);
       }
       legendH.endDraw();
+
+      //Draws the bars of the cost per order heatmap
+      legendTC.beginDraw();
+      legendTC.clear();
+      for (int i=0; i<intervals; i++) {
+         legendTC.fill(lerpColor(to_2, from_2, float(i)/float(intervals)));
+         legendTC.rect(0, i*h, legendTC.width, h);
+      }
+      legendTC.endDraw();
     }
 
 // Methods for Rendering a MiniMap

@@ -629,6 +629,9 @@ void pressAdvancedOptimizationButton(int button){
   synchButton(enableAdvancedOptimization,button);
   reloadData(gridU, gridV, modeIndex);
   waitingForAdvancedOptimization = false;
+  if (enableAdvancedOptimization){
+    sendCTLData();
+  }
 }
 
 void setPop(int button) {

@@ -27,6 +27,57 @@
       }
     }
 
+   String facilityTypeName(int typeID){
+      String typeName = "";
+      switch(typeID){
+        case 1:
+          typeName = "IMN";
+          break;
+        case 2:
+          typeName = "Store (L)";
+          break;
+        case 3:
+            typeName = "Store";
+            break;
+        case 4:
+          typeName = "Spoke";
+          break;
+        case 5:
+          typeName = "Locker";
+          break;
+        case 6:
+            typeName = "Locker(L)";
+            break;
+        case 7:
+            typeName = "Remote";
+            break;
+      }
+      return typeName;
+   }
+
+   String vehicleTypeName(int typeID){
+      String typeName = "";
+      switch(typeID){
+        case 1:
+          typeName = "Fleet";
+          break;
+        case 2:
+          typeName = "On-Demand";
+          break;
+        case 3:
+            typeName = "3PL";
+            break;
+        case 4:
+          typeName = "Deliv";
+          break;
+        case 5:
+          typeName = "Associates";
+          break;
+      }
+      return typeName;
+   }
+
+
 
     void resetGridParameters() {
       scaler = int(MAX_GRID_SIZE/gridSize);
