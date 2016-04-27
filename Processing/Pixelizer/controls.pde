@@ -167,6 +167,9 @@ void mouseClicked() {
   if (!buttonHovering) {
     selectionU = mouseToU();
     selectionV = mouseToV();
+//    println(facilities[selectionU][selectionV]);
+//    facilities[selectionU][selectionV] = 1;
+//    println("facility set at " + selectionU, selectionV + " to " + facilities[selectionU][selectionV]);
   }
 
   //Hide/Show Menu
@@ -549,9 +552,10 @@ void resetMousePan() {
 }
 
 void mousePressed() {
+  
   x_0 = mouseX;
   y_0 = mouseY;
-
+  
   if (showBasemap) {
     mapWasOn = true;
   } else {

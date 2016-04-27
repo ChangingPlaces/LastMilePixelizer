@@ -226,14 +226,18 @@ void renderBasemap(PGraphics graphic) {
             // POPULATION
             if (pop[u+gridPanU][v+gridPanV] > 10.0*sq(gridSize)) {
               normalized = findPopFill(p, pop[u+gridPanU][v+gridPanV]);
-              // Doesn't draw a rectangle for values of 0
-              //p.noStroke(); // No lines draw around grid cells
-              //p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               
-              for (int i=0; i<normalized*100; i++) {
-                //p.stroke(textColor);
-                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 2, 2);
+              if (!dragging) {
+                for (int i=0; i<normalized*100; i++) {
+                  //p.stroke(textColor);
+                  p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 2, 2);
+                }
+              } else {
+                // Doesn't draw a rectangle for values of 0
+                p.noStroke(); // No lines draw around grid cells
+                p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
+                
             }
 
             //STORES
