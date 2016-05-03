@@ -98,7 +98,7 @@
 
     // Loads one giant map object
     void initializeBaseMap() {
-      wholeMap = loadImage("data/" + mapColor + "/" + fileName + "_2000.png");
+      wholeMap = loadImage("data/markets/" + fileName + "/" + mapColor + "_2000.png");
     }
 
     // Loads subset of wholemap onto basemap
@@ -125,6 +125,9 @@
         case 1:
           sanjoseMode();
           break;
+        case 2:
+          atlantaMode();
+        break;
       }
 
       // Processes lat-long data and saves to aggregated JSON grid
@@ -169,9 +172,9 @@
     // Runs once when initializes
     void initStaticData() {
 
-      array = loadJSONArray("data/" + fileName + "_" + valueMode + ".json");
+      array = loadJSONArray("data/markets/" + fileName + "/" + fileName + "_" + valueMode + ".json");
       try {
-        popCSV = loadTable("data/CSV_POPHU/" + fileName + "_" + popMode + "_" + gridV + "_" + gridU + "_" + int(gridSize*1000) + ".csv");
+        popCSV = loadTable("data/markets/" + fileName + "/" + popMode + "_" + gridV + "_" + gridU + "_" + int(gridSize*1000) + ".csv");
       }  catch(RuntimeException e) {
         popCSV = new Table();
       }

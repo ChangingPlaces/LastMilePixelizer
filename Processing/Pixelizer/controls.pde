@@ -548,7 +548,7 @@ void toggleMainMenu() {
 
 // Loads Next Data Set
 void nextModeIndex() {
-  modeIndex = next(modeIndex, 1);
+  modeIndex = next(modeIndex, 2);
   reloadData(gridU, gridV, modeIndex);
   reRenderMiniMap(miniMap);
   fauxPieces(randomType, tablePieceInput, IDMax);

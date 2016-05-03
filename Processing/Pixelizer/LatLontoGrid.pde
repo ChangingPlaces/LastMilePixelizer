@@ -33,7 +33,7 @@ float jitter = 3;
 // Filename of TSV file to grab weighted lat-lon points
 // for example, the fileName for data.tsv would simply be the string "data";
 // this script add ".tsv" for you
-String fileName;
+String fileName = "denver";
 
 // String that specifies which parameter to summarize as pixels
 String valueMode = "deliveries";
@@ -90,11 +90,18 @@ void sanjoseMode() {
   fileName = "sanjose";
 }
 
+void atlantaMode() {
+  centerLatitude = 33.92215377;
+  centerLongitude = -84.33470247;
+  azimuth =  0; // 0 = North
+  fileName = "atlanta";
+}
+
 //
 void pixelizeData(int gridU, int gridV) {
 
   // Name of CSV file to upload
-  dataInput = loadTable("data/" + fileName + ".tsv");
+  dataInput = loadTable("data/markets/" + fileName + "/" + "historical_data.tsv");
   dataOutput = new JSONArray();
 
   // variables to temporary hold lat, lon, value, and grid buck for a single point; C for customer, S for store
@@ -219,7 +226,7 @@ void pixelizeData(int gridU, int gridV) {
       counter++;
     }
   }
-  saveJSONArray(dataOutput, "data/" + fileName + "_" + valueMode + ".json");
+  saveJSONArray(dataOutput, "data/markets/" + fileName + "/" + fileName + "_" + valueMode + ".json");
 }
 
 

@@ -1115,7 +1115,7 @@ void renderBasemap(PGraphics graphic) {
     //float mapRatio = 0.3;
 
     void loadMiniBaseMap() {
-      miniBaseMap = loadImage("data/" + mapColor + "/" + fileName + "_2000.png");
+      miniBaseMap = loadImage("data/markets/" + fileName + "/" + mapColor + "_2000.png");
       miniBaseMap.resize(4*displayU, 4*displayV);
     }
 

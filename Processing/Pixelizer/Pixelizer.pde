@@ -32,7 +32,8 @@ import java.awt.event.*;
 
 // 0 = Denver
 // 1 = San Jose
-int modeIndex = 1;
+// 2 = Atlanta
+int modeIndex = 0;
 
 // 0 = random
 // 1 = rows
@@ -87,7 +88,8 @@ void setup() {
   // Load Global Settings
   textSize(12);
   loadGlobalSettings();
-
+  
+  loadConfig();
 
   size(screenWidth, screenHeight, P3D);
 
@@ -155,6 +157,8 @@ void setup() {
 
       //Initialize the Dashboard
       initDashboard();
+      
+      
 }
 
 void draw() {

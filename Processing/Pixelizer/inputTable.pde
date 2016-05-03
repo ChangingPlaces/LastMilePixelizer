@@ -368,6 +368,7 @@ void loadGlobalSettings(){
   Table settings_table;
 
   settings_table = loadTable("settings/global_settings.csv","header");
+  println(settings_table);
 
   println(settings_table.getRowCount() + " total rows in global_settings.csv");
 

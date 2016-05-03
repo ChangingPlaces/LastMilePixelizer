@@ -1,14 +1,14 @@
 global_variable,g_value
-hideWallyWorld,false
+hideWallyWorld,FALSE
 portIN,6152
 dataProtocol,UDP
 CTL_ADDRESS,localhost
 CTL_PORT,5679
 POP_RENDER_MIN,0.01
-MAX_TOTAL_COST_RENDER,1500.0
-MAX_DELIVERY_COST_RENDER,150.0
-testProjectorOnMac,false
-STANDARD_MARGIN, 25
+MAX_TOTAL_COST_RENDER,1500
+MAX_DELIVERY_COST_RENDER,150
+testProjectorOnMac,FALSE
+STANDARD_MARGIN,25
 TABLE_IMAGE_OFFSET,550
 screenWidth,1920
 screenHeight,1080
@@ -20,5 +20,5 @@ screenHeight_mac,720
 projectorWidth_mac,1280
 projectorHeight_mac,720
 projectorOffset_mac,1280
-STANDARD_MARGIN_mac, 5
+STANDARD_MARGIN_mac,5
 TABLE_IMAGE_OFFSET_mac,150
