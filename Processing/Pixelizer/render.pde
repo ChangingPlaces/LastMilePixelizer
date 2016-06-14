@@ -230,9 +230,9 @@ void renderBasemap(PGraphics graphic) {
               //p.noStroke(); // No lines draw around grid cells
               //p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               
-              for (int i=0; i<normalized*100; i++) {
+              for (int i=0; i<normalized*10; i++) {
                 //p.stroke(textColor);
-                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 2, 2);
+                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 3, 3);
               }
             }
 
