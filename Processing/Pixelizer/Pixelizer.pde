@@ -183,12 +183,15 @@ void draw() {
   projector = get(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
   margin = get(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - int(mapRatio*TABLE_IMAGE_HEIGHT), STANDARD_MARGIN, int(mapRatio*TABLE_IMAGE_HEIGHT) + STANDARD_MARGIN, TABLE_IMAGE_HEIGHT);
   margin.resize(int(mapRatio*TABLE_IMAGE_HEIGHT), margin.height);
+  hist = get(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH, STANDARD_MARGIN, 250, 350);
+  hist.resize(margin.width, 350);
   
   // In Lieu of Projection creates the square table on main canvas for testing when on mac
   if (systemOS.equals("Mac") && testProjectorOnMac) {
     background(textColor);
     image(margin, 0, 0);
     image(projector, margin.width, 0);
+    image(hist, 0, 345);
   }
 
   fill(textColor, 80);
