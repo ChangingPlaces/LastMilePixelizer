@@ -69,7 +69,7 @@ boolean showTotalCost = false;
 boolean showAllocation = false;
 boolean showVehicle = false;
 
-//Walmart Logo
+//WMT Logo
 PImage wmt_logo;
 
 // Class that holds a button menu
@@ -133,9 +133,6 @@ void setup() {
 
       // Loads and formats menu items
       loadMenu(tableWidth, tableHeight);
-
-      //Load Walmart "Spark" Logo
-      wmt_logo = loadImage("Walmart_Spark.png");
        
       systemOS = System.getProperty("os.name").substring(0,3);
       println(systemOS);
@@ -201,7 +198,7 @@ void draw() {
   
   if (waitingForCTL){
     if(waiting_blink){
-      fill(walmart_light_green);
+      fill(wmt_light_green);
       text("** OPTIMIZING **", 20, 65);
       fill(textColor);
       waiting_blink = false;

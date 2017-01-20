@@ -161,9 +161,25 @@ void loadMenu(int screenWidth, int screenHeight) {
   mainMenu.buttons[getButtonIndex(buttonNames[22])].isPressed = true;
 }
 
+int tempID = 0;
 // The result of each button click is defined here
 void mouseClicked() {
 
+//  // manually place a store
+//  int x, y;
+//  
+//  if (tempID == 0) {
+//    tempID = 2;
+//  } else {
+//    tempID = 0;
+//  }
+//    
+//  x = mouseToU()/4;
+//  y = mouseToV()/4;
+//  tablePieceInput[x][y][0] = tempID;
+//  tablePieceInput[x][y][1] = 90;
+//  changeDetected = true;
+  
   if (!buttonHovering) {
     selectionU = mouseToU();
     selectionV = mouseToV();
@@ -1075,12 +1091,12 @@ class Button{
         graphic.fill(textColor, hover);
         buttonHovering = true;
       } else if (isPressed){
-        graphic.fill(walmart_dark_blue, pressed);
+        graphic.fill(wmt_dark_blue, pressed);
       } else {
-        graphic.fill(walmart_dark_blue, active);
+        graphic.fill(wmt_dark_blue, active);
       }
       graphic.rect(x, y, w, h, 5);
-      graphic.fill(walmart_yellow);
+      graphic.fill(wmt_yellow);
       graphic.text(label, x + (w/2-textWidth(label)/2), y + 0.6*h); //text(str, x1, y1, x2, y2) text(label, x + 5, y + 15)
     }
   }

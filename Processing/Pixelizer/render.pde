@@ -19,12 +19,12 @@ color blueBrick =  #0000FF;
 color redBrick =   #FF0000;
 color blackBrick = #000000;
 color greenBrick = #00FF00;
-color walmart_yellow = #ffc220;
-color walmart_light_green = #76c043;
-color walmart_dark_blue = #004c91;
-color walmart_medium_blue = #007dc6;
-color walmart_orange = #f47321;
-color walmart_dark_green = #367c2b;
+color wmt_yellow = #ffc220;
+color wmt_light_green = #76c043;
+color wmt_dark_blue = #004c91;
+color wmt_medium_blue = #007dc6;
+color wmt_orange = #f47321;
+color wmt_dark_green = #367c2b;
 
 boolean faux3D = true;
 boolean flagResize = true;
@@ -55,10 +55,6 @@ void renderTable() {
   table.beginDraw();
   table.clear();
   table.background(background);
-  
-  if (!hideWallyWorld) {
-    image(wmt_logo, STANDARD_MARGIN ,TABLE_IMAGE_HEIGHT-STANDARD_MARGIN-49, STANDARD_MARGIN+44,STANDARD_MARGIN+49);
-  }
 
   // Draws a Google Satellite Image
   renderBasemap(table);
@@ -227,13 +223,13 @@ void renderBasemap(PGraphics graphic) {
             if (pop[u+gridPanU][v+gridPanV] > 10.0*sq(gridSize)) {
               normalized = findPopFill(p, pop[u+gridPanU][v+gridPanV]);
               // Doesn't draw a rectangle for values of 0
-              //p.noStroke(); // No lines draw around grid cells
-              //p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              p.noStroke(); // No lines draw around grid cells
+              p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               
-              for (int i=0; i<normalized*10; i++) {
-                //p.stroke(textColor);
-                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 3, 3);
-              }
+//              for (int i=0; i<normalized*10; i++) {
+//                //p.stroke(textColor);
+//                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 3, 3);
+//              }
             }
 
             //STORES
@@ -469,7 +465,9 @@ void renderBasemap(PGraphics graphic) {
             if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
               value = deliveryCost[u+gridPanU][v+gridPanV]/MAX_DELIVERY_COST_RENDER;
               if (value >= 0 && value != Float.POSITIVE_INFINITY) {
-                output.fill(lerpColor(from, to, value));
+                output.colorMode(HSB);
+                output.fill(hue(lerpColor(from, to, value)), 255, 255, 150);
+                output.colorMode(RGB);
                 output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               }
             }
@@ -699,7 +697,7 @@ void renderBasemap(PGraphics graphic) {
       i.translate(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - w, 2*STANDARD_MARGIN + h + 10);
 
       // Main Info
-      i.fill(walmart_yellow);
+      i.fill(wmt_yellow);
       i.text(fileName.toUpperCase(), 0, 0);
       i.fill(textColor);
       i.text("Last Mile Network Design", 0, 15);
@@ -710,7 +708,7 @@ void renderBasemap(PGraphics graphic) {
       
       // Grid INFO Summary Values
       i.translate(0, 80);
-      i.fill(walmart_dark_green);
+      i.fill(wmt_dark_green);
       i.text("GRID INFO", 0, 0);
       i.fill(textColor);
       i.text("2015 Delivery Data:", 0, 20);
