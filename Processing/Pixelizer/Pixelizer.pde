@@ -41,10 +41,10 @@ int randomType = 2;
 
 int projectorWidth = 1920;
 int projectorHeight = 1200;
-int projectorOffset = 1842;
+int projectorOffset = 1920;
 
-int screenWidth = 1842;
-int screenHeight = 1026;
+int screenWidth = 1920;
+int screenHeight = 1080;
 
 boolean hideWallyWorld = true;
 
