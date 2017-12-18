@@ -368,12 +368,14 @@ void renderBasemap(PGraphics graphic) {
       if (showFacilities) {
         for (int i=0; i<facilitiesList.size(); i++) {
           Facility current = facilitiesList.get(i);
-          input.fill(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
-          input.stroke(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+          //input.fill(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+          input.fill(255); // White
+          //input.stroke(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+          input.stroke(255); // Temp Color Gradient
           input.strokeWeight(4);
           input.rect(current.u*gridWidth, current.v*gridHeight, gridWidth, gridHeight);
           input.fill(textColor);
-          input.text(facilitiesList.get(i).ID, current.u*gridWidth, current.v*gridHeight);
+          //input.text(facilitiesList.get(i).ID, current.u*gridWidth, current.v*gridHeight);
         }
       }
 

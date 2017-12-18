@@ -59,10 +59,10 @@ boolean showPopulationData = true;
 boolean showBasemap = true;
 
 boolean showInputData = true;
-boolean showFacilities = false;
+boolean showFacilities = true;
 boolean showMarket = false;
 boolean showObstacles = false;
-boolean showForm = true;
+boolean showForm = false;
 
 boolean showOutputData = true;
 boolean showDeliveryCost = false;
