@@ -81,11 +81,20 @@ void renderTable() {
 
   // Draws lines
   table.image(l, 0, 0);
+  
+  // Block Margin
+  table.fill(0);
+  //TOP
+  table.rect(0, 0, table.width, 1.0/22.0*table.height);
+  //BOTTOM
+  table.rect(0, 21.0/22.0*table.height, table.width, 1.0/22.0*table.height);
+  //RIGHT
+  table.rect(17.0/18.0*table.width, 1.0/22.0*table.height, 1.0/18.0*table.width, 20.0/22.0*table.height);
 
   // Draws Cursor
   renderCursor(c);
   table.image(c, 0, 0);
-
+  
   table.endDraw();
 }
 
@@ -547,11 +556,11 @@ void renderBasemap(PGraphics graphic) {
       i.beginDraw();
       i.clear();
 
-      // Draw Rectangle around main canvas
-      i.noFill();
-      i.stroke(textColor);
-      i.strokeWeight(1);
-      i.rect(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
+//      // Draw Rectangle around main canvas
+//      i.noFill();
+//      i.stroke(textColor);
+//      i.strokeWeight(1);
+//      i.rect(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
 
       i.translate(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH + STANDARD_MARGIN, STANDARD_MARGIN + TABLE_IMAGE_HEIGHT);
 

@@ -158,6 +158,7 @@ void draw() {
       sendCTLData();
     }
     renderDynamicTableLayers(input);
+    reRenderMiniMap(miniMap);
     changeDetected = false;
   }
 
