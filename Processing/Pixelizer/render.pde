@@ -371,9 +371,9 @@ void renderBasemap(PGraphics graphic) {
           //input.fill(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
           input.fill(255); // White
           //input.stroke(float(i)/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
-          input.stroke(255); // Temp Color Gradient
-          input.strokeWeight(4);
-          input.rect(current.u*gridWidth, current.v*gridHeight, gridWidth, gridHeight);
+          input.stroke(0);
+          input.strokeWeight(2);
+          input.rect(current.u*gridWidth, current.v*gridHeight, gridWidth/2, gridHeight/2);
           input.fill(textColor);
           //input.text(facilitiesList.get(i).ID, current.u*gridWidth, current.v*gridHeight);
         }
