@@ -502,7 +502,8 @@ void renderBasemap(PGraphics graphic) {
                 int inset = 1;
                 output.strokeWeight(2*offset);
                 output.strokeCap(ROUND);
-                output.stroke(value/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+                //output.stroke(value/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
+                output.stroke(255); // White
                 
                 if (u+gridPanU > 0 && value != allocation[u+gridPanU-1][v+gridPanV]) {
                   output.line(u*gridWidth+offset, v*gridHeight+inset, u*gridWidth+offset, (v+1)*gridHeight-inset);

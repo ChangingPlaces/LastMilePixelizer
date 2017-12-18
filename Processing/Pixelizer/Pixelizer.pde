@@ -51,6 +51,7 @@ boolean hideWallyWorld = true;
 // Set this to true to display the main menu upon start
 boolean showMainMenu = true;
 boolean showFrameRate = false;
+boolean startup = true;
 
 boolean showStores = false;
 boolean showDeliveryData = false;
@@ -64,9 +65,9 @@ boolean showObstacles = false;
 boolean showForm = true;
 
 boolean showOutputData = true;
-boolean showDeliveryCost = true;
+boolean showDeliveryCost = false;
 boolean showTotalCost = false;
-boolean showAllocation = false;
+boolean showAllocation = true;
 boolean showVehicle = false;
 
 //WMT Logo
@@ -74,6 +75,10 @@ PImage wmt_logo;
 
 // Class that holds a button menu
 Menu mainMenu, hideMenu;
+
+boolean sketchFullScreen() {
+  return true;
+}
 
 void setup() {
   size(screenWidth, screenHeight, P3D);
@@ -207,6 +212,13 @@ void draw() {
     else{
       waiting_blink = true;
     }
+  }
+  
+  if (!displayProjection2D && startup) {
+    // Open Projector by default
+    displayProjection2D = true;
+    showProjection2D();
+    startup = false;
   }
 
 }
