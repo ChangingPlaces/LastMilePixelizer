@@ -83,14 +83,23 @@ void renderTable() {
   table.image(l, 0, 0);
   
   // Block Margin
-  table.fill(0);
+  table.fill(background);
   //TOP
   table.rect(0, 0, table.width, 1.0/22.0*table.height);
   //BOTTOM
   table.rect(0, 21.0/22.0*table.height, table.width, 1.0/22.0*table.height);
   //RIGHT
   table.rect(17.0/18.0*table.width, 1.0/22.0*table.height, 1.0/18.0*table.width, 20.0/22.0*table.height);
-
+  
+  //DOCK
+  table.rect(0.5/18.0*table.width, 17.5/22.0*table.height, 2.0/18.0*table.width, 3.0/22.0*table.height);
+  table.fill(#FF0000);
+  table.rect(1.2/18.0*table.width, 18.1/22.0*table.height, 0.6/18.0*table.width, 0.3/22.0*table.height);
+  table.fill(#FFFF00);
+  table.rect(1.2/18.0*table.width, 18.5/22.0*table.height, 0.6/18.0*table.width, 0.3/22.0*table.height);
+  table.fill(textColor);
+  table.text("DATA", 1.2/17.75*table.width, 18.0/22.0*table.height);
+  
   // Draws Cursor
   renderCursor(c);
   table.image(c, 0, 0);

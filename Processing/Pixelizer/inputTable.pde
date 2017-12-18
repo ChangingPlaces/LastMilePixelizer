@@ -244,6 +244,8 @@ void setupPieces() {
   inputForm.add(form_15);
 }
 
+int lastValue = -1;
+
 void decodePieces() {
   
   clearInputData();
@@ -253,6 +255,83 @@ void decodePieces() {
       int ID = tablePieceInput[i][j][0];
       if (ID >= 0 && ID <= IDMax) {
         
+        if (i==1 && j==19) {
+          
+          if (ID >= 8 && ID <= 10) {
+            
+            while (!showPopulationData) {
+              togglePopulationData(getButtonIndex(buttonNames[17]));
+            }
+            while (!showInputData) {
+              toggleInputData(getButtonIndex(buttonNames[23]));
+            }
+            while (showStores) {
+              setStores(getButtonIndex(buttonNames[6]));
+            }
+            while (showDeliveryData) {
+              toggleDeliveryData(getButtonIndex(buttonNames[16]));
+            }
+            
+            if (ID == 8) { // Delivery Demand
+            
+              while (showOutputData) {
+                toggleOutputData(getButtonIndex(buttonNames[26]));
+              }
+              
+            } else if (ID == 9) { // Service Areas
+            
+              while (!showOutputData) {
+                toggleOutputData(getButtonIndex(buttonNames[26]));
+              }
+              while (!showAllocation) {
+                setAllocation();
+              }
+              
+            } else if (ID == 10) { // Delivery Cost
+            
+              while (!showOutputData) {
+                toggleOutputData(getButtonIndex(buttonNames[26]));
+              }
+              while (!showDeliveryCost) {
+                setDeliveryCost();
+              }
+              
+            } 
+            
+          } else if (ID == 11) { // Delivery Data
+          
+            while (showOutputData) {
+              toggleOutputData(getButtonIndex(buttonNames[26]));
+            }
+            while (showPopulationData) {
+              togglePopulationData(getButtonIndex(buttonNames[17]));
+            }
+            while (showInputData) {
+              toggleInputData(getButtonIndex(buttonNames[23]));
+            }
+            while (!showStores) {
+              setStores(getButtonIndex(buttonNames[6]));
+            }
+            while (!showDeliveryData) {
+              toggleDeliveryData(getButtonIndex(buttonNames[16]));
+            }
+            
+          } else if (ID == 12) { // San Francisco
+          
+            while(modeIndex==0) {
+              nextModeIndex();
+              renderStaticTableLayers(h, s, p);
+            }
+            
+          } else if (ID == 13) { // Denver
+          
+            while(modeIndex==1) {
+              nextModeIndex();
+              renderStaticTableLayers(h, s, p);
+            }
+            
+          }
+      } else {
         // Rotation Parameters
         int rotation = (tablePieceInput[i][j][1] + rotationMod)%4;
         int X =0;
@@ -303,8 +382,9 @@ void decodePieces() {
             if (ID >= 0 && ID <= 6) {
               this.facilities[gridPanU+X][gridPanV+Y] = data[v][u];
             } else if (ID ==8 || ID == 9) {
-              this.market[gridPanU+X][gridPanV+Y] = data[v][u];
-            } 
+                this.market[gridPanU+X][gridPanV+Y] = data[v][u];
+              } 
+            }
           }
         }
       }
