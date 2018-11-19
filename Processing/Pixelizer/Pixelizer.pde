@@ -87,6 +87,8 @@ void setup() {
   logo[0] = loadImage("data/logos/ira.png");
   logo[1] = loadImage("data/logos/mit.png");
   logo[2] = loadImage("data/logos/bgv.png");
+  single = loadImage("data/slides/single.png");
+  multi = loadImage("data/slides/multi.png");
 
   // Frame Options
 
@@ -159,7 +161,6 @@ void draw() {
 
   // Decode pieces only if there is a change in Colortizer input
   if (changeDetected) {
-    high_density = false;
     decodePieces();
     if (!enableCTL) {
       updateFacilitiesList();
@@ -221,7 +222,13 @@ void draw() {
 //  }
   
   for (int i=0; i<logo.length; i++) {
-    image(logo[i], 25, 50 + i*100);
+    image(logo[i], 25, 25 + i*100);
+  }
+  
+  if (showSingle) {
+    image(single,0,0,width,height);
+  } else if(showMulti) {
+    image(multi,0,0,width,height);
   }
   
   if (!displayProjection2D && startup) {

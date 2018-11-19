@@ -1,7 +1,9 @@
 float DU_PER_SQM = 6.5/4046.86; // https://www.theurbanist.org/2017/05/04/visualizing-compatible-density/
-boolean high_density = false;
-
 PImage[] logo = new PImage[3];
+boolean showSingle = false;
+boolean showMulti = false;
+
+PImage single, multi;
 
 // Data Extents Parameters
 

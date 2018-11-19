@@ -258,7 +258,13 @@ void decodePieces() {
         
         if (i==1 && j==19) {
           
-          high_density = true;
+          if (ID == 2) {
+            showSingle = !showSingle;
+            if (showSingle) showMulti = false;
+          } else {
+            showMulti = !showMulti;
+            if (showMulti) showSingle = false;
+          }
           
           /*
           if (ID >= 8 && ID <= 10) {
@@ -338,57 +344,57 @@ void decodePieces() {
           }
           */
           
-      } else {
-        // Rotation Parameters
-        int rotation = (tablePieceInput[i][j][1] + rotationMod)%4;
-        int X =0;
-        int Y =0;
-        
-        // Update "Form" Layer
-        Integer[][] form = inputForm.get(ID);
-        for (int u=0; u<form.length; u++) {
-          for (int v=0; v<form[0].length; v++) {
-            
-            if (rotation == 0) {
-              X = 4*i + u;
-              Y = 4*j + v;
-            } else if (rotation == 1) {
-              X = 4*i + v;
-              Y = 4*j + (3-u);
-            } else if (rotation == 2) {
-              X = 4*i + (3-u);
-              Y = 4*j + (3-v);
-            } else if (rotation == 3) {
-              X = 4*i + (3-v);
-              Y = 4*j + u;
-            }
+        } else {
+          // Rotation Parameters
+          int rotation = (tablePieceInput[i][j][1] + rotationMod)%4;
+          int X =0;
+          int Y =0;
           
-            this.form[gridPanU+X][gridPanV+Y] = form[v][u];
-          }
-        }
-        
-        // Update Facility, Market, and Obstacle Layers
-        Integer[][] data = inputData.get(ID);
-        for (int u=0; u<data.length; u++) {
-          for (int v=0; v<data[0].length; v++) {
+          // Update "Form" Layer
+          Integer[][] form = inputForm.get(ID);
+          for (int u=0; u<form.length; u++) {
+            for (int v=0; v<form[0].length; v++) {
+              
+              if (rotation == 0) {
+                X = 4*i + u;
+                Y = 4*j + v;
+              } else if (rotation == 1) {
+                X = 4*i + v;
+                Y = 4*j + (3-u);
+              } else if (rotation == 2) {
+                X = 4*i + (3-u);
+                Y = 4*j + (3-v);
+              } else if (rotation == 3) {
+                X = 4*i + (3-v);
+                Y = 4*j + u;
+              }
             
-            if (rotation == 0) {
-              X = 4*i + u;
-              Y = 4*j + v;
-            } else if (rotation == 1) {
-              X = 4*i + v;
-              Y = 4*j + (3-u);
-            } else if (rotation == 2) {
-              X = 4*i + (3-u);
-              Y = 4*j + (3-v);
-            } else if (rotation == 3) {
-              X = 4*i + (3-v);
-              Y = 4*j + u;
+              this.form[gridPanU+X][gridPanV+Y] = form[v][u];
             }
-        
-            if (ID >= 0 && ID <= 6) {
-              this.facilities[gridPanU+X][gridPanV+Y] = data[v][u];
-            } else if (ID ==8 || ID == 9) {
+          }
+          
+          // Update Facility, Market, and Obstacle Layers
+          Integer[][] data = inputData.get(ID);
+          for (int u=0; u<data.length; u++) {
+            for (int v=0; v<data[0].length; v++) {
+              
+              if (rotation == 0) {
+                X = 4*i + u;
+                Y = 4*j + v;
+              } else if (rotation == 1) {
+                X = 4*i + v;
+                Y = 4*j + (3-u);
+              } else if (rotation == 2) {
+                X = 4*i + (3-u);
+                Y = 4*j + (3-v);
+              } else if (rotation == 3) {
+                X = 4*i + (3-v);
+                Y = 4*j + u;
+              }
+          
+              if (ID >= 0 && ID <= 6) {
+                this.facilities[gridPanU+X][gridPanV+Y] = data[v][u];
+              } else if (ID ==8 || ID == 9) {
                 this.market[gridPanU+X][gridPanV+Y] = data[v][u];
               } 
             }
@@ -443,7 +449,6 @@ void fauxPieces(int code, int[][][] pieces, int maxID) {
       }
     }
   }
-  high_density = false;
   decodePieces();
 }
   

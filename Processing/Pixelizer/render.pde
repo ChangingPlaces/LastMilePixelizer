@@ -98,7 +98,7 @@ void renderTable() {
 //  table.fill(#FFFF00);
 //  table.rect(1.2/18.0*table.width, 18.5/22.0*table.height, 0.6/18.0*table.width, 0.3/22.0*table.height);
   table.fill(textColor);
-  table.text("HIGH\nDENS", 1.2/17.75*table.width, 18.0/22.0*table.height);
+  table.text("INFO", 1.2/17.75*table.width, 18.0/22.0*table.height);
   
   // Draws Cursor
   renderCursor(c);

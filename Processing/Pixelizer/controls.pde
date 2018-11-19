@@ -508,6 +508,14 @@ void keyPressed() {
       saveProjectorLocation();
       projectorMoved = true;
       break;
+    case 'S':
+      showSingle = !showSingle;
+      if (showSingle) showMulti = false;
+      break;
+    case 'M':
+      showMulti = !showMulti;
+      if (showMulti) showSingle = false;
+      break;
   }
   
   if (switched) {
