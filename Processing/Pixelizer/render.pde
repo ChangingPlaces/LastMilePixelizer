@@ -352,8 +352,8 @@ void renderBasemap(PGraphics graphic) {
 
         // Full Color Range
         graphic.colorMode(HSB);
-        graphic.fill(255*normalized, 255, 255, alpha);
-        graphic.stroke(255*normalized, 255, 255, alpha);
+        graphic.fill(50+155*normalized, 255, 255, alpha);
+        graphic.stroke(50+155*normalized, 255, 255, alpha);
 
         return normalized;
     }
@@ -515,7 +515,7 @@ void renderBasemap(PGraphics graphic) {
               value = allocation[u+gridPanU][v+gridPanV];
               if (value != 0) {
                 if (showAllocation) {
-                  output.fill(value/facilitiesList.size()*255, 255, 255, 175); // Temp Color Gradient
+                  output.fill(50+value/facilitiesList.size()*155, 255, 255, 175); // Temp Color Gradient
                   output.rect(rand*gridWidth + 0.5*shrink*gridWidth + u*gridWidth, rand*gridWidth + 0.5*shrink*gridHeight + v*gridHeight, 
                              (1+rand)*shrink*gridWidth, (1+rand)*shrink*gridHeight);
                 }
