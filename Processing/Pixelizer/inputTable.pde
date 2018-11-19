@@ -258,12 +258,22 @@ void decodePieces() {
         
         if (i==1 && j==19) {
           
-          if (ID == 2) {
-            showSingle = !showSingle;
-            if (showSingle) showMulti = false;
+          if (ID == 1) {
+            showHigh = true;
+            showSingle = false;
+            showMulti = false;
+          } else if (ID == 2) {
+            showHigh = false;
+            showSingle = true;
+            showMulti = false;
+          } else if (ID == 3) {
+            showHigh = false;
+            showSingle = false;
+            showMulti = true;
           } else {
-            showMulti = !showMulti;
-            if (showMulti) showSingle = false;
+            showHigh = false;
+            showSingle = false;
+            showMulti = false;
           }
           
           /*

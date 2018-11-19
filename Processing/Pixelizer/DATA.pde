@@ -2,8 +2,9 @@ float DU_PER_SQM = 6.5/4046.86; // https://www.theurbanist.org/2017/05/04/visual
 PImage[] logo = new PImage[3];
 boolean showSingle = false;
 boolean showMulti = false;
+boolean showHigh = false;
 
-PImage single, multi;
+PImage single, multi, high;
 
 // Data Extents Parameters
 

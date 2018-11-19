@@ -510,11 +510,24 @@ void keyPressed() {
       break;
     case 'S':
       showSingle = !showSingle;
-      if (showSingle) showMulti = false;
+      if (showSingle) {
+        showHigh = false;
+        showMulti = false;
+      }
       break;
     case 'M':
       showMulti = !showMulti;
-      if (showMulti) showSingle = false;
+      if (showMulti) {
+        showSingle = false;
+        showHigh = false;
+      }
+      break;
+    case 'H':
+      showHigh = !showHigh;
+      if (showHigh) {
+        showSingle = false;
+        showMulti = false;
+      }
       break;
   }
   

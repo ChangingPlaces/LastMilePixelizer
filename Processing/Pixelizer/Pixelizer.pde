@@ -89,6 +89,7 @@ void setup() {
   logo[2] = loadImage("data/logos/bgv.png");
   single = loadImage("data/slides/single.png");
   multi = loadImage("data/slides/multi.png");
+  high = loadImage("data/slides/high.png");
 
   // Frame Options
 
@@ -221,14 +222,19 @@ void draw() {
 //    }
 //  }
   
-  for (int i=0; i<logo.length; i++) {
-    image(logo[i], 25, 25 + i*100);
+  if (showSingle) {
+    background(0);
+    image(single, width/2 - single.width/2, height/2 - single.height/2);
+  } else if(showMulti) {
+    background(0);
+    image(multi,width/2 - multi.width/2, height/2 - multi.height/2);
+  } else if(showHigh) {
+    background(0);
+    image(high,width/2 - high.width/2, height/2 - high.height/2);
   }
   
-  if (showSingle) {
-    image(single,0,0,width,height);
-  } else if(showMulti) {
-    image(multi,0,0,width,height);
+  for (int i=0; i<logo.length; i++) {
+    image(logo[i], 25, 25 + i*100);
   }
   
   if (!displayProjection2D && startup) {
