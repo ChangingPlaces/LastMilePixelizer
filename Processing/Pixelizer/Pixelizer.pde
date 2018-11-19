@@ -186,7 +186,7 @@ void draw() {
 
   // Exports table Graphic to Projector
   projector = get(TABLE_IMAGE_OFFSET, STANDARD_MARGIN, TABLE_IMAGE_WIDTH, TABLE_IMAGE_HEIGHT);
-  margin = get(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - int(mapRatio*TABLE_IMAGE_HEIGHT), STANDARD_MARGIN, int(mapRatio*TABLE_IMAGE_HEIGHT) + STANDARD_MARGIN, TABLE_IMAGE_HEIGHT);
+  margin = get(TABLE_IMAGE_OFFSET - STANDARD_MARGIN - int(mapRatio*TABLE_IMAGE_HEIGHT) + 10, STANDARD_MARGIN, int(mapRatio*TABLE_IMAGE_HEIGHT) + STANDARD_MARGIN - 10, TABLE_IMAGE_HEIGHT);
   margin.resize(int(mapRatio*TABLE_IMAGE_HEIGHT), margin.height);
   hist = get(TABLE_IMAGE_OFFSET + TABLE_IMAGE_WIDTH, STANDARD_MARGIN, 250, 350);
   hist.resize(margin.width, 350);
@@ -196,7 +196,7 @@ void draw() {
     background(textColor);
     image(margin, 0, 0);
     image(projector, margin.width, 0);
-    image(hist, 0, 345);
+    image(hist, 0, 370);
   }
 
   fill(textColor, 80);

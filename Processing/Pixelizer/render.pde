@@ -246,7 +246,7 @@ void renderBasemap(PGraphics graphic) {
               
               for (int i=0; i<normalized*10; i++) {
                 //p.stroke(textColor);
-                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 3, 3);
+                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 2, 2);
               }
             }
 
@@ -318,8 +318,8 @@ void renderBasemap(PGraphics graphic) {
         color from, to;
 
         //BEGIN Drawing POPULATION
-        from = color(#000AF7, 100); // Blue
-        to = color(#FF0000);   // Red
+        from = color(#000AF7, 255); // Blue
+        to = color(#AA0000, 255);   // Red
 
         // Draw Population
         try {
@@ -472,14 +472,20 @@ void renderBasemap(PGraphics graphic) {
       // makes it so that colors are defined by Hue, Saturation, and Brightness values (0-255 by default)
       output.colorMode(HSB);
 
+      float shrink = 0.45;
+      
       for (int u=0; u<displayU; u++) {
         for (int v=0; v<displayV; v++) {
           // Only loads data within bounds of dataset
           if (u+gridPanU>=0 && u+gridPanU<gridU && v+gridPanV>=0 && v+gridPanV<gridV) {
+            
+//            output.pushMatrix();
+//            output.translate(0.5*shrink*gridWidth, shrink*gridHeight);
 
-
+            float rand = random(-0.25, 0.25);
+            
             float value;
-            output.noStroke(); // No lines draw around grid cells
+            output.stroke(0); // No lines draw around grid cells
             //output.strokeWeight(1);
             //output.stroke(background);
             if (showDeliveryCost && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
@@ -488,7 +494,8 @@ void renderBasemap(PGraphics graphic) {
                 output.colorMode(HSB);
                 output.fill(hue(lerpColor(from, to, value)), 255, 255, 150);
                 output.colorMode(RGB);
-                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+                output.rect(rand*gridWidth + 0.5*shrink*gridWidth + u*gridWidth, rand*gridWidth + 0.5*shrink*gridHeight + v*gridHeight, 
+                           (1+rand)*shrink*gridWidth, (1+rand)*shrink*gridHeight);
               }
             }
 
@@ -496,17 +503,21 @@ void renderBasemap(PGraphics graphic) {
               value = totalCost[u+gridPanU][v+gridPanV]/MAX_TOTAL_COST_RENDER;
               if (value > 0  && value != Float.POSITIVE_INFINITY) {
                 output.fill(lerpColor(from, to, value));
-                output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+                output.rect(rand*gridWidth + 0.5*shrink*gridWidth + u*gridWidth, rand*gridWidth + 0.5*shrink*gridHeight + v*gridHeight, 
+                           (1+rand)*shrink*gridWidth, (1+rand)*shrink*gridHeight);
               }
             }
-
+            
+//            output.popMatrix();
+            
             //if (showAllocation && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
             if (pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
               value = allocation[u+gridPanU][v+gridPanV];
               if (value != 0) {
                 if (showAllocation) {
                   output.fill(value/facilitiesList.size()*255, 255, 255, 175); // Temp Color Gradient
-                  output.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+                  output.rect(rand*gridWidth + 0.5*shrink*gridWidth + u*gridWidth, rand*gridWidth + 0.5*shrink*gridHeight + v*gridHeight, 
+                             (1+rand)*shrink*gridWidth, (1+rand)*shrink*gridHeight);
                 }
 
                 int offset = 1;
@@ -516,18 +527,18 @@ void renderBasemap(PGraphics graphic) {
                 //output.stroke(value/facilitiesList.size()*255, 255, 255); // Temp Color Gradient
                 output.stroke(255); // White
                 
-                if (u+gridPanU > 0 && value != allocation[u+gridPanU-1][v+gridPanV]) {
-                  output.line(u*gridWidth+offset, v*gridHeight+inset, u*gridWidth+offset, (v+1)*gridHeight-inset);
-                }
-                if (u+gridPanU < gridU-1 && value != allocation[u+gridPanU+1][v+gridPanV]) {
-                  output.line((u+1)*gridWidth-offset, v*gridHeight+inset, (u+1)*gridWidth-offset, (v+1)*gridHeight-inset);
-                }
-                if (v+gridPanV > 0 && value != allocation[u+gridPanU][v+gridPanV-1]) {
-                  output.line(u*gridWidth+inset, v*gridHeight+offset, (u+1)*gridWidth-inset, v*gridHeight+offset);
-                }
-                if (v+gridPanV < gridV-1 && value != allocation[u+gridPanU][v+gridPanV+1]) {
-                  output.line(u*gridWidth+inset, (v+1)*gridHeight-offset, (u+1)*gridWidth-inset, (v+1)*gridHeight-offset);
-                }
+//                if (u+gridPanU > 0 && value != allocation[u+gridPanU-1][v+gridPanV]) {
+//                  output.line(u*gridWidth+offset, v*gridHeight+inset, u*gridWidth+offset, (v+1)*gridHeight-inset);
+//                }
+//                if (u+gridPanU < gridU-1 && value != allocation[u+gridPanU+1][v+gridPanV]) {
+//                  output.line((u+1)*gridWidth-offset, v*gridHeight+inset, (u+1)*gridWidth-offset, (v+1)*gridHeight-inset);
+//                }
+//                if (v+gridPanV > 0 && value != allocation[u+gridPanU][v+gridPanV-1]) {
+//                  output.line(u*gridWidth+inset, v*gridHeight+offset, (u+1)*gridWidth-inset, v*gridHeight+offset);
+//                }
+//                if (v+gridPanV < gridV-1 && value != allocation[u+gridPanU][v+gridPanV+1]) {
+//                  output.line(u*gridWidth+inset, (v+1)*gridHeight-offset, (u+1)*gridWidth-inset, (v+1)*gridHeight-offset);
+//                }
               }
             }
 
@@ -606,7 +617,7 @@ void renderBasemap(PGraphics graphic) {
         
         float average = sumTotalCost/demandSupplied;
         i.fill(#FFFF00);
-        i.text("Average Rent Index: " + int(average*100)/100.0 + " per dwelling", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
+        i.text("Avg. Opportunity: " + int(average*100)/100.0 + " / DU", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
         i.fill(textColor);
         
         //Histogram
@@ -721,7 +732,7 @@ void renderBasemap(PGraphics graphic) {
       i.fill(wmt_yellow);
       i.text(fileName.toUpperCase(), 0, 0);
       i.fill(textColor);
-      i.text("Last Mile Network Design", 0, 15);
+      i.text("Mandatory Affordable\nHousing Design", 0, 15);
 
       if (showFrameRate) {
         i.text("FrameRate: " + frameRate, 0, 45);
@@ -734,15 +745,17 @@ void renderBasemap(PGraphics graphic) {
       i.fill(textColor);
       //i.text("2015 Delivery Data:", 0, 20);
       i.text("Population Value:", 0, 50);
-      i.text("Demand Potential:", 0, 80);
-      i.text("Avg Dwelling Rent:", 0, 110);
-      //i.text("Total Dwellings:", 0, 140);
+      i.text("Dwelling Demand:", 0, 80);
+      i.text("Avg Dwelling Opportunity:", 0, 110);
+      i.text("Total Opportunity:", 0, 140);
         
       i.colorMode(RGB);
       i.fill(0,255,255);
       
-      // Empirical 2015 Delivery Values
       String value = "";
+      
+      /*
+      // Empirical 2015 Delivery Values
       value = "";
       if ((int)getCellValue(mouseToU(), mouseToV()) == -1) {
         value = "NO_DATA";
@@ -750,6 +763,7 @@ void renderBasemap(PGraphics graphic) {
         value += (int)getCellValue(mouseToU(), mouseToV());
       }
       i.text(prefix + value + suffix, 0, 35);
+      */
       
       // Population Figures
       value = "";
@@ -782,7 +796,6 @@ void renderBasemap(PGraphics graphic) {
         i.text(int(float(value)*10.0)/10.0, 0, 125);
       }
       
-      /*
       // Output: Total Cost
       value = "";
       if (getCellTotalCost(mouseToU(), mouseToV()) == -1) {
@@ -792,7 +805,6 @@ void renderBasemap(PGraphics graphic) {
         value += getCellTotalCost(mouseToU(), mouseToV());
         i.text(int(float(value)*10.0)/10.0, 0, 155);
       }
-      */
       
       i.endDraw();
 

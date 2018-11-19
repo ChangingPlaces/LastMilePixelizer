@@ -132,7 +132,7 @@ public class projApplet extends PApplet {
     p.clear();
     p.image(margin, 0, 0);
     p.image(projector, margin.width, 0);
-    p.image(hist, 0, 358);
+    p.image(hist, 0, 370);
     p.endDraw();
   }
   
