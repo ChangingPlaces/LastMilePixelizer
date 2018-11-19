@@ -77,9 +77,9 @@ PImage wmt_logo;
 // Class that holds a button menu
 Menu mainMenu, hideMenu;
 
-//boolean sketchFullScreen() {
-//  return true;
-//}
+boolean sketchFullScreen() {
+  return true;
+}
 
 void setup() {
   size(screenWidth, screenHeight, P3D);

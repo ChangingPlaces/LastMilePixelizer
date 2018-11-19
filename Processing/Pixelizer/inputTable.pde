@@ -250,23 +250,27 @@ void decodePieces() {
   
   clearInputData();
   
+  showHigh = false;
+  showSingle = false;
+  showMulti = false;
+      
   for (int i=0; i<tablePieceInput.length; i++) {
     for (int j=0; j<tablePieceInput[0].length; j++) {
       int ID = tablePieceInput[i][j][0];
-      
+            
       if (ID >= 0 && ID <= IDMax) {
         
         if (i==1 && j==19) {
           
-          if (ID == 1) {
+          if (ID == 0) {
             showHigh = true;
             showSingle = false;
             showMulti = false;
-          } else if (ID == 2) {
+          } else if (ID == 1) {
             showHigh = false;
             showSingle = true;
             showMulti = false;
-          } else if (ID == 3) {
+          } else if (ID == 2) {
             showHigh = false;
             showSingle = false;
             showMulti = true;

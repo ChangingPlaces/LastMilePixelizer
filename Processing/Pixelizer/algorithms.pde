@@ -65,11 +65,11 @@ void updateFacilitiesList() {
           break;
         case 2: // LARGE STORE
           //facilitiesList.add(new Facility(2, u, v,   200, 10, 2, true,  true));
-          facilitiesList.add(new Facility(2, u, v,   800, 10, 2, true,  true));
+          facilitiesList.add(new Facility(2, u, v,   1000, 10, 2, true,  true));
           break;
         case 3: // SMALL STORE
           //facilitiesList.add(new Facility(3, u, v,   200, 10, 2, true,  true));
-          facilitiesList.add(new Facility(3, u, v,   40, 10, 2, true,  true));
+          facilitiesList.add(new Facility(3, u, v,   200, 10, 2, true,  true));
           break;
         case 4: // SPOKE
           facilitiesList.add(new Facility(4, u, v,   40,  0, 2, false, true));
