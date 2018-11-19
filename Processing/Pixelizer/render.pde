@@ -516,7 +516,11 @@ void renderBasemap(PGraphics graphic) {
             
             //if (showAllocation && pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
             if (pop[u+gridPanU][v+gridPanV] > POP_RENDER_MIN ) {
-              value = allocation[u+gridPanU][v+gridPanV];
+              //if (allocation[u+gridPanU][v+gridPanV] < facilitiesList.size()) {
+              //  value = facilitiesList.get(allocation[u+gridPanU][v+gridPanV]).ID-1;
+              //} else {
+                value = allocation[u+gridPanU][v+gridPanV];
+              //}
               if (value != 0) {
                 if (showAllocation) {
                   output.fill(50+value/facilitiesList.size()*155, 255, 255, 175); // Temp Color Gradient
@@ -616,12 +620,12 @@ void renderBasemap(PGraphics graphic) {
         i.strokeWeight(1);
         if (ratio < 0.98) {
           i.text("Dwellings Built", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
-          i.text(int(demandSupplied) + " dwellings", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
+          i.text(int(dailyDemand(popTotal)*facilitiesList.size()/6.0) + " dwellings", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
         }
         
-        float average = sumTotalCost/demandSupplied;
+        float average = 4* (25 - sumTotalCost/demandSupplied);
         i.fill(#FFFF00);
-        i.text("Avg. Opportunity: " + int(average*100)/100.0 + " / DU", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
+        i.text("Avg. Opportunity Index: " + int(average*100)/100.0 + " % / DU", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
         i.fill(textColor);
         
         //Histogram
