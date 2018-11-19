@@ -1,3 +1,6 @@
+float DU_PER_SQM = 6.5/4046.86; // https://www.theurbanist.org/2017/05/04/visualizing-compatible-density/
+boolean high_density = false;
+
 // Data Extents Parameters
 
     // Display Matrix Size (cells rendered to screen)
@@ -72,6 +75,9 @@
           break;
         case 1:
           sanjoseMode();
+          break;
+        case 2:
+          seattleMode();
           break;
       }
       
@@ -162,7 +168,9 @@
       
       for (int i=0; i<popCSV.getRowCount(); i++) {
         for (int j=0; j<popCSV.getColumnCount(); j++) {
-          pop[j][i] = popCSV.getFloat(popCSV.getRowCount()-1-i, j);
+          float popScaler = 1.0;
+          if (modeIndex == 2) popScaler = sq(1000*gridSize)*DU_PER_SQM / 250.0;
+          pop[j][i] = popScaler * popCSV.getFloat(popCSV.getRowCount()-1-i, j);
           popTotal += pop[j][i];
         }
       }

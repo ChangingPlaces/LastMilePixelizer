@@ -32,7 +32,8 @@ import java.awt.event.*;
 
 // 0 = Denver
 // 1 = San Jose
-int modeIndex = 1;
+// 2 = Seattle
+int modeIndex = 2;
 
 // 0 = random
 // 1 = rows
@@ -76,9 +77,9 @@ PImage wmt_logo;
 // Class that holds a button menu
 Menu mainMenu, hideMenu;
 
-boolean sketchFullScreen() {
-  return true;
-}
+//boolean sketchFullScreen() {
+//  return true;
+//}
 
 void setup() {
   size(screenWidth, screenHeight, P3D);
@@ -154,6 +155,7 @@ void draw() {
 
   // Decode pieces only if there is a change in Colortizer input
   if (changeDetected) {
+    high_density = false;
     decodePieces();
     if (!enableCTL) {
       updateFacilitiesList();

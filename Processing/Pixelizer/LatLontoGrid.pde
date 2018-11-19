@@ -18,7 +18,7 @@
  */
 
 // length of one pixel [km]
-float gridSize = 2.0; // toggle to 2.0, 1.0, and 0.5
+float gridSize = 1.0; // toggle to 2.0, 1.0, and 0.5
 float MAX_GRID_SIZE = 2.0;
 float MIN_GRID_SIZE = 0.5;
 
@@ -81,6 +81,13 @@ void sanjoseMode() {
   centerLongitude = -121.979507;
   azimuth =  0; // 0 = North
   fileName = "sanjose";
+}
+
+void seattleMode() {
+  centerLatitude = +47.611140;
+  centerLongitude = -122.292338;
+  azimuth =  0; // 0 = North
+  fileName = "seattle";
 }
 
 // 

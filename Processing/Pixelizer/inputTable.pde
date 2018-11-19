@@ -253,10 +253,14 @@ void decodePieces() {
   for (int i=0; i<tablePieceInput.length; i++) {
     for (int j=0; j<tablePieceInput[0].length; j++) {
       int ID = tablePieceInput[i][j][0];
+      
       if (ID >= 0 && ID <= IDMax) {
         
         if (i==1 && j==19) {
           
+          high_density = true;
+          
+          /*
           if (ID >= 8 && ID <= 10) {
             
             while (!showPopulationData) {
@@ -298,6 +302,7 @@ void decodePieces() {
               
             } 
             
+            
           } else if (ID == 11) { // Delivery Data
           
             while (showOutputData) {
@@ -331,6 +336,8 @@ void decodePieces() {
             }
             
           }
+          */
+          
       } else {
         // Rotation Parameters
         int rotation = (tablePieceInput[i][j][1] + rotationMod)%4;
@@ -436,7 +443,7 @@ void fauxPieces(int code, int[][][] pieces, int maxID) {
       }
     }
   }
-  
+  high_density = false;
   decodePieces();
 }
   

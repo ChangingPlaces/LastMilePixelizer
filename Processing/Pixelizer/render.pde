@@ -93,12 +93,12 @@ void renderTable() {
   
   //DOCK
   table.rect(0.5/18.0*table.width, 17.5/22.0*table.height, 2.0/18.0*table.width, 3.0/22.0*table.height);
-  table.fill(#FF0000);
-  table.rect(1.2/18.0*table.width, 18.1/22.0*table.height, 0.6/18.0*table.width, 0.3/22.0*table.height);
-  table.fill(#FFFF00);
-  table.rect(1.2/18.0*table.width, 18.5/22.0*table.height, 0.6/18.0*table.width, 0.3/22.0*table.height);
+//  table.fill(#FF0000);
+//  table.rect(1.2/18.0*table.width, 18.1/22.0*table.height, 0.6/18.0*table.width, 0.3/22.0*table.height);
+//  table.fill(#FFFF00);
+//  table.rect(1.2/18.0*table.width, 18.5/22.0*table.height, 0.6/18.0*table.width, 0.3/22.0*table.height);
   table.fill(textColor);
-  table.text("DATA", 1.2/17.75*table.width, 18.0/22.0*table.height);
+  table.text("HIGH\nDENS", 1.2/17.75*table.width, 18.0/22.0*table.height);
   
   // Draws Cursor
   renderCursor(c);
@@ -242,12 +242,12 @@ void renderBasemap(PGraphics graphic) {
               normalized = findPopFill(p, pop[u+gridPanU][v+gridPanV]);
               // Doesn't draw a rectangle for values of 0
               p.noStroke(); // No lines draw around grid cells
-              p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
+              //p.rect(u*gridWidth, v*gridHeight, gridWidth, gridHeight);
               
-//              for (int i=0; i<normalized*10; i++) {
-//                //p.stroke(textColor);
-//                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 3, 3);
-//              }
+              for (int i=0; i<normalized*10; i++) {
+                //p.stroke(textColor);
+                p.ellipse(u*gridWidth + random(0,1)*gridWidth, v*gridHeight + random(0,1)*gridHeight, 3, 3);
+              }
             }
 
             //STORES
@@ -585,8 +585,8 @@ void renderBasemap(PGraphics graphic) {
         i.strokeWeight(3);
         i.line(0, -TABLE_IMAGE_HEIGHT/2, 3*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2);
         i.fill(textColor);
-        i.text("Total Demand Potential", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
-        i.text(int(dailyDemand(popTotal)) + " deliveries", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
+        i.text("Total Dwelling Demand", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
+        i.text(int(dailyDemand(popTotal)) + " dwellings", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
         
         // Draw Demand Met
         float ratio = (demandSupplied/dailyDemand(popTotal));
@@ -600,13 +600,13 @@ void renderBasemap(PGraphics graphic) {
         i.line(0, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN, 3.25*STANDARD_MARGIN, -ratio*(TABLE_IMAGE_HEIGHT/2-STANDARD_MARGIN) - STANDARD_MARGIN);
         i.strokeWeight(1);
         if (ratio < 0.98) {
-          i.text("Daily Demand Supplied", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
-          i.text(int(demandSupplied) + " deliveries", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
+          i.text("Dwellings Built", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2-20);
+          i.text(int(demandSupplied) + " dwellings", 3.5*STANDARD_MARGIN, -ratio*TABLE_IMAGE_HEIGHT/2);
         }
         
         float average = sumTotalCost/demandSupplied;
         i.fill(#FFFF00);
-        i.text("Average Cost: " + int(average*100)/100.0 + " per delivery", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
+        i.text("Average Rent Index: " + int(average*100)/100.0 + " per dwelling", 0, -2.0/3*TABLE_IMAGE_HEIGHT);
         i.fill(textColor);
         
         //Histogram
@@ -661,10 +661,10 @@ void renderBasemap(PGraphics graphic) {
           demandMIN = int(dailyDemand(popMIN+1));
           demandMAX = int(dailyDemand(popMAX));
 
-          i.text("Demand Potential", 0, legendPix - 35);
-          i.text("Source: 2010 U.S. Census", 0, legendPix - 20);
-          i.text(int(POP_RENDER_MIN) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
-          i.text(int(demandMAX) + " deliv./day", STANDARD_MARGIN + legendP.width, legendPix+10);
+          i.text("MHA Redevelopment Potential", 0, legendPix - 35);
+          i.text("Source: 2018 King County GIS", 0, legendPix - 20);
+          i.text(int(POP_RENDER_MIN) + " dwellings", STANDARD_MARGIN + legendP.width, legendPix + legendP.height);
+          i.text(int(demandMAX) + " dwellings", STANDARD_MARGIN + legendP.width, legendPix+10);
         }
 
         if (showDeliveryData) {
@@ -732,11 +732,11 @@ void renderBasemap(PGraphics graphic) {
       i.fill(wmt_dark_green);
       i.text("GRID INFO", 0, 0);
       i.fill(textColor);
-      i.text("2015 Delivery Data:", 0, 20);
+      //i.text("2015 Delivery Data:", 0, 20);
       i.text("Population Value:", 0, 50);
       i.text("Demand Potential:", 0, 80);
-      i.text("Cost Per Delivery:", 0, 110);
-      i.text("Total Delivery Cost:", 0, 140);
+      i.text("Avg Dwelling Rent:", 0, 110);
+      //i.text("Total Dwellings:", 0, 140);
         
       i.colorMode(RGB);
       i.fill(0,255,255);
@@ -758,7 +758,8 @@ void renderBasemap(PGraphics graphic) {
       } else {
         value += (int)getCellPop(mouseToU(), mouseToV());
       }
-      i.text(value + " " + popMode, 0, 65);
+      //i.text(value + " " + popMode, 0, 65);
+      i.text(value + " dwellings", 0, 65);
       
       // Daily Demand Estimate based on population
       value = "";
@@ -780,7 +781,8 @@ void renderBasemap(PGraphics graphic) {
         value += getCellDeliveryCost(mouseToU(), mouseToV());
         i.text(int(float(value)*10.0)/10.0, 0, 125);
       }
-
+      
+      /*
       // Output: Total Cost
       value = "";
       if (getCellTotalCost(mouseToU(), mouseToV()) == -1) {
@@ -790,7 +792,8 @@ void renderBasemap(PGraphics graphic) {
         value += getCellTotalCost(mouseToU(), mouseToV());
         i.text(int(float(value)*10.0)/10.0, 0, 155);
       }
-
+      */
+      
       i.endDraw();
 
 
