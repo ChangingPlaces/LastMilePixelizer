@@ -596,11 +596,11 @@ void renderBasemap(PGraphics graphic) {
         i.strokeWeight(3);
         i.line(0, -TABLE_IMAGE_HEIGHT/2, 3*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2);
         i.fill(textColor);
-        i.text("Total Dwelling Demand", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
+        i.text("Mandatory Affordable Housing Goal", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+5);
         i.text(int(dailyDemand(popTotal)) + " dwellings", 3.5*STANDARD_MARGIN, -TABLE_IMAGE_HEIGHT/2+20);
         
-        // Draw Demand Met
-        float ratio = (demandSupplied/dailyDemand(popTotal));
+        // Draw Demand Met 
+        float ratio = facilitiesList.size()/6.0;
 
         i.fill(#00FF00);
         i.noStroke();

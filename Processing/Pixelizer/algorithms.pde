@@ -61,7 +61,7 @@ void updateFacilitiesList() {
       switch (facilities[u][v] ){
         // Facility(int ID, int u, int v, int maxOrderSize, int maxFleetSize, int maxShifts, boolean delivers, boolean pickup)
         case 1: // IMN
-          facilitiesList.add(new Facility(1, u, v, 2000, 10, 2, true,  false));
+          facilitiesList.add(new Facility(1, u, v, 200, 10, 2, true,  false));
           break;
         case 2: // LARGE STORE
           //facilitiesList.add(new Facility(2, u, v,   200, 10, 2, true,  true));
@@ -69,7 +69,7 @@ void updateFacilitiesList() {
           break;
         case 3: // SMALL STORE
           //facilitiesList.add(new Facility(3, u, v,   200, 10, 2, true,  true));
-          facilitiesList.add(new Facility(3, u, v,   200, 10, 2, true,  true));
+          facilitiesList.add(new Facility(3, u, v,   5000, 10, 2, true,  true));
           break;
         case 4: // SPOKE
           facilitiesList.add(new Facility(4, u, v,   40,  0, 2, false, true));
