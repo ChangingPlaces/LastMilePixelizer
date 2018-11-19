@@ -92,13 +92,17 @@ void renderTable() {
   table.rect(17.0/18.0*table.width, 1.0/22.0*table.height, 1.0/18.0*table.width, 20.0/22.0*table.height);
   
   //DOCK
-  table.rect(0.5/18.0*table.width, 17.5/22.0*table.height, 2.0/18.0*table.width, 3.0/22.0*table.height);
+  table.rect(0.5/18.0*table.width, 18.5/22.0*table.height, 2.0/18.0*table.width, 2.0/22.0*table.height);
+  if(docked) {
+    table.fill(255);
+    table.rect(1.0/18.0*table.width, 19.0/22.0*table.height, 1.0/18.0*table.width, 1.0/22.0*table.height);
+  }
 //  table.fill(#FF0000);
 //  table.rect(1.2/18.0*table.width, 18.1/22.0*table.height, 0.6/18.0*table.width, 0.3/22.0*table.height);
 //  table.fill(#FFFF00);
 //  table.rect(1.2/18.0*table.width, 18.5/22.0*table.height, 0.6/18.0*table.width, 0.3/22.0*table.height);
   table.fill(textColor);
-  table.text("INFO", 1.2/17.75*table.width, 18.0/22.0*table.height);
+  table.text("INFO", 1.2/17.75*table.width, 18.75/22.0*table.height);
   
   // Draws Cursor
   renderCursor(c);

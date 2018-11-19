@@ -3,6 +3,7 @@ PImage[] logo = new PImage[3];
 boolean showSingle = false;
 boolean showMulti = false;
 boolean showHigh = false;
+boolean docked = false;
 
 PImage single, multi, high;
 

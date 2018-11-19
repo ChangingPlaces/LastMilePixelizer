@@ -253,6 +253,7 @@ void decodePieces() {
   showHigh = false;
   showSingle = false;
   showMulti = false;
+  docked = false;
       
   for (int i=0; i<tablePieceInput.length; i++) {
     for (int j=0; j<tablePieceInput[0].length; j++) {
@@ -266,14 +267,17 @@ void decodePieces() {
             showHigh = true;
             showSingle = false;
             showMulti = false;
+            docked = true;
           } else if (ID == 1) {
             showHigh = false;
             showSingle = true;
             showMulti = false;
+            docked = true;
           } else if (ID == 2) {
             showHigh = false;
             showSingle = false;
             showMulti = true;
+            docked = true;
           } else {
             showHigh = false;
             showSingle = false;
