@@ -83,6 +83,10 @@ Menu mainMenu, hideMenu;
 
 void setup() {
   size(screenWidth, screenHeight, P3D);
+  
+  logo[0] = loadImage("data/logos/ira.png");
+  logo[1] = loadImage("data/logos/mit.png");
+  logo[2] = loadImage("data/logos/bgv.png");
 
   // Frame Options
 
@@ -199,21 +203,25 @@ void draw() {
     image(hist, 0, 370);
   }
 
-  fill(textColor, 80);
-  text("CTL Optimization = " + enableCTL, 20, 35);
-  text("(Press Spacebar to Toggle)", 20, 50);
-  fill(textColor);
+//  fill(textColor, 80);
+//  text("CTL Optimization = " + enableCTL, 20, 35);
+//  text("(Press Spacebar to Toggle)", 20, 50);
+//  fill(textColor);
   
-  if (waitingForCTL){
-    if(waiting_blink){
-      fill(wmt_light_green);
-      text("** OPTIMIZING **", 20, 65);
-      fill(textColor);
-      waiting_blink = false;
-    }
-    else{
-      waiting_blink = true;
-    }
+//  if (waitingForCTL){
+//    if(waiting_blink){
+//      fill(wmt_light_green);
+//      text("** OPTIMIZING **", 20, 65);
+//      fill(textColor);
+//      waiting_blink = false;
+//    }
+//    else{
+//      waiting_blink = true;
+//    }
+//  }
+  
+  for (int i=0; i<logo.length; i++) {
+    image(logo[i], 25, 50 + i*100);
   }
   
   if (!displayProjection2D && startup) {
